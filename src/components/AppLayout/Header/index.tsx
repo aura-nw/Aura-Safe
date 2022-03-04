@@ -45,7 +45,7 @@ const HeaderComponent = (): React.ReactElement => {
             (event) => {
               connectKeplr()
             },
-            { once: true },
+            // { once: true },
           )
         }
       }

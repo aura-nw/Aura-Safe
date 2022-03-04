@@ -8,8 +8,12 @@ import { currentChainId } from 'src/logic/config/store/selectors'
 
 const WalletSwitch = (): ReactElement => {
   const chainId = useSelector(currentChainId)
+
+  const switchWalletChainAlert = () => {
+    alert(`Please add the ${chainId} chain to your Wallet!`)
+  }
   return (
-    <Button variant="outlined" size="medium" color="primary" onClick={switchWalletChain}>
+    <Button variant="outlined" size="medium" color="primary" onClick={switchWalletChainAlert}>
       <Text size="lg">
         Switch wallet to <ChainIndicator chainId={chainId} />
       </Text>

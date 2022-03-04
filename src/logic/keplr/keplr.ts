@@ -3,13 +3,14 @@ import { Keplr } from "@keplr-wallet/types";
 import { getChainInfo, getInternalChainId, _getChainId } from "../../config";
 import { makeProvider, ProviderProps } from '../wallets/store/model/provider';
 import { Dispatch } from 'redux';
-import { addProvider } from '../wallets/store/actions';
+import { addProvider, removeProvider } from '../wallets/store/actions';
 import enqueueSnackbar from '../notifications/store/actions/enqueueSnackbar';
 import { enhanceSnackbarForAction, NOTIFICATIONS } from '../notifications';
 import { trackAnalyticsEvent, WALLET_EVENTS } from '../../utils/googleAnalytics';
 import { saveToStorage } from 'src/utils/storage';
 import { LAST_USED_PROVIDER_KEY } from '../wallets/store/middlewares/providerWatcher';
 import { parseToAdress } from 'src/utils/parseByteAdress';
+import { ChainsInfo } from './constants/chainsInfo';
 
 
 export type WalletKey = {
@@ -107,6 +108,8 @@ export async function connectKeplr(): Promise<KeplrErrors> {
             smartContractWallet: false,
             internalChainId
           }
+
+          store.dispatch(removeProvider({ keepStorageKey: true }))
 
           store.dispatch(fetchProvider(providerInfo))
           saveToStorage(LAST_USED_PROVIDER_KEY, providerInfo.name)
@@ -219,54 +222,8 @@ const handleProviderNotification = (provider: ProviderProps, dispatch: Dispatch<
   }
 }
 
-export async function suggestChain(): Promise<any> {
-  await window['keplr']?.experimentalSuggestChain({
-    features: ['no-legacy-stdTx'],
-    chainId: "aura-testnet",
-    chainName: "aura testnet",
-    rpc: "https://tendermint-testnet.aura.network",
-    rest: "https://rpc-testnet.aura.network",
-    bip44: {
-      coinType: 118,
-    },
-    bech32Config: {
-      bech32PrefixAccAddr: "aura",
-      bech32PrefixAccPub: "aura" + "pub",
-      bech32PrefixValAddr: "aura" + "valoper",
-      bech32PrefixValPub: "aura" + "valoperpub",
-      bech32PrefixConsAddr: "aura" + "valcons",
-      bech32PrefixConsPub: "aura" + "valconspub",
-    },
-    currencies: [
-      {
-        coinDenom: "AURA",
-        coinMinimalDenom: "uaura",
-        coinDecimals: 6,
-        // coinGeckoId: "aura",
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDenom: "AURA",
-        coinMinimalDenom: "uaura",
-        coinDecimals: 6,
-        // coinGeckoId: "uaura",
-      },
-    ],
-    stakeCurrency: {
-      coinDenom: "AURA",
-      coinMinimalDenom: "uaura",
-      coinDecimals: 6,
-      // coinGeckoId: "uaura",
-    },
-    coinType: 118,
-    gasPriceStep: {
-      low: 1,
-      average: 2.5,
-      high: 4
-    },
-    walletUrlForStaking: "https://aura.network"
-  });
+export async function suggestChain(chainId = 'aura-testnet'): Promise<any> {
+  await window['keplr']?.experimentalSuggestChain(ChainsInfo[chainId]);
 }
 
 function fetchProvider(providerInfo: ProviderProps): (dispatch: Dispatch<any>) => Promise<void> {

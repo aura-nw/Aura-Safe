@@ -96,11 +96,11 @@ export const QueueTxList = ({ transactions }: QueueTxListProps): ReactElement =>
     }
   }
 
-  const title =
-    txLocation === 'queued.next'
+  const title = ''
+  /* txLocation === 'queued.next'
       ? 'NEXT TRANSACTION'
       : `QUEUE - Transaction with nonce ${nonce} needs to be executed first`
-
+ */
   return (
     <TxActionProvider>
       <StyledTransactionsGroup>

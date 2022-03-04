@@ -42,6 +42,10 @@ const TxSingularDetails = (): ReactElement => {
   const chainId = useSelector(currentChainId)
   const safeAddress = extractSafeAddress()
 
+  history.listen(() => {
+    window.location.reload()
+  })
+
   // We must use the tx from the store as the queue actions alter the tx
   const indexedTx = useSelector(
     (state: AppReduxState) =>

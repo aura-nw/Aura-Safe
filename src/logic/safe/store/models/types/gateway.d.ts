@@ -43,11 +43,12 @@ type StoreStructure = {
   queued: {
     next: { [nonce: number]: Transaction[] } // 1 Transaction element
     queued: { [nonce: number]: Transaction[] } // n Transaction elements
+    txs?: { [nonce: number]: Transaction[] }
   }
   history: { [timestamp: number]: Transaction[] } // n Transaction elements
 }
 
-type TxQueuedLocation = 'queued.next' | 'queued.queued'
+type TxQueuedLocation = 'queued.next' | 'queued.queued' | 'queued.txs'
 
 type TxHistoryLocation = 'history'
 

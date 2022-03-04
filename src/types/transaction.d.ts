@@ -29,6 +29,7 @@ export interface ICreateSafeTransaction {
 export interface ITransactionListQuery {
     safeAddress: string,
     pageSize: number,
+    isHistory: boolean,
     pageIndex: number
 }
 
@@ -85,6 +86,7 @@ export interface ITransactionDetail {
     Denom: string;
     GasUsed: string;
     GasWanted: number;
+    GasPrice: number;
     ChainId: string;
     Status: string;
     ConfirmationsRequired: number;

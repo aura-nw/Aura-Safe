@@ -26,7 +26,8 @@ export const HistoryTransactions = (): ReactElement => {
     const payload: ITransactionListQuery = {
       safeAddress,
       pageIndex: 1,
-      pageSize: 10,
+      pageSize: 50,
+      isHistory: false
     }
 
     const getTx = async (payload) => {

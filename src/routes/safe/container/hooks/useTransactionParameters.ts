@@ -82,22 +82,22 @@ export const useTransactionParameters = (props?: Props): TxParameters => {
   }, [ethGasPrice, isCancelTransaction])
 
   // Calc safe nonce
-  useEffect(() => {
-    const getSafeNonce = async () => {
-      if (safeAddress) {
-        try {
-          const recommendedNonce = (await getRecommendedNonce(safeAddress)).toString()
-          setSafeNonce(recommendedNonce)
-        } catch (e) {
-          logError(Errors._616, e.message)
-        }
-      }
-    }
+  // useEffect(() => {
+  //   const getSafeNonce = async () => {
+  //     if (safeAddress) {
+  //       try {
+  //         const recommendedNonce = (await getRecommendedNonce(safeAddress)).toString()
+  //         setSafeNonce(recommendedNonce)
+  //       } catch (e) {
+  //         logError(Errors._616, e.message)
+  //       }
+  //     }
+  //   }
 
-    if (safeNonce === undefined) {
-      getSafeNonce()
-    }
-  }, [safeAddress, safeVersion, safeNonce, state])
+  //   if (safeNonce === undefined) {
+  //     getSafeNonce()
+  //   }
+  // }, [safeAddress, safeVersion, safeNonce, state])
 
   return {
     safeNonce,

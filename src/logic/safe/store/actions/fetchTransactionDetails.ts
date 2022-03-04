@@ -38,6 +38,10 @@ export const fetchTransactionDetails =
       }
     }
 
+type DetailedExecutionInfoExtended = {
+  gasPrice: string
+}
+
 export const fetchTransactionDetailsByHash = ({ transactionId, txHash }: { transactionId: string, txHash?: string | null }) =>
   async (dispatch: Dispatch, getState: () => AppReduxState): Promise<Transaction['txDetails']> => {
     const transaction = getTransactionByAttribute(getState(), {
@@ -63,7 +67,7 @@ export const fetchTransactionDetailsByHash = ({ transactionId, txHash }: { trans
       const direction: TransferDirection = Data?.Direction as TransferDirection || TransferDirection.UNKNOWN
 
       let safeAppInfo: SafeAppInfo | null = null;
-      let detailedExecutionInfo: DetailedExecutionInfo | null = null;
+      let detailedExecutionInfo: DetailedExecutionInfo & DetailedExecutionInfoExtended | null = null;
       let txData: TransactionData | null = null;
 
       if (direction == TransferDirection.OUTGOING) {
@@ -79,12 +83,12 @@ export const fetchTransactionDetailsByHash = ({ transactionId, txHash }: { trans
           nonce: Data.Id,
           safeTxGas: (Data?.GasUsed || 0)?.toString(),
           baseGas: (Data?.GasWanted || 0)?.toString(),
-          gasPrice: '0',
+          gasPrice: (Data?.GasPrice || 0)?.toString(),
           gasToken: Data.Denom,
           refundReceiver: {
             logoUri: null,
             name: null,
-            value: 'aura000000000000000000000000000000000000000'
+            value: '0000000000000000000000000000000000000000'
           },
           safeTxHash: safeAddress,
           executor: !Data.Executor[0] ? null : {

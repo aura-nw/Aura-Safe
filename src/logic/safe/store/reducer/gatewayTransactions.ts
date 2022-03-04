@@ -94,6 +94,7 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
       const { chainId, safeAddress, values } = action.payload
       let newNext = {}
       let newQueued = {}
+      let txs: { [nonce: number]: Transaction[] } = []
 
       let label: 'next' | 'queued' | undefined
 
@@ -125,6 +126,13 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
         }
 
         const newTx = value.transaction
+
+        // txs[txNonce] = [...txs[txNonce], newTx]
+        if (txs?.[txNonce]) {
+          txs[txNonce] = [...txs[txNonce], newTx]
+        } else {
+          txs = { ...txs, [txNonce]: [newTx] }
+        }
         if (label === 'queued') {
           if (newQueued?.[txNonce]) {
             newQueued[txNonce] = [...newQueued[txNonce], newTx]
@@ -157,6 +165,7 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
             queued: {
               next: newNext,
               queued: newQueued,
+              txs
             },
           },
         },
@@ -179,7 +188,7 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
         }
 
         for (const [timestamp, transactions] of Object.entries(txGroup)) {
-          
+
           const txIndex = transactions.findIndex(({ id }) => sameString(id, transactionId))
 
           if (txIndex !== -1) {

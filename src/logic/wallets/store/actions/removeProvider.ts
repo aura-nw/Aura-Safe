@@ -10,8 +10,8 @@ const removeProvider = createAction(REMOVE_PROVIDER)
 
 export default (payload?: { keepStorageKey: boolean }) =>
   (dispatch: Dispatch): void => {
-    onboard().walletReset()
-    resetWeb3()
+    // onboard().walletReset()
+    // resetWeb3()
 
     dispatch(removeProvider(payload))
   }

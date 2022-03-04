@@ -1,3 +1,5 @@
+# I. Connect Keplr Wallet to Aura Testnet
+
 1. Add Network to Keplr
 ```
 await window['keplr'].experimentalSuggestChain({
@@ -128,3 +130,131 @@ await window['keplr'].experimentalSuggestChain({
 ```
 
 Reference: https://docs.keplr.app/api/
+
+# II. Connect Keplr Wallet to other testnet
+1. Vega Testnet (ATOM) <br>
+Open a console on your browser, paste the following code to the console and execute.
+```
+var foo = async function(){
+console.log('start request')
+	await window.keplr.experimentalSuggestChain({
+    chainId: "vega-testnet",
+    chainName: "vega",
+    rpc: "http://198.50.215.1:46657",
+    rest: "http://198.50.215.1:4317",
+    bip44: {
+        coinType: 118,
+    },
+    bech32Config: {
+        bech32PrefixAccAddr: "cosmos",
+        bech32PrefixAccPub: "cosmos" + "pub",
+        bech32PrefixValAddr: "cosmos" + "valoper",
+        bech32PrefixValPub: "cosmos" + "valoperpub",
+        bech32PrefixConsAddr: "cosmos" + "valcons",
+        bech32PrefixConsPub: "cosmos" + "valconspub",
+    },
+    currencies: [
+        {
+            coinDenom: "ATOM",
+            coinMinimalDenom: "uatom",
+            coinDecimals: 6,
+            coinGeckoId: "cosmos",
+        },
+    ],
+    feeCurrencies: [
+        {
+            coinDenom: "ATOM",
+            coinMinimalDenom: "uatom",
+            coinDecimals: 6,
+            coinGeckoId: "cosmos",
+        },
+    ],
+    stakeCurrency: {
+        coinDenom: "ATOM",
+        coinMinimalDenom: "uatom",
+        coinDecimals: 6,
+        coinGeckoId: "cosmos",
+    },
+    coinType: 118,
+     gasPriceStep: {
+        low: 1,
+        average: 1,
+        high: 1,
+    },
+    features: ["stargate", "ibc-transfer", "no-legacy-stdTx"],
+})
+console.log('finish request')
+}
+setTimeout(()=> {
+foo()
+console.log(window.keplr)
+}, 1000)
+console.log('hello')
+```
+2. Terra Testnet (LUNA) <br>
+Open a console on your browser, paste the following code to the console and execute.
+```
+await window['keplr'].experimentalSuggestChain({
+	features: ['no-legacy-stdTx'],
+	chainName: "terra testnet",
+	chainId: "bombay-12",
+	rpc: "https://bombay.stakesystems.io:2053",
+	rest: "https://bombay.stakesystems.io",
+	bip44: {
+		coinType: 118,
+	},
+	bech32Config: {
+		bech32PrefixAccAddr: "terra",
+		bech32PrefixAccPub: "terra" + "pub",
+		bech32PrefixValAddr: "terra" + "valoper",
+		bech32PrefixValPub: "terra" + "valoperpub",
+		bech32PrefixConsAddr: "terra" + "valcons",
+		bech32PrefixConsPub: "terra" + "valconspub",
+	},
+	currencies: [
+		{
+			coinDenom: "LUNA",
+			coinMinimalDenom: "uluna",
+			coinDecimals: 6,
+			// coinGeckoId: "LUNA",
+		},
+	],
+	feeCurrencies: [
+		{
+			coinDenom: "LUNA",
+			coinMinimalDenom: "uluna",
+			coinDecimals: 6,
+			// coinGeckoId: "uluna",
+		},
+	],
+	stakeCurrency: {
+		coinDenom: "LUNA",
+		coinMinimalDenom: "uluna",
+		coinDecimals: 6,
+		// coinGeckoId: "uluna",
+	},
+	coinType: 118,
+	gasPriceStep: {
+		low: 1,
+		average: 2.5,
+		high: 4
+	},
+	walletUrlForStaking: "https://luna.network"
+});
+```
+3. Juno Testnet (JUNO) <br>
+Access JunoTools website: https://test.juno.tools/
+![](public/img/guide/juno-tools.png) 
+Click on Connect Wallet and approve request add chain. <br>
+![](public/img/guide/approve-chain-add-juno.png) <br>
+Approve request connect network. <br>
+![](public/img/guide/approve-request-connect.png) <br>
+4. Osmosis Testnet (OSMO) <br>
+Access Osmosis Testnet website: https://testnet.osmosis.zone/
+![](public/img/guide/osmo-fe.png)
+Click on Connect Wallet and select Keplr Wallet in the pop-up.
+![](public/img/guide/pop-up-connect-wallet.png) <br>
+Approve request add chain. <br>
+![](public/img/guide/request-add-chain.png) <br>
+Approve request connect network. <br>
+![](public/img/guide/request-connect.png) <br>

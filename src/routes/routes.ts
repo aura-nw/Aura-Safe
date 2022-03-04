@@ -13,10 +13,10 @@ export const history = createBrowserHistory({
 
 // Safe specific routes
 // const hashRegExp = '0x[0-9A-Fa-f]'
-const hashRegExp = 'aura[0-9A-Za-z]'
+const hashRegExp = '[0-9A-Za-z]'
 
 // const chainSpecificSafeAddressPathRegExp = `[a-z0-9-]{2,}:${hashRegExp}{40}`
-const chainSpecificSafeAddressPathRegExp = `[a-z0-9-]{1,}:${hashRegExp}{39,40}`
+const chainSpecificSafeAddressPathRegExp = `[a-z0-9-]{1,}:[a-z]+${hashRegExp}{39,40}`
 
 export const SAFE_ADDRESS_SLUG = 'prefixedSafeAddress'
 export const ADDRESSED_ROUTE = `/:${SAFE_ADDRESS_SLUG}(${chainSpecificSafeAddressPathRegExp})`

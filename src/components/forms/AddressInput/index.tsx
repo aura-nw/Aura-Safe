@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import TextField from 'src/components/forms/TextField'
-import { Validator, composeValidators, mustBeEthereumAddress, required, mustBeCosmosAddress } from 'src/components/forms/validator'
+import { Validator, composeValidators, mustBeEthereumAddress, required, mustBeValidAddress } from 'src/components/forms/validator'
 import { trimSpaces } from 'src/utils/strings'
 import { getAddressFromDomain } from 'src/logic/wallets/getWeb3'
 import { isValidEnsName, isValidCryptoDomainName } from 'src/logic/wallets/ethAddresses'
@@ -55,7 +55,7 @@ const AddressInput = ({
 
   // Internal validators + externally passed validators
   const allValidators = useMemo(
-    () => composeValidators(required, mustBeCosmosAddress, sanitizedValidators),
+    () => composeValidators(required, mustBeValidAddress, sanitizedValidators),
     [sanitizedValidators],
   )
 
@@ -80,7 +80,7 @@ const AddressInput = ({
           })
       } else {
         // A regular address hash
-        if (!mustBeCosmosAddress(address) /* || !mustBeEthereumAddress(address) */) {
+        if (!mustBeValidAddress(address) /* || !mustBeEthereumAddress(address) */) {
           const parsed = parsePrefixedAddress(address)
           const checkedAddress = checksumAddress(parsed.address) || parsed.address
 

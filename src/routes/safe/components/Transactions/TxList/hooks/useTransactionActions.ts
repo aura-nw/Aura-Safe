@@ -1,4 +1,4 @@
-import { MultisigExecutionInfo } from '@gnosis.pm/safe-react-gateway-sdk'
+import { MultisigExecutionDetails, MultisigExecutionInfo } from '@gnosis.pm/safe-react-gateway-sdk'
 import { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -11,8 +11,8 @@ import { grantedSelector } from 'src/routes/safe/container/selector'
 import { AppReduxState } from 'src/store'
 import { TxLocationContext } from '../TxLocationProvider'
 
-export const isThresholdReached = (executionInfo: MultisigExecutionInfo): boolean => {
-  const { confirmationsSubmitted, confirmationsRequired } = executionInfo
+export const isThresholdReached = (confirmationsRequired: number, confirmationsSubmitted: number): boolean => {
+  // const { confirmationsSubmitted, confirmationsRequired } = executionInfo
   return confirmationsSubmitted >= confirmationsRequired
 }
 
@@ -59,12 +59,15 @@ export const useTransactionActions = (transaction: Transaction): TransactionActi
       const oneToGo = confirmationsSubmitted === confirmationsRequired - 1
       const canConfirm =
         ['queued.next', 'queued.queued'].includes(txLocation) && !currentUserSigned && isUserAnOwner && !isWrongChain
-      const thresholdReached = confirmationsSubmitted >= confirmationsRequired
+      const thresholdReached =
+        confirmationsRequired > 0 &&
+        confirmationsRequired <=
+          (transaction?.txDetails?.detailedExecutionInfo as MultisigExecutionDetails)?.confirmations?.length
 
       setState({
         canConfirm,
-        canConfirmThenExecute: txLocation === 'queued.next' && canConfirm && oneToGo,
-        canExecute: txLocation === 'queued.next' && thresholdReached && !!currentUser && !isWrongChain,
+        canConfirmThenExecute: txLocation === 'queued.queued' && canConfirm && oneToGo,
+        canExecute: txLocation === 'queued.queued' && thresholdReached && !!currentUser && !isWrongChain,
         canCancel,
         isUserAnOwner,
       })

@@ -95,7 +95,7 @@ export const TxParametersDetail = ({
       </AccordionSummary>
       <AccordionDetails>
         <AccordionDetailsWrapper>
-          <StyledText size="md" color="placeHolder">
+          {/* <StyledText size="md" color="placeHolder">
             Safe transaction
           </StyledText>
 
@@ -114,9 +114,9 @@ export const TxParametersDetail = ({
             >
               {txParameters.safeNonce}
             </ColoredText>
-          </TxParameterWrapper>
+          </TxParameterWrapper> */}
 
-          {showSafeTxGas && (
+          {/* {showSafeTxGas && (
             <TxParameterWrapper>
               <Text
                 size="lg"
@@ -131,20 +131,22 @@ export const TxParametersDetail = ({
                 {txParameters.safeTxGas}
               </Text>
             </TxParameterWrapper>
-          )}
+          )} */}
 
-          {areEthereumParamsVisible(parametersStatus || defaultParameterStatus) && (
-            <>
+          {/* {areEthereumParamsVisible(parametersStatus || defaultParameterStatus) && (
+            
+          )} */}
+          <>
               <TxParameterWrapper>
                 <StyledText size="md" color="placeHolder">
                   {ethereumTxParametersTitle(isTransactionExecution)}
                 </StyledText>
               </TxParameterWrapper>
 
-              <TxParameterWrapper>
+              {/* <TxParameterWrapper>
                 <Text size="lg">Nonce</Text>
                 <Text size="lg">{txParameters.ethNonce}</Text>
-              </TxParameterWrapper>
+              </TxParameterWrapper> */}
 
               <TxParameterWrapper>
                 <Text size="lg">Gas limit</Text>
@@ -156,7 +158,6 @@ export const TxParametersDetail = ({
                 <Text size="lg">{txParameters.ethGasPrice}</Text>
               </TxParameterWrapper>
             </>
-          )}
           <StyledButtonLink color="primary" textSize="xl" onClick={onEdit}>
             Edit
           </StyledButtonLink>

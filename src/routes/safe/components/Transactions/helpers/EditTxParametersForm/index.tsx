@@ -133,7 +133,7 @@ export const EditTxParametersForm = ({
         >
           {() => (
             <>
-              <StyledText size="xl" strong>
+              {/* <StyledText size="xl" strong>
                 Safe transaction
               </StyledText>
 
@@ -160,16 +160,18 @@ export const EditTxParametersForm = ({
                     disabled={!areSafeParamsEnabled(parametersStatus)}
                   />
                 )}
-              </SafeOptions>
+              </SafeOptions> */}
 
-              {areEthereumParamsVisible(parametersStatus) && (
-                <>
+              {/* {areEthereumParamsVisible(parametersStatus) && (
+                
+              )} */}
+              <>
                   <StyledTextMt size="xl" strong>
                     {ethereumTxParametersTitle(isExecution)}
                   </StyledTextMt>
 
                   <EthereumOptions>
-                    <Field
+                    {/* <Field
                       name="ethNonce"
                       defaultValue={ethNonce}
                       placeholder="Nonce"
@@ -177,7 +179,7 @@ export const EditTxParametersForm = ({
                       type="number"
                       component={TextField}
                       disabled={!areEthereumParamsVisible(parametersStatus)}
-                    />
+                    /> */}
                     <Field
                       name="ethGasLimit"
                       defaultValue={ethGasLimit}
@@ -191,10 +193,10 @@ export const EditTxParametersForm = ({
                       name="ethGasPrice"
                       defaultValue={ethGasPrice}
                       type="number"
-                      placeholder="Gas price (GWEI)"
-                      text="Gas price (GWEI)"
+                      placeholder="Gas price"
+                      text="Gas price"
                       component={TextField}
-                      disabled={!areEthereumParamsVisible(parametersStatus)}
+                      // disabled={!areEthereumParamsVisible(parametersStatus)}
                     />
                   </EthereumOptions>
 
@@ -208,7 +210,6 @@ export const EditTxParametersForm = ({
                     <Icon size="sm" type="externalLink" color="primary" />
                   </StyledLink>
                 </>
-              )}
 
               <StyledDividerFooter />
 

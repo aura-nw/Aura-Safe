@@ -243,25 +243,25 @@ export const makeTransactionDetail = (txDetail: any): any => {
       confirmationsRequired: txDetail?.ConfirmationsRequired,
       confirmationsSubmitted: 1,
       missingSigners: null,
-      nonce: 0,
+      nonce: txDetail?.Id,
       type: 'MULTISIG',
     },
-    id: txDetail?.Id.toString(),
+    id: txDetail?.Id?.toString(),
     safeAppInfo: undefined,
     timestamp: new Date(txDetail?.CreatedAt).getTime(),
     txDetails: {
       detailedExecutionInfo: {
-        baseGas: '0',
+        baseGas: txDetail?.GasWanted,
         confirmations: confirmationList,
         confirmationsRequired: txDetail?.ConfirmationsRequired,
         executor: null,
-        gasPrice: txDetail?.GasWanted,
+        gasPrice: txDetail?.GasPrice,
         gasToken: '',
-        nonce: 0,
+        nonce: txDetail?.Id,
         refundReceiver: {
           value: '',
         },
-        safeTxGas: txDetail?.GasWanted,
+        safeTxGas: txDetail?.GasUsed,
         safeTxHash: txDetail?.TxHash,
         signers: signerList,
         submittedAt: new Date(txDetail?.UpdatedAt).getTime(),
@@ -325,6 +325,8 @@ export const makeHistoryTransactionsFromService = (list: ITransactionListItem[])
   )
   let page: TransactionListPage = {
     results: [...transaction],
+    next: undefined,
+    previous: undefined
   }
 
   return page
@@ -336,6 +338,8 @@ export const makeQueueTransactionsFromService = (list: ITransactionListItem[]): 
   )
   let page: TransactionListPage = {
     results: [...transaction],
+    next: undefined,
+    previous: undefined
   }
   return page
 }
@@ -346,8 +350,8 @@ const makeTransactions = (list: ITransactionListItem[]): MTransactionListItem[] 
     type: 'TRANSACTION',
     transaction: {
       executionInfo: {
-        confirmationsRequired: 1,
-        confirmationsSubmitted: 1,
+        confirmationsRequired: 0,
+        confirmationsSubmitted: 0,
         nonce: tx.Id,
         type: 'MULTISIG',
         missingSigners: null,

@@ -16,11 +16,11 @@ const ExecuteCheckbox = ({ onChange }: ExecuteCheckboxProps): ReactElement | nul
       <Paragraph noMargin>
         If you want to sign the transaction now but manually execute it later, click on the checkbox below.
       </Paragraph>
-      <FormControlLabel
-        control={<Checkbox defaultChecked color="primary" onChange={handleChange} />}
+      {/* <FormControlLabel
+        control={<Checkbox color="primary" onChange={handleChange} />}
         label="Execute transaction"
         data-testid="execute-checkbox"
-      />
+      /> */}
     </Row>
   )
 }

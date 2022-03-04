@@ -27,10 +27,11 @@ export const onboardUser = async (): Promise<boolean> => {
 }
 
 export const onConnectButtonClick = async (): Promise<void> => {
+  const chainId = _getChainId()
   await connectKeplr()
     .then((status) => {
       if (status === KeplrErrors.NoChainInfo) {
-        return suggestChain()
+        return suggestChain(chainId)
       }
     })
     .then((e) => connectKeplr())

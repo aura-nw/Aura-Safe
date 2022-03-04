@@ -50,6 +50,13 @@ export const queuedTransactions = createSelector(
   },
 )
 
+export const txTransactions = createSelector(
+  pendingTransactions,
+  (pendingTransactions): StoreStructure['queued']['txs'] | undefined => {
+    return pendingTransactions?.txs
+  },
+)
+
 const txLocations: TxLocation[] = ['queued.next', 'queued.queued', 'history']
 
 export const getTransactionWithLocationByAttribute = createSelector(

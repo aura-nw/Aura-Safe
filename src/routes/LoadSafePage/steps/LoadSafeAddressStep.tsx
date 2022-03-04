@@ -28,8 +28,9 @@ import NetworkLabel from 'src/components/NetworkLabel/NetworkLabel'
 import { getLoadSafeName } from '../fields/utils'
 import { currentChainId } from 'src/logic/config/store/selectors'
 
-import { getMSafeInfo, getMSafeInfoWithAdress } from 'src/services'
+import { getMSafeInfoWithAdress } from 'src/services'
 import { getInternalChainId } from 'src/config'
+import { mustBeValidAddress } from 'src/components/forms/validator'
 
 export const loadSafeAddressStepLabel = 'Name and address'
 
@@ -58,21 +59,20 @@ function LoadSafeAddressStep(): ReactElement {
 
   useEffect(() => {
     const checkSafeAddress = async () => {
-      const _safeId = loadSafeForm.getState().values[FIELD_LOAD_SAFE_ID]
+      const isNotValid = safeAddress ? mustBeValidAddress(safeAddress) !== undefined : true
 
-      if (!_safeId && !safeAddress) {
+      if (isNotValid) {
+        setIsValidSafeAddress(false)
         return
       }
 
       setIsSafeInfoLoading(true)
 
       try {
-        const { owners, threshold, id} = _safeId
-          ? await getMSafeInfo(_safeId)
-          : await getMSafeInfoWithAdress(safeAddress, Number(internalChainId))
+        const { owners, threshold, id } = await getMSafeInfoWithAdress(safeAddress, Number(internalChainId))
 
-        // const { owners, threshold } = await getSafeInfo(safeAddress)
         setIsSafeInfoLoading(false)
+
         const ownersWithName = owners.map((address) =>
           makeAddressBookEntry(addressBook[address] || { address, name: '', chainId }),
         )
@@ -134,7 +134,7 @@ function LoadSafeAddressStep(): ReactElement {
           a read-only view.
         </Paragraph>
 
-        <Paragraph color="primary" size="lg">
+        {/* <Paragraph color="primary" size="lg">
           Don&apos;t have the address of the Safe you created?{' '}
           <StyledLink
             href="https://help.gnosis-safe.io/en/articles/4971293-i-don-t-remember-my-safe-address-where-can-i-find-it"
@@ -143,7 +143,7 @@ function LoadSafeAddressStep(): ReactElement {
           >
             This article explains how to find it.
           </StyledLink>
-        </Paragraph>
+        </Paragraph> */}
       </Block>
       <FieldContainer>
         <Col xs={11}>
@@ -186,15 +186,15 @@ function LoadSafeAddressStep(): ReactElement {
       <Block margin="sm">
         <Paragraph color="primary" noMargin size="lg">
           By continuing you consent to the{' '}
-          <StyledLink href="https://gnosis-safe.io/terms" rel="noopener noreferrer" target="_blank">
+          <StyledLink href="https://aura.network/" rel="noopener noreferrer" target="_blank">
             terms of use
           </StyledLink>
           {' and '}
-          <StyledLink href="https://gnosis-safe.io/privacy" rel="noopener noreferrer" target="_blank">
+          <StyledLink href="https://aura.network/" rel="noopener noreferrer" target="_blank">
             privacy policy
           </StyledLink>
           . Most importantly, you confirm that your funds are held securely in the Aura Safe, a smart contract on the
-          Ethereum blockchain. These funds cannot be accessed by Aura at any point.
+          Aura blockchain. These funds cannot be accessed by Aura at any point.
         </Paragraph>
       </Block>
     </Container>

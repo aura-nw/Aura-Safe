@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { _getChainId } from 'src/config'
-import { loadQueuedTransactions, loadQueuedTransactionsFromAuraApi } from 'src/logic/safe/store/actions/transactions/fetchTransactions/loadGatewayTransactions'
-import { addQueuedTransactions } from 'src/logic/safe/store/actions/transactions/gatewayTransactions'
 
 import { TransactionDetails } from 'src/logic/safe/store/models/types/gateway.d'
-import { nextTransactions, queuedTransactions } from 'src/logic/safe/store/selectors/gatewayTransactions'
-import { extractSafeAddress } from 'src/routes/routes'
+import { nextTransactions, queuedTransactions, txTransactions as txsTransactions } from 'src/logic/safe/store/selectors/gatewayTransactions'
 
 export type QueueTransactionsInfo = {
   next: TransactionDetails
   queue: TransactionDetails
+  txs?: TransactionDetails
 }
 
 /**
@@ -19,8 +17,9 @@ export type QueueTransactionsInfo = {
 export const useQueueTransactions = (): QueueTransactionsInfo | undefined => {
   const nextTxs = useSelector(nextTransactions)
   const queuedTxs = useSelector(queuedTransactions)
+  const allTxs = useSelector(txsTransactions)
   const dispatch = useDispatch()
-  const [txsCount, setTxsCount] = useState<{ next: number; queued: number } | undefined>()
+  const [txsCount, setTxsCount] = useState<{ next: number; queued: number, txs: number } | undefined>()
 
   useEffect(() => {
     const next = nextTxs
@@ -30,19 +29,23 @@ export const useQueueTransactions = (): QueueTransactionsInfo | undefined => {
       ? Object.entries(queuedTxs).reduce((acc, [, transactions]) => (acc += transactions.length), 0)
       : 0
 
-    // If 'queued.queued' deeplinked tx was open then queue visited before next poll
-    const hasDeeplinkLoaded = next === 0 && queued === 1
-    if (hasDeeplinkLoaded) {
-      const getQueuedTxs = async () => {
-        const safeAddress = extractSafeAddress()
-        // const values = await loadQueuedTransactions(safeAddress)
-        const values = await loadQueuedTransactionsFromAuraApi(safeAddress)
-        dispatch(addQueuedTransactions({ chainId: _getChainId(), safeAddress, values }))
-      }
-      getQueuedTxs()
-    }
+    const txs = allTxs
+      ? Object.entries(allTxs).reduce((acc, [, transactions]) => (acc += transactions.length), 0)
+      : 0
 
-    setTxsCount({ next, queued })
+    // If 'queued.queued' deeplinked tx was open then queue visited before next poll
+    // const hasDeeplinkLoaded = next === 0 && queued === 1
+    // if (hasDeeplinkLoaded) {
+    //   const getQueuedTxs = async () => {
+    //     const safeAddress = extractSafeAddress()
+    //     // const values = await loadQueuedTransactions(safeAddress)
+    //     const values = await loadQueuedTransactionsFromAuraApi(safeAddress)
+    //     dispatch(addQueuedTransactions({ chainId: _getChainId(), safeAddress, values }))
+    //   }
+    //   getQueuedTxs()
+    // }
+
+    setTxsCount({ next, queued, txs })
   }, [dispatch, nextTxs, queuedTxs])
 
   // no data loaded to the store yet
@@ -59,5 +62,9 @@ export const useQueueTransactions = (): QueueTransactionsInfo | undefined => {
       count: txsCount.queued,
       transactions: queuedTxs ? Object.entries(queuedTxs) : [],
     },
+    txs: {
+      count: txsCount.txs,
+      transactions: allTxs ? Object.entries(allTxs) : [],
+    }
   }
 }

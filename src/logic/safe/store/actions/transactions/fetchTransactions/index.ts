@@ -25,8 +25,8 @@ export default (chainId: string, safeAddress: string) =>
     }
 
     await Promise.all([
-      loadTxs(loadHistoryTransactionsFromAuraApi, addHistoryTransactions),
       loadTxs(loadQueuedTransactionsFromAuraApi, addQueuedTransactions),
+      loadTxs(loadHistoryTransactionsFromAuraApi, addHistoryTransactions),
     ])
 
     // try {

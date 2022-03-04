@@ -107,7 +107,7 @@ const getDefaultGasEstimation = (
     gasCost: '0',
     gasCostFormatted: '< 0.001',
     gasPrice,
-    gasPriceFormatted,
+    gasPriceFormatted: '1',
     gasLimit: '0',
     isExecution,
     isCreation,

@@ -33,7 +33,8 @@ export interface IResponse<T> {
 
 type _ChainInfo = {
   internalChainId: number,
-  denom: string
+  denom: string,
+  symbol: string
 }
 
 export type MChainInfo = ChainInfo & _ChainInfo
@@ -45,11 +46,11 @@ export function setBaseUrl(url: string): void {
 export function getMChainsConfig(): Promise<MChainInfo[]> {
   return axios.post(`${baseUrl}/general/network-list`)
     .then(response => {
-      const chainList: MChainInfo[] = response.data.Data.filter(e => e.name !== 'Aura Devnet').map((e: {
-        chainId: any; name: any; rpc: any, id: number, prefix: string; denom: string
+      const chainList: MChainInfo[] = response.data.Data.map((e: {
+        chainId: any; name: any; rpc: any, id: number, prefix: string; denom: string, symbol: string
       }) => {
         return {
-          transactionService: 'https://safe-transaction.rinkeby.staging.gnosisdev.com',
+          transactionService: null,
           internalChainId: e.id,
           denom: e.denom,
           chainId: e.chainId,
@@ -58,15 +59,15 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
           l2: false,
           description: '',
           rpcUri: {
-            authentication: 'API_KEY_PATH',
+            authentication: '',
             value: e.rpc,
           },
           safeAppsRpcUri: {
-            authentication: 'API_KEY_PATH',
+            authentication: '',
             value: e.rpc,
           },
           publicRpcUri: {
-            authentication: 'API_KEY_PATH',
+            authentication: '',
             value: e.rpc,
           },
           blockExplorerUriTemplate: {
@@ -75,38 +76,31 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
             api: "https://explorer.aura.network/api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}"
           },
           nativeCurrency: {
-            name: "Aura",
-            symbol: "Aura",
+            name: e.prefix.charAt(0).toUpperCase() + e.prefix.slice(1, e.prefix.length).toLowerCase(),
+            symbol: e.symbol,
             decimals: 6,
-            logoUri: "https://safe-transaction-assets.staging.gnosisdev.com/chains/4/currency_logo.png"
+            logoUri: `img/token/${e.chainId}.svg`
           },
           theme: {
             textColor: '#ffffff',
             backgroundColor: '#E8673C',
           },
-          ensRegistryAddress: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
-          gasPrice: [
-            {
-              type: 'ORACLE',
-              uri: 'https://api-rinkeby.etherscan.io/api?module=gastracker&action=gasoracle&apikey=JNFAU892RF9TJWBU3EV7DJCPIWZY8KEMY1',
-              gasParameter: 'FastGasPrice',
-              gweiFactor: '1000000000.000000000',
-            },
-          ],
-          disabledWallets: ['fortmatic', 'lattice'],
+          ensRegistryAddress: '',
+          gasPrice: [],
+          disabledWallets: [],
           features: [
-            'CONTRACT_INTERACTION',
-            'DOMAIN_LOOKUP',
-            'EIP1559',
-            'ERC721',
-            'SAFE_TX_GAS_OPTIONAL',
-            'SPENDING_LIMIT',
+            // 'CONTRACT_INTERACTION',
+            // 'DOMAIN_LOOKUP',
+            // 'EIP1559',
+            // 'ERC721',
+            // 'SAFE_TX_GAS_OPTIONAL',
+            // 'SPENDING_LIMIT',
           ],
         }
       },
-    )
-    return chainList
-  })
+      )
+      return chainList
+    })
 }
 
 export function fetchMSafesByOwner(addressOwner: string, internalChainId: number): Promise<OwnedMSafes> {
@@ -165,10 +159,18 @@ export async function getAllTx(payload: ITransactionListQuery): Promise<IRespons
   return axios.post(`${baseUrl}/transaction/get-all-txs`, payload).then(res => res.data);
 }
 
-export async function getTxDetailByHash(txHash: string,safeAddress: string): Promise<IResponse<ITransactionDetail>> {
+export async function getTxDetailByHash(txHash: string, safeAddress: string): Promise<IResponse<ITransactionDetail>> {
   return axios.get(`${baseUrl}/transaction/transaction-details/${txHash}/${safeAddress}`).then(res => res.data)
 }
 
 export function sendSafeTransaction(payload: any): Promise<IResponse<any>> {
   return axios.post(`${baseUrl}/transaction/send`, payload).then((res) => res.data)
+}
+
+export function confirmSafeTransaction(payload: any): Promise<IResponse<any>> {
+  return axios.post(`${baseUrl}/transaction/confirm`, payload).then((res) => res.data)
+}
+
+export async function getAccountOnChain(safeAddress: string, internalChainId): Promise<IResponse<any>> {
+  return axios.get(`${baseUrl}/general/get-account-onchain/${safeAddress}/${internalChainId}`).then(res => res.data)
 }

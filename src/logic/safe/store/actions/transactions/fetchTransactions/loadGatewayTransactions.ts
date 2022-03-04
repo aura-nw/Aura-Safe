@@ -70,7 +70,8 @@ export const loadHistoryTransactionsFromAuraApi = async (safeAddress: string): P
     const { Data: list } = await getAllTx({
       safeAddress,
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 50,
+      isHistory: true
     })
     const { results, next, previous } = makeHistoryTransactionsFromService(list)
     if (!historyPointers[chainId]) {
@@ -147,8 +148,9 @@ export const loadQueuedTransactionsFromAuraApi = async (safeAddress: string): Pr
   try {
     const { Data: list } = await getAllTx({
       safeAddress,
+      isHistory: false,
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 50
     })
     const { results, next, previous } = makeQueueTransactionsFromService(list)
 
