@@ -120,9 +120,7 @@ export const SafeList = ({ onSafeClick }: Props): ReactElement => {
           })
 
           if (safePendingIndex >= 0 && safesPending) {
-            console.log('safesPending', safesPending)
             safesPending?.splice(safePendingIndex, 1)
-            console.log('safesPending', safesPending)
             saveToStorage(SAFES_PENDING_STORAGE_KEY, [...safesPending])
           }
         }

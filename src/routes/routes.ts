@@ -61,7 +61,7 @@ export const SAFE_ROUTES = {
   TRANSACTIONS_HISTORY: `${ADDRESSED_ROUTE}/transactions/history`,
   TRANSACTIONS_QUEUE: `${ADDRESSED_ROUTE}/transactions/queue`,
   // TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_SLUG}(${hashRegExp}+)`, // [TRANSACTION_HASH_SLUG] === 'safeTxHash'
-  TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:id`, // [TRANSACTION_HASH_SLUG] === 'safeTxHash'
+  TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_NUMBER}`, // [TRANSACTION_HASH_SLUG] === 'safeTxHash'
   ADDRESS_BOOK: `${ADDRESSED_ROUTE}/address-book`,
   APPS: `${ADDRESSED_ROUTE}/apps`,
   SETTINGS: `${ADDRESSED_ROUTE}/settings`,

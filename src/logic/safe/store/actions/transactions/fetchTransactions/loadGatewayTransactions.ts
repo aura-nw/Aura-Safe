@@ -1,4 +1,4 @@
-import { getTransactionHistory, getTransactionQueue } from '@gnosis.pm/safe-react-gateway-sdk'
+import { getTransactionHistory, getTransactionQueue, TransactionListItem } from '@gnosis.pm/safe-react-gateway-sdk'
 import { _getChainId } from 'src/config'
 import { HistoryGatewayResponse, QueuedGatewayResponse } from 'src/logic/safe/store/models/types/gateway.d'
 import { checksumAddress } from 'src/utils/checksumAddress'
@@ -6,7 +6,7 @@ import { Errors, CodedException } from 'src/logic/exceptions/CodedException'
 import { GATEWAY_URL } from 'src/utils/constants'
 import { getAllTx } from 'src/services'
 import { makeQueueTransactionsFromService, makeHistoryTransactionsFromService } from 'src/routes/safe/components/Transactions/TxList/utils'
-import { ITransactionListItem } from 'src/types/transaction'
+import isEqual from 'lodash/isEqual'
 
 /*************/
 /*  HISTORY  */
@@ -91,7 +91,7 @@ export const loadHistoryTransactionsFromAuraApi = async (safeAddress: string): P
 /************/
 /*  QUEUED  */
 /************/
-const queuedPointers: { [chainId: string]: { [safeAddress: string]: { next?: string; previous?: string } } } = {}
+const queuedPointers: { [chainId: string]: { [safeAddress: string]: { next?: string; previous?: string, current?: TransactionListItem[] } } } = {}
 
 /**
  * Fetch next page if there is a next pointer for the safeAddress.
@@ -143,8 +143,9 @@ export const loadQueuedTransactions = async (safeAddress: string): Promise<Queue
   }
 }
 
-export const loadQueuedTransactionsFromAuraApi = async (safeAddress: string): Promise<QueuedGatewayResponse['results']> => {
+export const loadQueuedTransactionsFromAuraApi = async (safeAddress: string): Promise<QueuedGatewayResponse['results'] | null> => {
   const chainId = _getChainId()
+
   try {
     const { Data: list } = await getAllTx({
       safeAddress,
@@ -152,17 +153,25 @@ export const loadQueuedTransactionsFromAuraApi = async (safeAddress: string): Pr
       pageIndex: 1,
       pageSize: 50
     })
-    const { results, next, previous } = makeQueueTransactionsFromService(list)
+    let { results, next, previous } = makeQueueTransactionsFromService(list)
 
+    let ret: QueuedGatewayResponse['results'] | null = results;
     if (!queuedPointers[chainId]) {
       queuedPointers[chainId] = {}
     }
 
-    if (!queuedPointers[chainId][safeAddress]) {
-      queuedPointers[chainId][safeAddress] = { next, previous }
+    if (queuedPointers[chainId][safeAddress]) {
+      const queuedPointerValue = queuedPointers[chainId][safeAddress]?.current
+      if (isEqual(results, queuedPointerValue)) {
+        ret = null
+      } else {
+        queuedPointers[chainId][safeAddress] = { ...queuedPointerValue, current: results }
+      }
+    } else {
+      queuedPointers[chainId][safeAddress] = { next, previous, current: results }
     }
 
-    return results
+    return ret
   } catch (e) {
     throw new CodedException(Errors._602, e.message)
   }

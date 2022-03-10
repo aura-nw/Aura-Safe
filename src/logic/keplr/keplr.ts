@@ -223,7 +223,15 @@ const handleProviderNotification = (provider: ProviderProps, dispatch: Dispatch<
 }
 
 export async function suggestChain(chainId = 'aura-testnet'): Promise<any> {
-  await window['keplr']?.experimentalSuggestChain(ChainsInfo[chainId]);
+  if (ChainsInfo[chainId]) {
+    await window['keplr']?.experimentalSuggestChain(ChainsInfo[chainId]);
+  } else {
+    const result = confirm(`Please add the ${chainId} chain to your Wallet!`)
+
+    if (result) {
+      window.open('https://github.com/aura-nw/Aura-Safe/blob/dev/CONNECT_KEPLR.md#i-connect-keplr-wallet-to-aura-testnet')
+    }
+  }
 }
 
 function fetchProvider(providerInfo: ProviderProps): (dispatch: Dispatch<any>) => Promise<void> {

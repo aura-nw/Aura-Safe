@@ -11,17 +11,16 @@ import {
   generateSafeRoute,
   SafeRouteSlugs,
   SAFE_ROUTES,
-  TRANSACTION_ID_SLUG,
   history,
   TRANSACTION_ID_NUMBER,
+  SAFE_ADDRESS_SLUG,
 } from 'src/routes/routes'
 import { Centered } from './styled'
 import { getTransactionWithLocationByAttribute } from 'src/logic/safe/store/selectors/gatewayTransactions'
 import { TxLocationContext } from './TxLocationProvider'
 import { AppReduxState } from 'src/store'
 import { logError, Errors } from 'src/logic/exceptions/CodedException'
-import { fetchSafeTransaction } from 'src/logic/safe/transactions/api/fetchSafeTransaction'
-import { makeTransactionDetail, makeTxFromDetails } from './utils'
+import { makeTransactionDetail } from './utils'
 import {
   addQueuedTransactions,
   addHistoryTransactions,
@@ -34,17 +33,13 @@ import { HistoryTxList } from './HistoryTxList'
 import { fetchSafeTransactionById } from 'src/services'
 
 const TxSingularDetails = (): ReactElement => {
-  const { [TRANSACTION_ID_SLUG]: safeTxHash = '' } = useParams<SafeRouteSlugs>()
+  const { [SAFE_ADDRESS_SLUG]: safeTxHash = '' } = useParams<SafeRouteSlugs>()
   const { [TRANSACTION_ID_NUMBER]: txId = '' } = useParams<SafeRouteSlugs>()
   const [fetchedTx, setFetchedTx] = useState<TransactionDetails>()
   const [liveTx, setLiveTx] = useState<{ txLocation: TxLocation; transaction: Transaction }>()
   const dispatch = useDispatch()
   const chainId = useSelector(currentChainId)
   const safeAddress = extractSafeAddress()
-
-  history.listen(() => {
-    window.location.reload()
-  })
 
   // We must use the tx from the store as the queue actions alter the tx
   const indexedTx = useSelector(
@@ -89,7 +84,7 @@ const TxSingularDetails = (): ReactElement => {
       }
 
       if (isCurrent) {
-        const tempTxDetail = {...txDetails, txId: txDetails?.Id?.toString()}
+        const tempTxDetail = { ...txDetails, txId: txDetails?.Id?.toString() }
         setFetchedTx(tempTxDetail)
       }
     }
@@ -99,7 +94,7 @@ const TxSingularDetails = (): ReactElement => {
     return () => {
       isCurrent = false
     }
-  }, [safeTxHash, setFetchedTx, setLiveTx])
+  }, [safeTxHash, txId, setFetchedTx, setLiveTx])
 
   // Add the tx to the store
   useEffect(() => {

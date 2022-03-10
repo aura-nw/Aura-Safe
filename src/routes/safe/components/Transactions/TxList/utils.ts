@@ -124,8 +124,8 @@ export const isCancelTxDetails = (txInfo: Transaction['txInfo']): boolean =>
 
 export const addressInList =
   (list: AddressEx[] = []) =>
-  (address: string): boolean =>
-    list.some((ownerAddress) => sameAddress(ownerAddress.value, address))
+    (address: string): boolean =>
+      list.some((ownerAddress) => sameAddress(ownerAddress.value, address))
 
 export const getTxTo = ({ txInfo }: Pick<Transaction, 'txInfo'>): AddressEx | undefined => {
   switch (txInfo.type) {
@@ -350,8 +350,8 @@ const makeTransactions = (list: ITransactionListItem[]): MTransactionListItem[] 
     type: 'TRANSACTION',
     transaction: {
       executionInfo: {
-        confirmationsRequired: 0,
-        confirmationsSubmitted: 0,
+        confirmationsRequired: tx?.ConfirmationsRequired || 0,
+        confirmationsSubmitted: tx?.Confirmations || 0,
         nonce: tx.Id,
         type: 'MULTISIG',
         missingSigners: null,
@@ -359,7 +359,7 @@ const makeTransactions = (list: ITransactionListItem[]): MTransactionListItem[] 
       id: tx.Id.toString(),
       txHash: tx.TxHash,
       timestamp: new Date(tx.UpdatedAt).getTime(),
-      txStatus: (tx.Status == '0' ? TransactionStatus.SUCCESS : tx.Status) as TransactionStatus,
+      txStatus: (tx.Status) as TransactionStatus,
       txInfo: {
         type: 'Transfer',
         sender: {

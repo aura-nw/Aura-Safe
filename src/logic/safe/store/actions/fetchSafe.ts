@@ -176,36 +176,36 @@ async function _getSafeInfo(safeAddress: string, safeId: number, dispatch?: Disp
   return {
     address: {
       value: safeAddress,
-      logoUri: '',
-      name: ''
+      logoUri: null,
+      name: null
     },
     chainId: _getChainId(),
     nonce: 0,
     threshold: info.threshold,
-    owners: info.owners.map(owners => ({
+    owners: info.owners?.map(owners => ({
       value: owners,
-      logoUri: '',
-      name: ''
+      logoUri: null,
+      name: null
     })),
     implementation: {
-      value: info.owners[0],
-      logoUri: '',
-      name: ''
+      value: '',
+      logoUri: null,
+      name: null
     },
     modules: [{
-      value: info.owners[0],
-      logoUri: '',
-      name: ''
+      value: '',
+      logoUri: null,
+      name: null
     }],
     guard: {
-      value: info.owners[0],
-      logoUri: '',
-      name: ''
+      value: '',
+      logoUri: null,
+      name: null
     },
     fallbackHandler: {
-      value: info.owners[0],
-      logoUri: '',
-      name: ''
+      value: '',
+      logoUri: null,
+      name: null
     },
     version: '',
     collectiblesTag: '',

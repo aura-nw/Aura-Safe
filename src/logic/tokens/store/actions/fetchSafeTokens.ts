@@ -100,21 +100,22 @@ export const fetchMSafeTokens =
           fiatTotal: '0',
           items: []
         }
-
-        safeInfo.balance.forEach(balance => {
-          tokenCurrenciesBalances.items.push({
-            balance: balance.amount,
-            fiatBalance: '0',
-            fiatConversion: '0',
-            tokenInfo: {
-              address: '0000000000000000000000000000000000000000',
-              decimals: 6,
-              logoUri: '',
-              name: 'Aura',
-              symbol: 'Aura'
-            }
+        if (safeInfo.balance) {
+          safeInfo.balance.forEach(balance => {
+            tokenCurrenciesBalances.items.push({
+              balance: balance.amount,
+              fiatBalance: '0',
+              fiatConversion: '0',
+              tokenInfo: {
+                address: '0000000000000000000000000000000000000000',
+                decimals: 6,
+                logoUri: '',
+                name: 'Aura',
+                symbol: 'Aura'
+              }
+            })
           })
-        })
+        }
 
         const { balances, ethBalance, tokens } = tokenCurrenciesBalances.items.reduce<ExtractedData>(
           extractDataFromResult,

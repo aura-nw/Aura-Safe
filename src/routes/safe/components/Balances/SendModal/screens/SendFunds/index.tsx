@@ -16,6 +16,7 @@ import {
   mustBeFloat,
   mustBeEthereumAddress,
   required,
+  mustBeValidAddress,
 } from 'src/components/forms/validator'
 import Block from 'src/components/layout/Block'
 import ButtonLink from 'src/components/layout/ButtonLink'
@@ -206,7 +207,7 @@ const SendFunds = ({
             const scannedName = addressBook.find(({ address }) => {
               return sameAddress(scannedAddress, address)
             })?.name
-            const addressErrorMessage = mustBeEthereumAddress(scannedAddress)
+            const addressErrorMessage = mustBeValidAddress(scannedAddress)
             if (!addressErrorMessage) {
               mutators.setRecipient(scannedAddress)
               setSelectedEntry({

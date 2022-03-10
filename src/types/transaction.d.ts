@@ -44,7 +44,9 @@ export interface ITransactionListItem {
     Denom: string,
     Status: string,
     Signatures: string[],
-    Direction: string
+    Direction: string,
+    ConfirmationsRequired: number,
+    Confirmations: number
 }
 
 export interface ISignature {

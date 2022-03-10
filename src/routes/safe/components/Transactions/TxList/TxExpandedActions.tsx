@@ -34,9 +34,10 @@ export const TxExpandedActions = ({ transaction }: TxExpandedActionsProps): Reac
 
   const getConfirmTooltipTitle = () => {
     if (isAwaitingEx) {
-      return (transaction.executionInfo as MultisigExecutionInfo)?.nonce === nonce
-        ? 'Execute'
-        : `Transaction with nonce ${nonce} needs to be executed first`
+      // return (transaction.executionInfo as MultisigExecutionInfo)?.nonce === nonce
+      //   ? 'Execute'
+      //   : `Transaction with nonce ${nonce} needs to be executed first`
+      return 'Execute'
     }
     return 'Confirm'
   }

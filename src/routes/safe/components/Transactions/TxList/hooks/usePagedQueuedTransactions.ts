@@ -7,6 +7,7 @@ import { QueueTransactionsInfo, useQueueTransactions } from './useQueueTransacti
 import { Errors } from 'src/logic/exceptions/CodedException'
 import { Await } from 'src/types/helpers'
 import { extractSafeAddress } from 'src/routes/routes'
+import { isEqual } from 'lodash'
 
 type PagedQueuedTransactions = {
   count: number

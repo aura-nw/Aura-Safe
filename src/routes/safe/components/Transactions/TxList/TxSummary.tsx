@@ -52,7 +52,7 @@ export const TxSummary = ({ txDetails }: Props): ReactElement => {
           <InlineEthHashInfo textSize="xl" hash={safeTxHash} shortenHash={8} showCopyBtn />
         </div>
       )}
-      {nonce !== undefined && (
+      {/* {nonce !== undefined && (
         <div className="tx-nonce">
           <Text size="xl" strong as="span">
             Nonce:{' '}
@@ -61,7 +61,7 @@ export const TxSummary = ({ txDetails }: Props): ReactElement => {
             {nonce}
           </Text>
         </div>
-      )}
+      )} */}
       {created && (
         <div className="tx-created">
           <Text size="xl" strong as="span">

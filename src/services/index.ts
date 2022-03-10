@@ -34,7 +34,8 @@ export interface IResponse<T> {
 type _ChainInfo = {
   internalChainId: number,
   denom: string,
-  symbol: string
+  symbol: string,
+  explorer: string
 }
 
 export type MChainInfo = ChainInfo & _ChainInfo
@@ -47,12 +48,13 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
   return axios.post(`${baseUrl}/general/network-list`)
     .then(response => {
       const chainList: MChainInfo[] = response.data.Data.map((e: {
-        chainId: any; name: any; rpc: any, id: number, prefix: string; denom: string, symbol: string
+        chainId: any; name: any; rpc: any, id: number, prefix: string; denom: string, symbol: string, explorer: string
       }) => {
         return {
           transactionService: null,
           internalChainId: e.id,
           denom: e.denom,
+          explorer: e.explorer,
           chainId: e.chainId,
           chainName: e.name,
           shortName: e.prefix,
@@ -71,9 +73,12 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
             value: e.rpc,
           },
           blockExplorerUriTemplate: {
-            address: "https://explorer.aura.network/address/{{address}}",
-            txHash: "https://explorer.aura.network/transaction/{{txHash}}",
-            api: "https://explorer.aura.network/api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}"
+            // address: "https://explorer.aura.network/address/{{address}}",
+            // txHash: "https://explorer.aura.network/transaction/{{txHash}}",
+            // api: "https://explorer.aura.network/api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}"
+            address: `${e.explorer}address/{{address}}`,
+            txHash: `${e.explorer}transaction/{{txHash}}`,
+            api: `${e.explorer}api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}`
           },
           nativeCurrency: {
             name: e.prefix.charAt(0).toUpperCase() + e.prefix.slice(1, e.prefix.length).toLowerCase(),

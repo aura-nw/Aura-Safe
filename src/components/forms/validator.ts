@@ -84,6 +84,13 @@ export const mustBeAddressHash = memoize((address: string): ValidatorReturnType 
   return isValidAddress(address) ? undefined : errorMessage
 })
 
+export const mustBeValidAddressHash = memoize((address: string): ValidatorReturnType => {
+  const errorMessage = 'Must be a valid address'
+
+  const regex = new RegExp('[a-z]{1,}[0-9A-Za-z]{39,}')
+  return regex.test(address) ? undefined : errorMessage
+})
+
 const mustHaveValidPrefix = (prefix: string): ValidatorReturnType => {
   if (!isValidPrefix(prefix)) {
     return 'Wrong chain prefix'
@@ -109,13 +116,11 @@ export const mustBeEthereumAddress = (fullAddress: string): ValidatorReturnType 
 }
 
 export const mustBeValidAddress = (fullAddress: string): ValidatorReturnType => {
-  const errorMessage = 'Must be a valid address, ENS or Unstoppable domain'
+  const errorMessage = 'Must be a valid address'
   const { address } = parsePrefixedAddress(fullAddress)
 
-  const regex = new RegExp('[a-z]{1,}[0-9A-Za-z]{39,}')
-
-
-  if (!regex.test(address)) {
+  const result = mustBeValidAddressHash(address)
+  if (result !== undefined) {
     return errorMessage
   }
   return undefined

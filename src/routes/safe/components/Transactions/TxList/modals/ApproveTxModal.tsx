@@ -347,18 +347,20 @@ export const ApproveTxModal = ({
       try {
         if (thresholdReached) {
           // case when Execute Click
+          const chainInfo = getChainInfo()
+          const chainId = chainInfo.chainId
           const data = {
             transactionId: transaction.id,
             internalChainId: getInternalChainId(),
             owner: userWalletAddress,
           }
-          const { ErrorCode, Data: safeData, Message } = await sendSafeTransaction(data)
+          const { ErrorCode } = await sendSafeTransaction(data)
           if (ErrorCode === 'SUCCESSFUL') {
             dispatch(enqueueSnackbar(NOTIFICATIONS.TX_EXECUTED_MSG))
-            window.location.reload()
           } else {
             dispatch(enqueueSnackbar(NOTIFICATIONS.TX_FAILED_MSG))
           }
+          dispatch(fetchTransactions(chainId, safeAddress))
         } else {
           // case when Confirm Click
           signTransactionWithKeplr(safeAddress)
@@ -422,7 +424,11 @@ export const ApproveTxModal = ({
       const signingInstruction = await (async () => {
         // const accountOnChain = await client.getAccount(safeAddress)
 
-        const {ErrorCode, Data: accountOnChainResult, Message} = await getAccountOnChain(safeAddress, getInternalChainId())
+        const {
+          ErrorCode,
+          Data: accountOnChainResult,
+          Message,
+        } = await getAccountOnChain(safeAddress, getInternalChainId())
 
         return {
           accountNumber: accountOnChainResult?.accountOnChain?.accountNumber,
@@ -469,7 +475,7 @@ export const ApproveTxModal = ({
           signature: signatures,
         }
 
-        const { ErrorCode, Data: safeData, Message } = await confirmSafeTransaction(data)
+        const { ErrorCode } = await confirmSafeTransaction(data)
         if (ErrorCode === 'SUCCESSFUL') {
           history.push(
             generateSafeRoute(SAFE_ROUTES.TRANSACTIONS_QUEUE, {
@@ -477,13 +483,15 @@ export const ApproveTxModal = ({
               safeAddress,
             }),
           )
-          window.location.reload()
+
+          dispatch(fetchTransactions(chainId, safeAddress, true))
+          // window.location.reload()
         } else {
           dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.TX_FAILED_MSG)))
         }
       } catch (error) {
         console.log(error)
-        dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.TX_CANCELLATION_EXECUTED_MSG)))
+        dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.TX_REJECTED_MSG)))
       }
     }
   }
@@ -511,11 +519,11 @@ export const ApproveTxModal = ({
               <Block className={classes.container}>
                 <Row style={{ flexDirection: 'column' }}>
                   <Paragraph>{description}</Paragraph>
-                  <Paragraph color="medium" size="sm">
+                  {/* <Paragraph color="medium" size="sm">
                     Transaction nonce:
                     <br />
                     <Bold className={classes.nonceNumber}>{nonce}</Bold>
-                  </Paragraph>
+                  </Paragraph> */}
 
                   {oneConfirmationLeft && canExecute && !isCancelTx && (
                     <ExecuteCheckbox onChange={setApproveAndExecute} />

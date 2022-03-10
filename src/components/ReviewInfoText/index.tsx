@@ -10,6 +10,7 @@ import { TransactionFees } from '../TransactionsFees'
 import { getRecommendedNonce } from 'src/logic/safe/api/fetchSafeTxGasEstimation'
 import { extractSafeAddress } from 'src/routes/routes'
 import { useEffect, useState } from 'react'
+import { EstimationStatus } from 'src/logic/hooks/useEstimateTransactionGas'
 
 type CustomReviewInfoTextProps = {
   safeNonce?: string
@@ -36,20 +37,20 @@ export const ReviewInfoText = ({
   const safeNonceNumber = parseInt(txParamsSafeNonce, 10)
   const lastTxNonce = useSelector(getLastTxNonce)
   const storeNextNonce = `${lastTxNonce && lastTxNonce + 1}`
-  const safeAddress = extractSafeAddress()
+  // const safeAddress = extractSafeAddress()
   const [recommendedNonce, setRecommendedNonce] = useState<string>(storeNextNonce)
 
-  useEffect(() => {
-    const fetchRecommendedNonce = async () => {
-      try {
-        const recommendedNonce = (await getRecommendedNonce(safeAddress)).toString()
-        setRecommendedNonce(recommendedNonce)
-      } catch (e) {
-        return
-      }
-    }
-    fetchRecommendedNonce()
-  }, [safeAddress])
+  // useEffect(() => {
+  //   const fetchRecommendedNonce = async () => {
+  //     try {
+  //       const recommendedNonce = (await getRecommendedNonce(safeAddress)).toString()
+  //       setRecommendedNonce(recommendedNonce)
+  //     } catch (e) {
+  //       return
+  //     }
+  //   }
+  //   fetchRecommendedNonce()
+  // }, [safeAddress])
 
   const warningMessage = () => {
     const isTxNonceOutOfOrder = () => {
@@ -83,7 +84,7 @@ export const ReviewInfoText = ({
 
   return (
     <ReviewInfoTextWrapper data-testid={testId}>
-      {warningMessage() || (
+      {/* {warningMessage() || (
         <TransactionFees
           gasCostFormatted={gasCostFormatted}
           isCreation={isCreation}
@@ -91,7 +92,14 @@ export const ReviewInfoText = ({
           isOffChainSignature={isOffChainSignature}
           txEstimationExecutionStatus={txEstimationExecutionStatus}
         />
-      )}
+      )} */}
+      <TransactionFees
+        gasCostFormatted={gasCostFormatted}
+        isCreation={isCreation}
+        isExecution={isExecution}
+        isOffChainSignature={isOffChainSignature}
+        txEstimationExecutionStatus={EstimationStatus.SUCCESS}
+      />
     </ReviewInfoTextWrapper>
   )
 }
