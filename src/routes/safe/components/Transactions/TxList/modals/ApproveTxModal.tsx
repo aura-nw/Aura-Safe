@@ -431,8 +431,8 @@ export const ApproveTxModal = ({
         } = await getAccountOnChain(safeAddress, getInternalChainId())
 
         return {
-          accountNumber: accountOnChainResult?.accountOnChain?.accountNumber,
-          sequence: accountOnChainResult?.accountOnChain?.sequence,
+          accountNumber: accountOnChainResult?.accountNumber,
+          sequence: accountOnChainResult?.sequence,
           memo: '',
         }
       })()

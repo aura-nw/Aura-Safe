@@ -216,8 +216,8 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
         // const accountOnChain = await client.getAccount(safeAddress)
 
         return {
-          accountNumber: accountOnChainResult?.accountOnChain?.accountNumber,
-          sequence: accountOnChainResult?.accountOnChain?.sequence,
+          accountNumber: accountOnChainResult?.accountNumber,
+          sequence: accountOnChainResult?.sequence,
           memo: '',
         }
       })()
