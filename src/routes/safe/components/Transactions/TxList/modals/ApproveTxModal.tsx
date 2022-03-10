@@ -59,6 +59,8 @@ import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 export const APPROVE_TX_MODAL_SUBMIT_BTN_TEST_ID = 'approve-tx-modal-submit-btn'
 export const REJECT_TX_MODAL_SUBMIT_BTN_TEST_ID = 'reject-tx-modal-submit-btn'
 
+let isDisabled = false
+
 const getModalTitleAndDescription = (
   thresholdReached: boolean,
   isCancelTx: boolean,
@@ -252,6 +254,7 @@ export const ApproveTxModal = ({
   const isTheTxReadyToBeExecuted = oneConfirmationLeft ? true : thresholdReached
   const [manualGasPrice, setManualGasPrice] = useState<string | undefined>()
   const [manualGasLimit, setManualGasLimit] = useState<string | undefined>()
+  const [isDisabled, setDisabled] = useState(false)
   const userWalletAddress = useSelector(userAccountSelector)
   const {
     confirmations,
@@ -344,6 +347,7 @@ export const ApproveTxModal = ({
       // )
 
       // call api to broadcast tx
+      setDisabled(true)
       try {
         if (thresholdReached) {
           // case when Execute Click
@@ -564,6 +568,7 @@ export const ApproveTxModal = ({
                     status: buttonStatus,
                     text: txEstimationExecutionStatus === EstimationStatus.LOADING ? 'Estimating' : undefined,
                     testId: isCancelTx ? REJECT_TX_MODAL_SUBMIT_BTN_TEST_ID : APPROVE_TX_MODAL_SUBMIT_BTN_TEST_ID,
+                    disabled: isDisabled
                   }}
                 />
               </GenericModal.Footer>

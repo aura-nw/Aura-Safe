@@ -127,6 +127,7 @@ const SafeHeader = ({
   onNewTransactionClick,
 }: Props): React.ReactElement => {
   const copyChainPrefix = useSelector(copyShortNameSelector)
+  const chainInfoShortName = getChainInfo().shortName
   const shortName = extractShortChainName()
 
   if (!address) {
@@ -170,7 +171,7 @@ const SafeHeader = ({
           <ButtonHelper onClick={onReceiveClick}>
             <Icon size="sm" type="qrCode" tooltip="Show QR" />
           </ButtonHelper>
-          <CopyToClipboardBtn textToCopy={copyChainPrefix ? `${shortName}:${address}` : `${address}`} />
+          <CopyToClipboardBtn textToCopy={copyChainPrefix ? `${chainInfoShortName}:${address}` : `${address}`} />
           <ExplorerButton explorerUrl={getExplorerInfo(address)} />
         </IconContainer>
 

@@ -74,6 +74,7 @@ import axios from 'axios'
 
 const useStyles = makeStyles(styles)
 let chains: ChainInfo[] = []
+// let isDisabled = false
 
 export type ReviewTxProp = {
   recipientAddress: string
@@ -135,6 +136,7 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
   const [manualSafeTxGas, setManualSafeTxGas] = useState('0')
   const [manualGasPrice, setManualGasPrice] = useState<string | undefined>()
   const [manualGasLimit, setManualGasLimit] = useState<string | undefined>()
+  const [isDisabled, setDisabled] = useState(false)
   // const { address: safeAddress, ethBalance, name: safeName } = useSelector(currentSafeWithNames)
 
   // const {
@@ -183,6 +185,7 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
   const userWalletAddress = useSelector(userAccountSelector)
 
   const submitTx = async (txParameters: TxParameters) => {
+    setDisabled(true)
     signTransactionWithKeplr(safeAddress)
   }
 
@@ -452,6 +455,7 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
                 status: buttonStatus,
                 text: txEstimationExecutionStatus === EstimationStatus.LOADING ? 'Estimating' : undefined,
                 testId: 'submit-tx-btn',
+                disabled: isDisabled
               }}
             />
           </Modal.Footer>
