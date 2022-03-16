@@ -440,8 +440,12 @@ export const ApproveTxModal = ({
 
       // calculate fee
       const gasPriceFee = GasPrice.fromString(String(manualGasPrice || gasPrice).concat(denom))
-      const sendFee = calculateFee(Number(manualGasLimit) || Number(baseGas), gasPriceFee)
-
+      // const sendFee = calculateFee(Number(manualGasLimit) || Number(baseGas), gasPriceFee)
+      const sendFee = {
+        amount: coins(manualGasPrice || gasPriceFormatted, denom),
+        gas: manualGasLimit || gasLimit,
+      }
+      
       const signerData: SignerData = {
         accountNumber: signingInstruction.accountNumber || 0,
         sequence: signingInstruction.sequence || 0,
