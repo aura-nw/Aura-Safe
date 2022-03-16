@@ -16,7 +16,10 @@ import {
   SAFE_ADDRESS_SLUG,
 } from 'src/routes/routes'
 import { Centered } from './styled'
-import { getTransactionWithLocationByAttribute } from 'src/logic/safe/store/selectors/gatewayTransactions'
+import {
+  getTransactionWithLocationByAttribute,
+  historyTransactions,
+} from 'src/logic/safe/store/selectors/gatewayTransactions'
 import { TxLocationContext } from './TxLocationProvider'
 import { AppReduxState } from 'src/store'
 import { logError, Errors } from 'src/logic/exceptions/CodedException'
@@ -31,6 +34,7 @@ import { currentChainId } from 'src/logic/config/store/selectors'
 import { QueueTxList } from './QueueTxList'
 import { HistoryTxList } from './HistoryTxList'
 import { fetchSafeTransactionById } from 'src/services'
+import { MESSAGES_CODE } from 'src/services/constant/message'
 
 const TxSingularDetails = (): ReactElement => {
   const { [SAFE_ADDRESS_SLUG]: safeTxHash = '' } = useParams<SafeRouteSlugs>()
@@ -39,6 +43,7 @@ const TxSingularDetails = (): ReactElement => {
   const [liveTx, setLiveTx] = useState<{ txLocation: TxLocation; transaction: Transaction }>()
   const dispatch = useDispatch()
   const chainId = useSelector(currentChainId)
+  const historyTxs = useSelector(historyTransactions)
   const safeAddress = extractSafeAddress()
 
   // We must use the tx from the store as the queue actions alter the tx
@@ -77,7 +82,15 @@ const TxSingularDetails = (): ReactElement => {
       let txDetails: any
       try {
         // txDetails = await fetchSafeTransaction(safeTxHash)
-        txDetails = await fetchSafeTransactionById(Number(txId), safeAddress)
+        const res = await fetchSafeTransactionById(txId, safeAddress)
+        const { ErrorCode, Data } = res
+        if (ErrorCode !== MESSAGES_CODE.SUCCESSFUL.ErrorCode) {
+          const txsRoute = generateSafeRoute(SAFE_ROUTES.TRANSACTIONS, extractPrefixedSafeAddress())
+          history.push(txsRoute)
+        } else {
+          txDetails = Data
+        }
+
       } catch (e) {
         logError(Errors._614, e.message)
         return
@@ -94,7 +107,7 @@ const TxSingularDetails = (): ReactElement => {
     return () => {
       isCurrent = false
     }
-  }, [safeTxHash, txId, setFetchedTx, setLiveTx])
+  }, [safeTxHash, txId, historyTxs, setFetchedTx, setLiveTx])
 
   // Add the tx to the store
   useEffect(() => {

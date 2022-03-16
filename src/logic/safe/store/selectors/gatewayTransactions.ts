@@ -57,7 +57,7 @@ export const txTransactions = createSelector(
   },
 )
 
-const txLocations: TxLocation[] = ['queued.next', 'queued.queued', 'history']
+const txLocations: TxLocation[] = ['queued.txs', 'history']
 
 export const getTransactionWithLocationByAttribute = createSelector(
   gatewayTransactions,
@@ -70,7 +70,7 @@ export const getTransactionWithLocationByAttribute = createSelector(
   (gatewayTransactions, chainId, safeAddress, attrDetails) => {
     const { attributeName, attributeValue } = attrDetails
     for (const txLocation of txLocations) {
-      const storedTxs: StoreStructure['history'] | StoreStructure['queued']['queued' | 'next'] | undefined = get(
+      const storedTxs: StoreStructure['history'] | StoreStructure['queued']['txs'] | undefined = get(
         gatewayTransactions?.[chainId]?.[safeAddress],
         txLocation,
       )
@@ -110,7 +110,7 @@ export const getTransactionsByNonce = createSelector(
     let txsByNonce: Transaction[] = []
 
     for (const txLocation of txLocations) {
-      const storedTxs: StoreStructure['history'] | StoreStructure['queued']['queued' | 'next'] | undefined = get(
+      const storedTxs: StoreStructure['history'] | StoreStructure['queued']['txs'] | undefined = get(
         gatewayTransactions?.[chainId]?.[safeAddress],
         txLocation,
       )

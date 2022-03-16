@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { ExpandedTxDetails } from 'src/logic/safe/store/models/types/gateway.d'
-import { fetchTransactionDetails, fetchTransactionDetailsByHash } from 'src/logic/safe/store/actions/fetchTransactionDetails'
+import { fetchTransactionDetailsByHash } from 'src/logic/safe/store/actions/fetchTransactionDetails'
 import { getTransactionByAttribute } from 'src/logic/safe/store/selectors/gatewayTransactions'
 import { AppReduxState } from 'src/store'
 

@@ -3,17 +3,17 @@ import { generatePath, matchPath } from 'react-router-dom'
 
 import { getChains } from 'src/config/cache/chains'
 import { ChainId, ShortName } from 'src/config/chain.d'
-import { checksumAddress } from 'src/utils/checksumAddress'
 import { PUBLIC_URL } from 'src/utils/constants'
-import { parsePrefixedAddress, parsePrefixedChainIdAddress } from 'src/utils/prefixedAddress'
+import { parsePrefixedAddress } from 'src/utils/prefixedAddress'
 
 export const history = createBrowserHistory({
   basename: PUBLIC_URL,
 })
-
+ //  8E906198720BB3EE6813FAD4BADDF15AF5E24E2171339D9D8C041D44C67C75DA
 // Safe specific routes
 // const hashRegExp = '0x[0-9A-Fa-f]'
 const hashRegExp = '[0-9A-Za-z]'
+const singularExp = '([0-9a-zA-Z]{64,}|[0-9]+)'
 
 // const chainSpecificSafeAddressPathRegExp = `[a-z0-9-]{2,}:${hashRegExp}{40}`
 const chainSpecificSafeAddressPathRegExp = `[a-z0-9-]{1,}:[a-z]+${hashRegExp}{39,40}`
@@ -61,7 +61,7 @@ export const SAFE_ROUTES = {
   TRANSACTIONS_HISTORY: `${ADDRESSED_ROUTE}/transactions/history`,
   TRANSACTIONS_QUEUE: `${ADDRESSED_ROUTE}/transactions/queue`,
   // TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_SLUG}(${hashRegExp}+)`, // [TRANSACTION_HASH_SLUG] === 'safeTxHash'
-  TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_NUMBER}`, // [TRANSACTION_HASH_SLUG] === 'safeTxHash'
+  TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_NUMBER}${singularExp}`, // [TRANSACTION_HASH_SLUG] === 'safeTxHash'
   ADDRESS_BOOK: `${ADDRESSED_ROUTE}/address-book`,
   APPS: `${ADDRESSED_ROUTE}/apps`,
   SETTINGS: `${ADDRESSED_ROUTE}/settings`,

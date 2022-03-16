@@ -92,6 +92,16 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
     },
     [ADD_QUEUED_TRANSACTIONS]: (state, action: Action<QueuedPayload>) => {
       const { chainId, safeAddress, values } = action.payload
+      // let prevQueueds: StoreStructure['queued'] = cloneDeep(state[chainId]?.[safeAddress]?.queued || {})
+
+      // let newQueueds: StoreStructure['queued']
+
+      // if (!prevQueueds['txs']) {
+      //   prevQueueds['txs'] = {}
+      // }
+
+      // let prevTxs = prevQueueds['txs']
+
       let newNext = {}
       let newQueued = {}
       let txs: { [nonce: number]: Transaction[] } = []
@@ -127,12 +137,21 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
 
         const newTx = value.transaction
 
-        // txs[txNonce] = [...txs[txNonce], newTx]
+        // if (prevTxs[txNonce]) {
+        //   prevTxs[txNonce] = [{ ...prevTxs[txNonce], ...newTx }]
+        // } else {
+        //   prevTxs = {
+        //     ...prevTxs,
+        //     [txNonce]: [newTx],
+        //   }
+        // }
+
         if (txs?.[txNonce]) {
           txs[txNonce] = [...txs[txNonce], newTx]
         } else {
           txs = { ...txs, [txNonce]: [newTx] }
         }
+
         if (label === 'queued') {
           if (newQueued?.[txNonce]) {
             newQueued[txNonce] = [...newQueued[txNonce], newTx]
@@ -165,7 +184,7 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
             queued: {
               next: newNext,
               queued: newQueued,
-              txs
+              txs,
             },
           },
         },
@@ -177,8 +196,8 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
       const { queued: newQueued, history: newHistory } = clonedStoredTxs
 
       // get the tx group (it will be `queued.next`, `queued.queued` or `history`)
-      txLocationLoop: for (const txLocation of ['queued.next', 'queued.queued', 'history']) {
-        const txGroup: StoreStructure['queued']['next' | 'queued'] | StoreStructure['history'] = get(
+      txLocationLoop: for (const txLocation of ['queued.txs', 'history']) {
+        const txGroup: StoreStructure['queued']['txs'] | StoreStructure['history'] = get(
           clonedStoredTxs,
           txLocation,
         )
@@ -188,7 +207,6 @@ export const gatewayTransactionsReducer = handleActions<GatewayTransactionsState
         }
 
         for (const [timestamp, transactions] of Object.entries(txGroup)) {
-
           const txIndex = transactions.findIndex(({ id }) => sameString(id, transactionId))
 
           if (txIndex !== -1) {

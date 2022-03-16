@@ -62,13 +62,8 @@ import { ChainInfo } from '@gnosis.pm/safe-react-gateway-sdk'
 import { getChains } from 'src/config/cache/chains'
 import { generatePath } from 'react-router-dom'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
-import {
-  calculateFee,
-  GasPrice,
-  makeMultisignedTx,
-  StargateClient,
-} from '@cosmjs/stargate'
-import { fromBase64, toBase64 } from "@cosmjs/encoding";
+import { calculateFee, GasPrice, makeMultisignedTx, StargateClient } from '@cosmjs/stargate'
+import { fromBase64, toBase64 } from '@cosmjs/encoding'
 import fetchTransactions from 'src/logic/safe/store/actions/transactions/fetchTransactions'
 import axios from 'axios'
 
@@ -208,14 +203,18 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
     if (window.getOfflineSignerOnlyAmino) {
       const offlineSigner = window.getOfflineSignerOnlyAmino(chainId)
       const accounts = await offlineSigner.getAccounts()
-      const tendermintUrl = chainInfo?.rpcUri?.value
+      // const tendermintUrl = chainInfo?.rpcUri?.value
       const client = await SigningStargateClient.offline(offlineSigner)
 
       const amountFinal = Math.floor(Number(tx?.amount) * Math.pow(10, 6)).toString() || ''
 
       const signingInstruction = await (async () => {
         // get account on chain from API
-        const {ErrorCode, Data: accountOnChainResult, Message} = await getAccountOnChain(safeAddress, getInternalChainId())
+        const {
+          ErrorCode,
+          Data: accountOnChainResult,
+          Message,
+        } = await getAccountOnChain(safeAddress, getInternalChainId())
         // const accountOnChain = await client.getAccount(safeAddress)
 
         return {
@@ -236,8 +235,8 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
       }
 
       // calculate fee
-      const gasPrice = GasPrice.fromString(String(manualGasPrice || gasPriceFormatted).concat(denom));
-      const sendFee = calculateFee(Number(manualGasLimit) || Number(gasLimit), gasPrice);
+      const gasPrice = GasPrice.fromString(String(manualGasPrice || gasPriceFormatted).concat(denom))
+      const sendFee = calculateFee(Number(manualGasLimit) || Number(gasLimit), gasPrice)
 
       const signerData: SignerData = {
         accountNumber: signingInstruction.accountNumber || 0,
@@ -253,8 +252,6 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
 
         const signatures = toBase64(signResult.signatures[0])
         const bodyBytes = toBase64(signResult.bodyBytes)
-        // const signatures = parseToAdress(signResult.signatures[0])
-        // const bodyBytes = parseToAdress(signResult.bodyBytes)
 
         // call api to create transaction
         const data: ICreateSafeTransaction = {
@@ -282,11 +279,15 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
           })
           history.push(txRoute)
         } else {
-          dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.TX_FAILED_MSG)))
+          if (ErrorCode === 'E028') {
+            dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.CREATE_SAFE_PENDING_EXECUTE_MSG)))
+          } else {
+            dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.TX_FAILED_MSG)))
+          }
+
           onClose()
         }
       } catch (error) {
-        console.log(error)
         dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.TX_CANCELLATION_EXECUTED_MSG)))
         onClose()
       }
@@ -455,7 +456,7 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
                 status: buttonStatus,
                 text: txEstimationExecutionStatus === EstimationStatus.LOADING ? 'Estimating' : undefined,
                 testId: 'submit-tx-btn',
-                disabled: isDisabled
+                disabled: isDisabled,
               }}
             />
           </Modal.Footer>

@@ -44,6 +44,7 @@ import {
   SAFE_ADDRESS_SLUG,
   getPrefixedSafeAddressSlug,
   extractShortChainName,
+  TRANSACTION_ID_NUMBER,
 } from 'src/routes/routes'
 import ExecuteCheckbox from 'src/components/ExecuteCheckbox'
 import { calculateFee, coins, GasPrice, MsgSendEncodeObject, SignerData, SigningStargateClient } from '@cosmjs/stargate'
@@ -58,8 +59,6 @@ import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 
 export const APPROVE_TX_MODAL_SUBMIT_BTN_TEST_ID = 'approve-tx-modal-submit-btn'
 export const REJECT_TX_MODAL_SUBMIT_BTN_TEST_ID = 'reject-tx-modal-submit-btn'
-
-let isDisabled = false
 
 const getModalTitleAndDescription = (
   thresholdReached: boolean,
@@ -319,32 +318,6 @@ export const ApproveTxModal = ({
     if (thresholdReached && confirmations.size < _threshold) {
       dispatch(enqueueSnackbar(NOTIFICATIONS.TX_FETCH_SIGNATURES_ERROR_MSG))
     } else {
-      // dispatch(
-      //   processTransaction({
-      //     safeAddress,
-      //     tx: {
-      //       id,
-      //       baseGas,
-      //       confirmations,
-      //       data,
-      //       gasPrice,
-      //       gasToken,
-      //       nonce,
-      //       operation,
-      //       origin,
-      //       refundReceiver,
-      //       safeTxGas,
-      //       safeTxHash,
-      //       to,
-      //       value,
-      //     },
-      //     userAddress,
-      //     notifiedTransaction: TX_NOTIFICATION_TYPES.CONFIRMATION_TX,
-      //     approveAndExecute: canExecute && approveAndExecute && isTheTxReadyToBeExecuted,
-      //     ethParameters: txParameters,
-      //     thresholdReached,
-      //   }),
-      // )
 
       // call api to broadcast tx
       setDisabled(true)
@@ -358,9 +331,23 @@ export const ApproveTxModal = ({
             internalChainId: getInternalChainId(),
             owner: userWalletAddress,
           }
-          const { ErrorCode } = await sendSafeTransaction(data)
+          const {
+            ErrorCode,
+            Data,
+          } = await sendSafeTransaction(data)
           if (ErrorCode === 'SUCCESSFUL') {
             dispatch(enqueueSnackbar(NOTIFICATIONS.TX_EXECUTED_MSG))
+            const TxHash = Data['TxHash']
+            if (TxHash) {
+              const prefixedSafeAddress = getPrefixedSafeAddressSlug({ shortName: extractShortChainName(), safeAddress })
+
+              const txRoute = generatePath(SAFE_ROUTES.TRANSACTIONS_SINGULAR, {
+                [SAFE_ADDRESS_SLUG]: prefixedSafeAddress,
+                [TRANSACTION_ID_NUMBER]: TxHash,
+              })
+
+              history.replace(txRoute)
+            }
           } else {
             dispatch(enqueueSnackbar(NOTIFICATIONS.TX_FAILED_MSG))
           }

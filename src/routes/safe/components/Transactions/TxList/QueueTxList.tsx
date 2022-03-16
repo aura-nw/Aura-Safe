@@ -91,7 +91,7 @@ export const QueueTxList = ({ transactions }: QueueTxListProps): ReactElement =>
     const [, lastTransactionsGroup] = transactions[transactions.length - 1]
     const lastTransaction = lastTransactionsGroup[lastTransactionsGroup.length - 1]
 
-    if (txLocation === 'queued.queued' && !sameString(lastItemId, lastTransaction.id)) {
+    if (txLocation === 'queued.txs' && !sameString(lastItemId, lastTransaction.id)) {
       setLastItemId(lastTransaction.id)
     }
   }

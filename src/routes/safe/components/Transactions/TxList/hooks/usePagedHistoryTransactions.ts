@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadPagedHistoryTransactions } from 'src/logic/safe/store/actions/transactions/fetchTransactions/loadGatewayTransactions'
+import { loadPagedHistoryTransactions, loadPageHistoryTransactionsFromAuraApi } from 'src/logic/safe/store/actions/transactions/fetchTransactions/loadGatewayTransactions'
 import { addHistoryTransactions } from 'src/logic/safe/store/actions/transactions/gatewayTransactions'
 import { TransactionDetails } from 'src/logic/safe/store/models/types/gateway.d'
 import { currentChainId } from 'src/logic/config/store/selectors'
@@ -31,12 +31,15 @@ export const usePagedHistoryTransactions = (): PagedTransactions => {
 
     let results: Await<ReturnType<typeof loadPagedHistoryTransactions>>
     try {
-      results = await loadPagedHistoryTransactions(safeAddress.current)
+      // results = await loadPagedHistoryTransactions(safeAddress.current)
+      results = await loadPageHistoryTransactionsFromAuraApi(safeAddress.current)
     } catch (e) {
       // No next page
-      if (e.content !== Errors._608) {
-        e.log()
-      }
+      console.error(e);
+      
+      // if (e.content !== Errors._608) {
+      //   e.log()
+      // }
     }
 
     if (!results) {

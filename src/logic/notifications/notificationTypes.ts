@@ -21,6 +21,7 @@ enum NOTIFICATION_IDS {
   UNLOCK_WALLET_MSG,
   CONNECT_WALLET_ERROR_MSG,
   CREATE_SAFE_FAILED_MSG,
+  CREATE_SAFE_PENDING_EXECUTE_MSG,
   SIGN_TX_MSG,
   TX_REJECTED_MSG,
   TX_EXECUTED_MSG,
@@ -72,6 +73,10 @@ export const NOTIFICATIONS: Record<NotificationId, Notification> = {
   // Safe creation
   CREATE_SAFE_FAILED_MSG: {
     message: 'Safe creation failed',
+    options: { variant: ERROR, persist: false, autoHideDuration: longDuration },
+  },
+  CREATE_SAFE_PENDING_EXECUTE_MSG: {
+    message: 'Safe has pending transaction!',
     options: { variant: ERROR, persist: false, autoHideDuration: longDuration },
   },
   // Regular/Custom Transactions
@@ -239,5 +244,5 @@ export const NOTIFICATIONS: Record<NotificationId, Notification> = {
   SAFE_CREATION_DUPLICATED: {
     message: 'Duplicate safe information!',
     options: { variant: ERROR, persist: false, preventDuplicate: true, autoHideDuration: shortDuration },
-  },
+  }
 }
