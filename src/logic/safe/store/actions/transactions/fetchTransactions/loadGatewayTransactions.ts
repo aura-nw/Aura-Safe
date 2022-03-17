@@ -17,6 +17,7 @@ import { ITransactionListQuery } from 'src/types/transaction'
 /*  HISTORY  */
 /*************/
 const historyPointers: { [chainId: string]: { [safeAddress: string]: { next?: string; previous?: string } } } = {}
+const historyTransactions: { [chainId: string]: { [safeAddress: string]: { txs?: TransactionListItem[] } } } = {}
 
 /**
  * Fetch next page if there is a next pointer for the safeAddress.
@@ -83,9 +84,24 @@ export const loadHistoryTransactionsFromAuraApi = async (
     if (!historyPointers[chainId]) {
       historyPointers[chainId] = {}
     }
-
+    let ret: HistoryGatewayResponse['results'] | null = results
     if (!historyPointers[chainId][safeAddress]) {
       historyPointers[chainId][safeAddress] = { next, previous }
+    }
+
+    if (!historyTransactions[chainId]) {
+      historyTransactions[chainId] = {}
+    }
+
+    if (historyTransactions[chainId][safeAddress]) {
+      const history = historyTransactions[chainId][safeAddress]?.txs || []
+      if (isEqual(results, history)) {
+        ret = null
+      } else {
+        historyTransactions[chainId][safeAddress] = { txs: results }
+      }
+    } else {
+      historyTransactions[chainId][safeAddress] = { txs: results }
     }
 
     return results

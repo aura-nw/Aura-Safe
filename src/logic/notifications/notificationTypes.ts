@@ -82,7 +82,7 @@ export const NOTIFICATIONS: Record<NotificationId, Notification> = {
   // Regular/Custom Transactions
   SIGN_TX_MSG: {
     message: 'Please sign the transaction',
-    options: { variant: INFO, persist: true },
+    options: { variant: INFO, persist: false, autoHideDuration: shortDuration },
   },
   TX_REJECTED_MSG: {
     message: 'Transaction rejected',
