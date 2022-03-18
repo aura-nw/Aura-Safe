@@ -209,7 +209,7 @@ const CookiesBanner = (): ReactElement => {
           <p className={classes.text}>
             We use cookies to provide you with the best experience and to help improve our website and application.
             Please read our{' '}
-            <Link className={classes.link} to="https://gnosis-safe.io/cookie">
+            <Link className={classes.link} to="#">
               Cookie Policy
             </Link>{' '}
             for more information. By clicking &quot;Accept all&quot;, you agree to the storing of cookies on your device
