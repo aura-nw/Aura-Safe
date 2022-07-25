@@ -33,6 +33,7 @@ import SelectWalletAndNetworkStep, {
   selectWalletAndNetworkStepLabel,
 } from './steps/SelectWalletAndNetworkStep/SelectWalletAndNetworkStep'
 
+import { ConnectWalletModal } from 'src/components/ConnectWalletModal'
 import Paragraph from 'src/components/layout/Paragraph'
 import { Modal } from 'src/components/Modal'
 import NetworkLabel from 'src/components/NetworkLabel/NetworkLabel'
@@ -51,10 +52,9 @@ import { WALLETS_NAME } from '../../logic/wallets/constant/wallets'
 import { loadLastUsedProvider } from '../../logic/wallets/store/middlewares/providerWatcher'
 import { MESSAGES_CODE } from '../../services/constant/message'
 import { useAnalytics, USER_EVENTS } from '../../utils/googleAnalytics'
-import { ConnectWalletModal } from 'src/components/ConnectWalletModal'
 
-import { BackIcon, EmphasisLabel, LoaderContainer, StyledBorder, StyledButtonBorder, StyledButtonLabel } from './styles'
 import useConnectWallet from 'src/logic/hooks/useConnectWallet'
+import { BackIcon, EmphasisLabel, LoaderContainer, StyledBorder, StyledButtonBorder, StyledButtonLabel } from './styles'
 
 type ModalDataType = {
   safeAddress: string
@@ -70,8 +70,9 @@ export type PendingSafeListStorage = PendingSafeStorage[]
 
 function CreateSafePage(): ReactElement {
   const dispatch = useDispatch()
-  const [safePendingToBeCreated, setSafePendingToBeCreated] = useState<CreateSafeFormValues>()
+  // const [safePendingToBeCreated, setSafePendingToBeCreated] = useState<CreateSafeFormValues>()
   const [pendingSafe, setPendingSafe] = useState<boolean>(false)
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const [showCreatedModal, setShowModal] = useState(false)
@@ -83,7 +84,7 @@ function CreateSafePage(): ReactElement {
   const { connectWalletState, onConnectWalletShow, onConnectWalletHide } = useConnectWallet()
   const { trackEvent } = useAnalytics()
 
-  const BYTES = Buffer.from('')
+  // const BYTES = Buffer.from('')
 
   useEffect(() => {
     const checkIfSafeIsPendingToBeCreated = async (): Promise<void> => {
@@ -233,148 +234,58 @@ function CreateSafePage(): ReactElement {
           </StepperForm>
         </Block>
       </Page>
-      {showCreatedModal && (
-        <Modal
-          description="Select a Wallet"
-          handleClose={onClickModalButton}
-          open={true}
-          title={pendingSafe ? 'Confirmation' : 'Safe Created!'}
-        >
-          <Modal.Header onClose={onClickModalButton}>
-            <Modal.Header.Title withoutMargin>Select a Wallet</Modal.Header.Title>
-          </Modal.Header>
 
-          <Modal.Body>
-            {!pendingSafe ? (
-              <div data-testid="safe-created-popup">
-                <Paragraph>
-                  You just created a new Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>
-                  You will only be able to use this Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>
-                  If you send assets on other networks to this address,{' '}
-                  <EmphasisLabel>you will not be able to access them</EmphasisLabel>
-                </Paragraph>
-              </div>
-            ) : (
-              <div data-testid="safe-created-popup">
-                <Paragraph>
-                  You are about to create a new Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>
-                  You will only be able to use this Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>All other owners must give their permission in order for the Safe to be created.</Paragraph>
-                <Paragraph>
-                  Before that, you can also cancel the Safe creation request by clicking the{' '}
-                  <EmphasisLabel> "Cancel"</EmphasisLabel> button next to your awaiting safe in the Safe list.
-                </Paragraph>
-              </div>
-            )}
-          </Modal.Body>
-          <Modal.Footer justifyContent="flex-end">
-            {
-              <StyledBorder>
-                <StyledButtonBorder iconType="safe" iconSize="sm" size="lg" onClick={onClickModalButton}>
-                  <StyledButtonLabel size="xl">Add existing Safe</StyledButtonLabel>
-                </StyledButtonBorder>
-              </StyledBorder>
-              // <ButtonContainer>
-              //   <StyledButtonBorder
-              //     testId="safe-created-button"
-              //     onClick={onClickModalButton}
-              //     color="primary"
-              //     type={'button'}
-              //     size="small"
-              //     variant="contained"
-              //   >
-              //     Continue
-              //   </StyledButtonBorder>
-              // </ButtonContainer>
-            }
-          </Modal.Footer>
-        </Modal>
-      )}
-      {/* { showCreatedModal && (
-        <StyledGenericModal
-          onClose={onClickModalButton}
-          title={pendingSafe ? 'Confirmation' : 'Safe Created!'}
-          body={
-            !pendingSafe ? (
-              <div data-testid="safe-created-popup">
-                <Paragraph>
-                  You just created a new Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>
-                  You will only be able to use this Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>
-                  If you send assets on other networks to this address,{' '}
-                  <EmphasisLabel>you will not be able to access them</EmphasisLabel>
-                </Paragraph>
-              </div>
-            ) : (
-              <div data-testid="safe-created-popup">
-                <Paragraph>
-                  You are about to create a new Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>
-                  You will only be able to use this Safe on <NetworkLabel />
-                </Paragraph>
-                <Paragraph>All other owners must give their permission in order for the Safe to be created.</Paragraph>
-                <Paragraph>
-                  Before that, you can also cancel the Safe creation request by clicking the{' '}
-                  <EmphasisLabel> "Cancel"</EmphasisLabel> button next to your awaiting safe in the Safe list.
-                </Paragraph>
-              </div>
-            )
-          }
-          footer={
-            <ButtonContainer>
-              <StyledButtonBorder
-                testId="safe-created-button"
-                onClick={onClickModalButton}
-                color="primary"
-                type={'button'}
-                size="small"
-                variant="contained"
-              >
-                Continue
-              </StyledButtonBorder>
-            </ButtonContainer>
-          }
-        />
-      )} */}
+      <Modal
+        description=""
+        handleClose={onClickModalButton}
+        open={showCreatedModal}
+        title={pendingSafe ? 'Confirmation' : 'Safe Created!'}
+      >
+        <Modal.Header onClose={onClickModalButton}>
+          <Modal.Header.Title withoutMargin>{pendingSafe ? 'Confirmation' : 'Safe Created!'}</Modal.Header.Title>
+        </Modal.Header>
 
-      {/* { true && (
-        <GenericModal
-        onClose={() => {}}
-        
-          title="Unable to load the new Safe"
-          body={
-            <div>
+        <Modal.Body>
+          {!pendingSafe ? (
+            <div data-testid="safe-created-popup">
               <Paragraph>
-                We are currently unable to load the Safe but it was successfully created and can be found <br />
-                under the following address{' '}
-                <InlinePrefixedEthHashInfo
-                  hash={'newSafeAddress'}
-                  showCopyBtn
-                  explorerUrl={getExplorerInfo('newSafeAddress')}
-                />
+                You just created a new Safe on <NetworkLabel />
+              </Paragraph>
+              <Paragraph>
+                You will only be able to use this Safe on <NetworkLabel />
+              </Paragraph>
+              <Paragraph>
+                If you send assets on other networks to this address,{' '}
+                <EmphasisLabel>you will not be able to access them</EmphasisLabel>
               </Paragraph>
             </div>
+          ) : (
+            <div data-testid="safe-created-popup">
+              <Paragraph>
+                You are about to create a new Safe on <NetworkLabel />
+              </Paragraph>
+              <Paragraph>
+                You will only be able to use this Safe on <NetworkLabel />
+              </Paragraph>
+              <Paragraph>All other owners must give their permission in order for the Safe to be created.</Paragraph>
+              <Paragraph>
+                Before that, you can also cancel the Safe creation request by clicking the{' '}
+                <EmphasisLabel> {`"Cancel"`}</EmphasisLabel> button next to your awaiting safe in the Safe list.
+              </Paragraph>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer justifyContent="flex-end">
+          {
+            <StyledBorder>
+              <StyledButtonBorder iconType="safe" iconSize="sm" size="lg" onClick={onClickModalButton}>
+                <StyledButtonLabel size="xl">Continue</StyledButtonLabel>
+              </StyledButtonBorder>
+            </StyledBorder>
           }
-          footer={
-            <ButtonContainer>
-              <Button color="primary" type="button" size="small" variant="contained">
-                OK
-              </Button>
-            </ButtonContainer>
-          }
-        />
-      )} */}
+        </Modal.Footer>
+      </Modal>
+
       <ConnectWalletModal isOpen={connectWalletState.showConnect} onClose={onConnectWalletHide}></ConnectWalletModal>
     </>
   )
@@ -448,22 +359,22 @@ async function makeSafeCreate(creatorAddress: string, newSafeFormValues: CreateS
   } as ISafeCreate
 }
 
-async function makeSafeCreateWithTerra(
-  creatorAddress: string,
-  newSafeFormValues: CreateSafeFormValues,
-  creatorPubkey,
-): Promise<ISafeCreate> {
-  const internalChainId = getInternalChainId()
-  return {
-    internalChainId,
-    creatorAddress,
-    creatorPubkey,
-    otherOwnersAddress: newSafeFormValues[FIELD_SAFE_OWNERS_LIST].map(
-      ({ addressFieldName }) => newSafeFormValues[addressFieldName],
-    ).filter((e) => e !== creatorAddress),
-    threshold: newSafeFormValues[FIELD_NEW_SAFE_THRESHOLD],
-  } as ISafeCreate
-}
+// async function makeSafeCreateWithTerra(
+//   creatorAddress: string,
+//   newSafeFormValues: CreateSafeFormValues,
+//   creatorPubkey,
+// ): Promise<ISafeCreate> {
+//   const internalChainId = getInternalChainId()
+//   return {
+//     internalChainId,
+//     creatorAddress,
+//     creatorPubkey,
+//     otherOwnersAddress: newSafeFormValues[FIELD_SAFE_OWNERS_LIST].map(
+//       ({ addressFieldName }) => newSafeFormValues[addressFieldName],
+//     ).filter((e) => e !== creatorAddress),
+//     threshold: newSafeFormValues[FIELD_NEW_SAFE_THRESHOLD],
+//   } as ISafeCreate
+// }
 
 export const updateAddressBook = async (newAddress: string, formValues: CreateSafeFormValues, dispatch) => {
   const chainId = _getChainId()
