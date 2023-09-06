@@ -2,7 +2,6 @@ import { WalletInitOptions } from 'bnc-onboard/dist/src/interfaces'
 
 import { getRpcServiceUrl, getDisabledWallets, _getChainId } from 'src/config'
 import { WALLETS } from 'src/config/chain.d'
-import { FORTMATIC_KEY, PORTIS_ID } from 'src/utils/constants'
 
 type Wallet = WalletInitOptions & {
   desktop: boolean

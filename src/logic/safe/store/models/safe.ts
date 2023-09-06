@@ -47,7 +47,8 @@ export type SafeRecordProps = {
   nextQueueSeq: string
   sequence: string
   coinConfig?: any[]
-  isHideZeroBalance?: boolean
+  isHideZeroBalance?: boolean,
+  isSafeLoaded?: boolean
 }
 
 /**

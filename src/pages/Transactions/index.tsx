@@ -1,4 +1,3 @@
-import { Item } from '@aura/safe-react-components/dist/navigation/Tab'
 import { ReactElement, useEffect, useState } from 'react'
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import Icon from 'src/assets/icons/ChartBar.svg'
@@ -9,11 +8,6 @@ import { SAFE_ROUTES, extractPrefixedSafeAddress, generateSafeRoute } from 'src/
 import HistoryTransactions from './History'
 import QueueTransactions from './Queue'
 import { ContentWrapper, Wrapper } from './styled'
-
-const TRANSACTION_TABS: Item[] = [
-  { label: 'Queue', id: SAFE_ROUTES.TRANSACTIONS_QUEUE },
-  { label: 'History', id: SAFE_ROUTES.TRANSACTIONS_HISTORY },
-]
 
 const Transactions = (): ReactElement => {
   const history = useHistory()

@@ -5,11 +5,8 @@ import { useSelector } from 'react-redux'
 import Paragraph from 'src/components/layout/Paragraph'
 import { currentSafe } from 'src/logic/safe/store/selectors'
 import { getLastTxNonce } from 'src/logic/safe/store/selectors/gatewayTransactions'
-import { lg, sm } from 'src/theme/variables'
 import { TransactionFees } from '../TransactionsFees'
-import { getRecommendedNonce } from 'src/logic/safe/api/fetchSafeTxGasEstimation'
-import { extractSafeAddress } from 'src/routes/routes'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { EstimationStatus } from 'src/logic/hooks/useEstimateTransactionGas'
 
 type CustomReviewInfoTextProps = {

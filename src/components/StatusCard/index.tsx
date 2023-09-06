@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { ProposalStatus } from 'src/types/proposal'
 import styled from 'styled-components'
 

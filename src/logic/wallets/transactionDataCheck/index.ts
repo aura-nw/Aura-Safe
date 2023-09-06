@@ -1,5 +1,4 @@
 import { loadFromStorage, saveToStorage } from 'src/utils/storage'
-import { WALLET_PROVIDER } from 'src/logic/wallets/getWeb3'
 import contractDataImage from './images/contractData.png'
 
 const USER_ENABLED_LEDGER_TX_DATA = 'USER_ENABLED_LEDGER_TX_DATA'

@@ -41,7 +41,9 @@ import {
   changeTransactionSequenceById,
   confirmSafeTransaction,
   createSafeTransaction,
-  getAccountInfo
+  fetchAccountInfo,
+  getAccountInfo,
+  getAccountInfoByLcd
 } from 'src/services'
 import { MESSAGES_CODE } from 'src/services/constant/message'
 import { ICreateSafeTransaction } from 'src/types/transaction'
@@ -383,10 +385,10 @@ const signMessage = async (
       if (!signer)
         throw new Error(`An error occurred while loading signer. Please disconnect your wallet and try again.`)
       const account = await signer.getAccounts()
-      const accountInfo = (await getAccountInfo(safeAddress)).account[0]
+      const accountInfo = (await fetchAccountInfo(safeAddress))
       const onlineData: SequenceResponse = {
         accountNumber: accountInfo?.account_number,
-        sequence: accountInfo.sequence,
+        sequence: accountInfo?.sequence,
       }
 
       const signerData: SignerData = {
@@ -452,3 +454,4 @@ const signMessage = async (
     throw new Error(error)
   }
 }
+

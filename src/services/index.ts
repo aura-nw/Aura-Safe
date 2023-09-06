@@ -340,6 +340,13 @@ export async function getAccountInfo(contractAddress: string): Promise<any> {
     .then((res) => res.data.data[chainInfo.environment])
 }
 
+export async function getAccountInfoByLcd(contractAddress: string): Promise<any> {
+  const currentChainInfo = getChainInfo() as any
+  return axios
+    .get(`${currentChainInfo.lcd}/cosmos/auth/v1beta1/accounts/${contractAddress}`)
+    .then((res) => res.data)
+}
+
 export async function getNumberOfDelegator(validatorId: any): Promise<IResponse<any>> {
   const currentChainInfo = getChainInfo() as any
   const { chainInfo } = await getGatewayUrl()
@@ -405,4 +412,21 @@ export async function getDetailToken(address: string): Promise<IResponse<any>> {
   return axios
     .get(`${currentChainInfo.lcd}/cosmwasm/wasm/v1/contract/${address}/smart/eyAidG9rZW5faW5mbyI6IHt9IH0%3D`)
     .then((res) => res.data)
+}
+
+export async function fetchAccountInfo(safeAddress: string) {
+  try {
+    const response = await getAccountInfo(safeAddress);
+    const accountInfo = response.account[0];
+    return accountInfo;
+  } catch (error) {
+    try {
+      const lcdResponse = await getAccountInfoByLcd(safeAddress);
+      const accountInfoFromLcd = lcdResponse.account;
+      return accountInfoFromLcd;
+    } catch (lcdError) {
+      console.error("Error while fetching account info:", lcdError);
+      return null;
+    }
+  }
 }

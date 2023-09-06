@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Dot from '@material-ui/icons/FiberManualRecord'
 import { getChainById } from 'src/config'
 import { ChainId } from 'src/config/chain.d'
 import styled from 'styled-components'

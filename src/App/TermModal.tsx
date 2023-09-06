@@ -3,24 +3,15 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Close from '@material-ui/icons/Close'
 import { ReactElement } from 'react'
 
-import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { ChainInfo } from '@gnosis.pm/safe-react-gateway-sdk'
+import Logo from 'src/assets/icons/Logo.svg'
 import Hairline from 'src/components/layout/Hairline'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
-import { getChainInfo, getExplorerInfo } from 'src/config'
-import { fontColor, lg, md, screenSm, secondaryText } from 'src/theme/variables'
-import { borderLinear } from 'src/theme/variables'
-import Logo from 'src/assets/icons/Logo.svg'
-import session from 'src/utils/storage/session'
-import { store } from 'src/logic/safe/store'
-import { setTerm } from 'src/logic/checkTerm/store/actions/setTerm'
+import { getChainInfo } from 'src/config'
 import { handleConnectWallet } from 'src/logic/providers'
-
-import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
-import { enhanceSnackbarForAction, NOTIFICATIONS } from 'src/logic/notifications'
-import { TermSelector } from 'src/logic/checkTerm/store/selector'
+import { borderLinear, lg, md, secondaryText } from 'src/theme/variables'
+import styled from 'styled-components'
 
 const useStyles = (chainInfo: ChainInfo) =>
   makeStyles(

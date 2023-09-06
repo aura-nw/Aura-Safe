@@ -1,4 +1,4 @@
-import { border, extraSmallFontSize, sm, xs, fontColor } from 'src/theme/variables'
+import { extraSmallFontSize, sm, xs } from 'src/theme/variables'
 import styled from 'styled-components'
 
 type StyledLabelTypes = {

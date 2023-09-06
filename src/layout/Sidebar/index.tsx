@@ -4,11 +4,6 @@ import { Divider } from '@aura/safe-react-components'
 import List, { ListItemType } from 'src/components/List'
 import SafeHeader from './SafeHeader'
 
-const StyledDivider = styled(Divider)`
-  margin: 16px -8px 0;
-  border-top: 1px solid #404047;
-`
-
 type Props = {
   safeAddress?: string
   safeName?: string

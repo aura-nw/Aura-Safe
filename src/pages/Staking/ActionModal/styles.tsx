@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { Divider } from '@material-ui/core'
 
 const ImgStyled = styled.img`
   width: 56px;
@@ -160,27 +159,27 @@ const Wrapper = styled.div`
   box-sizing: border-box;
 `
 export {
-  ImgStyled,
-  HeaderPopup,
-  HeaderContainer,
+  BorderAura,
+  BorderInput,
+  BoxDelegate,
   BoxImgStyled,
   BoxVotingPower,
-  TextPower,
-  TextDelegators,
   Commission,
-  StyleDivider,
-  TextNotiStyled,
-  TextGray,
-  TextDelegateNoti,
-  BoxDelegate,
   FotterModal,
-  TextTitleStaking,
-  PaddingPopup,
+  HeaderContainer,
+  HeaderPopup,
+  ImgStyled,
   InputAura,
-  StyledInputModal,
+  PaddingPopup,
+  StyleDivider,
   StyledButtonModal,
-  BorderInput,
-  BorderAura,
+  StyledInputModal,
+  TextDelegateNoti,
+  TextDelegators,
   TextDisable,
+  TextGray,
+  TextNotiStyled,
+  TextPower,
+  TextTitleStaking,
   Wrapper,
 }

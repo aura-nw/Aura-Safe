@@ -1,21 +1,20 @@
-import { useMemo, useCallback } from 'react'
+import { FEATURES } from '@gnosis.pm/safe-react-gateway-sdk'
+import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouteMatch } from 'react-router-dom'
-import { FEATURES } from '@gnosis.pm/safe-react-gateway-sdk'
 
-import { getShortName } from 'src/config'
 import { ListItemType } from 'src/components/List'
+import { getShortName } from 'src/config'
 import ListIcon from 'src/layout/Sidebar/ListIcon'
 import { currentSafeFeaturesEnabled, currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { grantedSelector } from 'src/utils/safeUtils/selector'
+import { hasFeature } from 'src/logic/safe/utils/safeVersion'
 import {
-  extractSafeAddress,
   ADDRESSED_ROUTE,
   SAFE_SUBSECTION_ROUTE,
+  extractSafeAddress,
   generatePrefixedAddressRoutes,
 } from 'src/routes/routes'
-import { hasFeature } from 'src/logic/safe/utils/safeVersion'
-import path from 'path'
+import { grantedSelector } from 'src/utils/safeUtils/selector'
 
 const useSidebarItems = (): ListItemType[] => {
   const featuresEnabled = useSelector(currentSafeFeaturesEnabled)

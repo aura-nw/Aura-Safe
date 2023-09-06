@@ -2,7 +2,7 @@ import React, { JSXElementConstructor, ReactElement, useMemo, useState } from 'r
 import { useEffect } from 'react'
 import { Form } from 'react-final-form'
 import { Validator } from '../forms/validator'
-import Stepper, { StepElement, StepElementType } from '../Stepper/Stepper'
+import Stepper, { StepElement } from '../Stepper/Stepper'
 import { useStepper } from '../Stepper/stepperContext'
 
 type StepperFormProps = {
@@ -70,7 +70,6 @@ type StepFormElementProps = {
   children: ReactElement<any, string | JSXElementConstructor<any>>
   disableNextButton?: boolean
 }
-
 
 export function StepFormElement({ children }: StepFormElementProps): ReactElement {
   return children

@@ -1,8 +1,9 @@
-import { background, border, lg, sm, bgBox } from 'src/theme/variables'
-import styled from 'styled-components'
+import { createStyles } from '@material-ui/core'
 import Block from 'src/components/layout/Block'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
+import { border, lg, sm } from 'src/theme/variables'
+import styled from 'styled-components'
 
 const DetailsContainer = styled(Block)`
   padding: ${lg};
@@ -34,7 +35,6 @@ const DescriptionContainer = styled(Row)`
   display: flex;
   width: auto;
 `
-import { createStyles } from '@material-ui/core'
 const styles = (theme) =>
   createStyles({
     containerListOwner: {
@@ -47,4 +47,4 @@ const styles = (theme) =>
     },
   })
 
-export { DetailsContainer, SafeNameParagraph, TitleContainer, OwnersAddressesContainer, DescriptionContainer, styles }
+export { DescriptionContainer, DetailsContainer, OwnersAddressesContainer, SafeNameParagraph, TitleContainer, styles }

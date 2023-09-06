@@ -2,37 +2,34 @@ import React, { ReactElement, useEffect } from 'react'
 import { useForm } from 'react-final-form'
 import { useSelector } from 'react-redux'
 
-import TableContainer from '@material-ui/core/TableContainer'
 import { makeStyles } from '@material-ui/core'
+import TableContainer from '@material-ui/core/TableContainer'
+import NetworkLabel from 'src/components/NetworkLabel/NetworkLabel'
+import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
+import { useStepper } from 'src/components/Stepper/stepperContext'
 import Block from 'src/components/layout/Block'
 import Col from 'src/components/layout/Col'
 import Hairline from 'src/components/layout/Hairline'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
+import { getExplorerInfo, getNativeCurrency } from 'src/config'
+import { providerNameSelector } from 'src/logic/wallets/store/selectors'
+import InformationIcon from '../../assets/information.svg'
 import {
   FIELD_CREATE_CUSTOM_SAFE_NAME,
   FIELD_CREATE_SUGGESTED_SAFE_NAME,
-  FIELD_NEW_SAFE_GAS_LIMIT,
-  FIELD_NEW_SAFE_GAS_PRICE,
   FIELD_NEW_SAFE_PROXY_SALT,
   FIELD_NEW_SAFE_THRESHOLD,
   FIELD_SAFE_OWNERS_LIST,
 } from '../../fields/createSafeFields'
-import { getExplorerInfo, getNativeCurrency } from 'src/config'
-import { useEstimateSafeCreationGas } from 'src/logic/hooks/useEstimateSafeCreationGas'
-import NetworkLabel from 'src/components/NetworkLabel/NetworkLabel'
-import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
-import { useStepper } from 'src/components/Stepper/stepperContext'
-import { providerNameSelector } from 'src/logic/wallets/store/selectors'
 import {
+  DescriptionContainer,
   DetailsContainer,
+  OwnersAddressesContainer,
   SafeNameParagraph,
   TitleContainer,
-  OwnersAddressesContainer,
-  DescriptionContainer,
   styles,
 } from './styles'
-import InformationIcon from '../../assets/information.svg'
 
 export const reviewNewSafeStepLabel = 'Review'
 const useStyles = makeStyles((theme) => styles(theme))

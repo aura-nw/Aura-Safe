@@ -40,7 +40,7 @@ export default function Undelegate({ validator, amount, onClose, gasUsed }) {
   const decimal = getCoinDecimal()
   const defaultGas =
     gasUsed ||
-    chainDefaultGas.find((chain) => chain.typeUrl === MsgTypeUrl.Undelegate)?.gasAmount ||
+    chainDefaultGas?.find((chain) => chain.typeUrl === MsgTypeUrl.Undelegate)?.gasAmount ||
     DEFAULT_GAS_LIMIT.toString()
   const gasFee =
     defaultGas && chainDefaultGasPrice

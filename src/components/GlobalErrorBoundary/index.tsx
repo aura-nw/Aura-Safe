@@ -1,12 +1,11 @@
-import styled from 'styled-components'
-import { Text, Link, Icon, FixedIcon, Title } from '@aura/safe-react-components'
-import { IS_PRODUCTION } from 'src/utils/constants'
 import { FallbackRender } from '@sentry/react/dist/errorboundary'
-import { ROOT_ROUTE } from 'src/routes/routes'
-import { loadFromSessionStorage, removeFromSessionStorage, saveToSessionStorage } from 'src/utils/storage/session'
+import { useState } from 'react'
 import Astronaut from 'src/assets/images/astronaut.png'
 import Space from 'src/assets/images/bg-space.png'
-import { useState } from 'react'
+import { ROOT_ROUTE } from 'src/routes/routes'
+import { IS_PRODUCTION } from 'src/utils/constants'
+import { loadFromSessionStorage, removeFromSessionStorage, saveToSessionStorage } from 'src/utils/storage/session'
+import styled from 'styled-components'
 import { LinkButton } from '../Button'
 const Wrapper = styled.div`
   width: 100vw;

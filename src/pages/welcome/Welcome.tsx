@@ -1,28 +1,22 @@
-import { ReactElement } from 'react'
-import { Button, Title, Text } from '@aura/safe-react-components'
+import { Text, Title } from '@aura/safe-react-components'
 import Divider from '@material-ui/core/Divider'
-import Page from 'src/components/layout/Page'
+import { ReactElement } from 'react'
+import { useHistory } from 'react-router-dom'
+import { FilledButton, OutlinedButton } from 'src/components/Button'
 import Block from 'src/components/layout/Block'
-import Link from 'src/components/layout/Link'
+import Page from 'src/components/layout/Page'
 import { LOAD_SAFE_ROUTE, OPEN_SAFE_ROUTE } from 'src/routes/routes'
-import {
-  CardsContainer,
-  StyledCard,
-  CardContentContainer,
-  CardDescriptionContainer,
-  StyledTitle,
-  StyledButtonLabel,
-  StyledButton,
-  StyledTextButton,
-  StyledButtonBorder,
-  StyledBorder,
-  ButtonContainer,
-} from './styles'
 import styled from 'styled-components'
 import plusIcon from './assets/plus.svg'
 import walletIcon from './assets/wallet.svg'
-import { FilledButton, OutlinedButton } from 'src/components/Button'
-import { useHistory } from 'react-router-dom'
+import {
+  ButtonContainer,
+  CardContentContainer,
+  CardDescriptionContainer,
+  CardsContainer,
+  StyledCard,
+  StyledTitle,
+} from './styles'
 
 const TitleFont = styled(Title)`
   font-family: 'Inter';

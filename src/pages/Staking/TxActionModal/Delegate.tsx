@@ -17,6 +17,7 @@ import { extractSafeAddress } from 'src/routes/routes'
 import { convertAmount, formatNativeCurrency, formatNativeToken } from 'src/utils'
 import { signAndCreateTransaction } from 'src/utils/signer'
 import { Wrapper } from './style'
+import { DEFAULT_GAS_LIMIT } from 'src/services/constant/common'
 
 export default function Delegate({ validator, amount, onClose, gasUsed }) {
   const safeAddress = extractSafeAddress()
@@ -29,7 +30,7 @@ export default function Delegate({ validator, amount, onClose, gasUsed }) {
   const denom = getCoinMinimalDenom()
   const chainDefaultGasPrice = getChainDefaultGasPrice()
   const decimal = getCoinDecimal()
-  const defaultGas = gasUsed || '400000'
+  const defaultGas = gasUsed || DEFAULT_GAS_LIMIT.toString()
   const gasFee =
     defaultGas && chainDefaultGasPrice
       ? calculateGasFee(+defaultGas, +chainDefaultGasPrice, decimal)

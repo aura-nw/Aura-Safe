@@ -4,10 +4,8 @@ import Icon from 'src/assets/icons/FileText.svg'
 import Breadcrumb from 'src/components/Breadcrumb'
 import { FilledButton } from 'src/components/Button'
 import Loader from 'src/components/Loader'
-import { getInternalChainId } from 'src/config'
 import { enhanceSnackbarForAction } from 'src/logic/notifications'
 import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
-import { extractPrefixedSafeAddress } from 'src/routes/routes'
 import styled from 'styled-components'
 import MessageGenerator from './MessageGenerator'
 import ReviewPopup from './ReviewPopup'
@@ -32,12 +30,8 @@ const Wrap = styled.div`
 `
 
 function CustomTransaction(props): ReactElement {
-  const internalChainId = getInternalChainId()
   const dispatch = useDispatch()
-  const { safeId } = extractPrefixedSafeAddress()
-
   const [message, setMessage] = useState([])
-
   const [gasUsed, setGasUsed] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setIsError] = useState(true)

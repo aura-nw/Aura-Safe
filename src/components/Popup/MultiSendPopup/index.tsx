@@ -5,7 +5,7 @@ import { extendedSafeTokensSelector } from 'src/utils/safeUtils/selector'
 
 import { AminoMsgMultiSend, coins } from '@cosmjs/stargate'
 import BigNumber from 'bignumber.js'
-import { OutlinedButton, OutlinedNeutralButton, TextButton } from 'src/components/Button'
+import { OutlinedButton, OutlinedNeutralButton } from 'src/components/Button'
 import Gap from 'src/components/Gap'
 import TextArea from 'src/components/Input/TextArea'
 import TokenSelect from 'src/components/Input/Token'

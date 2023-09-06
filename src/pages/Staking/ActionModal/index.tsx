@@ -1,9 +1,5 @@
-import { Button } from '@aura/safe-react-components'
 import { useEffect, useState } from 'react'
-import ButtonSelect from 'src/components/ButtonSelect'
-import CloseButton from 'src/components/CloseButton'
 import { Popup } from 'src/components/Popup'
-import styled from 'styled-components'
 import StakeFish from '../assets/StakeFish.svg'
 
 import {
@@ -21,37 +17,19 @@ import {
   Wrapper,
 } from './styles'
 
-import { borderLinear } from 'src/theme/variables'
-
 import ModalDelegate from './delegate'
 import ManageModal from './manage'
 import ModalRedelegate from './redelegate'
 
+import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
+import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
+import SplitButton from 'src/components/Button/SplitButton'
+import Loader from 'src/components/Loader'
 import { LoadingContainer } from 'src/components/LoaderContainer'
 import { ValidatorType } from 'src/logic/validator/store/reducer'
 import { allValidator as allValidatorSelector } from 'src/logic/validator/store/selectors'
 import ModalUndelegate from './undelegate'
-import Loader from 'src/components/Loader'
-import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
-import SplitButton from 'src/components/Button/SplitButton'
-import BigNumber from 'bignumber.js'
-const StyledButtonSubmit = styled(Button)`
-  border: 2px solid transparent;
-  background-image: ${borderLinear};
-  background-origin: border-box;
-  background-clip: content-box, border-box;
-  border-radius: 50px !important;
-  padding: 0 !important;
-  background-color: transparent !important;
-  min-width: 130px !important;
-  height: 32px !important;
-  margin-left: 10px;
-  &:disabled {
-    cursor: not-allowed;
-    pointer-events: unset;
-  }
-`
 
 export default function ModalStaking(props) {
   const {

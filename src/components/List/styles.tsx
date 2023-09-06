@@ -7,8 +7,6 @@ import Badge from '@material-ui/core/Badge'
 import ListMui, { ListProps } from '@material-ui/core/List'
 import { FixedIcon } from '@aura/safe-react-components'
 
-import { semiBoldFont, mediumFontSize } from 'src/theme/variables'
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {

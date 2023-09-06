@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { lg, green } from 'src/theme/variables'
+import { lg } from 'src/theme/variables'
 import Block from 'src/components/layout/Block'
 
 const BlockWithPadding = styled(Block)`

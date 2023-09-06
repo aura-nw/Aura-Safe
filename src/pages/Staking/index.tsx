@@ -14,7 +14,6 @@ import {
   simulate,
 } from 'src/services/index'
 
-import queryString from 'query-string'
 import { extractPrefixedSafeAddress, extractSafeAddress } from 'src/routes/routes'
 
 import { coin } from '@cosmjs/stargate'
@@ -24,12 +23,12 @@ import Breadcrumb from 'src/components/Breadcrumb'
 import { ConnectWalletModal } from 'src/components/ConnectWalletModal'
 import useConnectWallet from 'src/logic/hooks/useConnectWallet'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
+import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import { loadedSelector } from 'src/logic/wallets/store/selectors'
 import { convertAmount, formatNumber } from 'src/utils'
 import { grantedSelector } from 'src/utils/safeUtils/selector'
 import MyDelegation from './MyDelegation'
 import TxActionModal from './TxActionModal'
-import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 
 export const defValidatorImage = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg'
 function Staking(props): ReactElement {
@@ -160,7 +159,7 @@ function Staking(props): ReactElement {
   useEffect(() => {
     const dataTemp: any = []
     const formatDataDelegations = allDelegations.map((delegation: any) => {
-      const reward = allRewards.find(
+      const reward = allRewards?.find(
         (rw: any) => rw.validator_address === delegation.delegation.validator_address,
       ) as any
       return {
@@ -199,20 +198,19 @@ function Staking(props): ReactElement {
     setDataDelegateOfUser(null)
 
     const validatorsRes: any = await getAllValidators()
-    const validator = validatorsRes.validator
-      .map((val) => ({
-        commission: val.commission.commission_rates.rate * 100,
-        delegators: val.delegators_count,
-        operatorAddress: val.operator_address,
-        votingPower: {
-          percent_voting_power: val.percent_voting_power,
-          tokens: {
-            amount: val.tokens,
-            denom: nativeCurrency.symbol,
-          },
+    const validatorItem = validatorsRes.validator.find((item) => item.operator_address === address)
+    const validator = {
+      commission: validatorItem.commission.commission_rates.rate * 100,
+      delegators: validatorItem.delegators_count,
+      operatorAddress: validatorItem.operator_address,
+      votingPower: {
+        percent_voting_power: validatorItem.percent_voting_power,
+        tokens: {
+          amount: validatorItem.tokens,
+          denom: nativeCurrency.symbol,
         },
-      }))
-      .find((item) => item.operatorAddress === address)
+      },
+    }
 
     const delegation = {
       claimedReward: {
@@ -220,8 +218,8 @@ function Staking(props): ReactElement {
         denom: rewardAmount[0]?.denom,
       },
       delegatableBalance: {
-        amount: balances.find((balance) => balance.type === 'native')?.tokenBalance,
-        denom: balances.find((balance) => balance.type === 'native')?.denom,
+        amount: balances?.find((balance) => balance.type === 'native')?.tokenBalance,
+        denom: balances?.find((balance) => balance.type === 'native')?.denom,
       },
       delegationBalance: {
         amount: allDelegations?.find((item) => item.delegation.validator_address === address)?.balance.amount,

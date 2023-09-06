@@ -4,7 +4,7 @@ import { convertAmount, formatNativeCurrency, formatWithComma } from 'src/utils'
 import { BoxDelegate, TextDelegateNoti, TextGray, TextNotiStyled } from './styles'
 
 export default function ManageModal(props) {
-  const { nativeCurrency, itemDelegate, availableBalance, dataDelegateOfUser } = props
+  const { nativeCurrency, dataDelegateOfUser } = props
   const pendingReward: any = convertAmount(dataDelegateOfUser?.delegation?.pendingReward?.amount || 0, false)
   return (
     <>
