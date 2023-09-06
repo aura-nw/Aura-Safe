@@ -105,128 +105,125 @@ export const fetchMSafeTokens =
       const listSafeTokens = [...(safeInfo?.balance || []), ...(cw20Tokens || [])];
       const state = getState()
       const safe = safeByAddressSelector(state, safeInfo.address)
-      if (safeInfo?.balance) {
-        const listChain = getChains()
-        const tokenDetailsListData = await getTokenDetail()
-        const tokenDetailsList = await tokenDetailsListData.json()
-        listTokens = [...tokenDetailsList['ibc'], ...tokenDetailsList['cw20']]
-        const importedConfig =
-          safe?.coinConfig?.filter((c) => {
-            if (c.isAddedToken) {
-              return !listTokens.some((t) => t.address === c.address)
-            }
-            return false
-          }) || []
-        listTokens = [...listTokens, ...importedConfig]
-        const filteredListTokens = listTokens.map((token) => {
-          const isExist = listSafeTokens.some((t) => t.denom === token.minCoinDenom || t.address === token.address)
-          return { ...token, enable: isExist }
-        })
-        const chainInfo: any = listChain.find((x: any) => x.internalChainId === safeInfo?.internalChainId)
-        const nativeTokenData = safeInfo.balance.find((balance) => balance.denom == chainInfo.denom)
-        const balances: any[] = []
-        if (nativeTokenData) {
-          const nativeToken = {
-            tokenBalance: `${humanReadableValue(
-              +nativeTokenData?.amount > 0 ? nativeTokenData?.amount : 0,
-              chainInfo.nativeCurrency.decimals,
-            )}`,
-            tokenAddress: '0000000000000000000000000000000000000000',
-            decimals: chainInfo.nativeCurrency.decimals,
-            logoUri: chainInfo.nativeCurrency.logoUri,
-            name: chainInfo.nativeCurrency.name,
-            symbol: chainInfo.nativeCurrency.symbol,
-            denom: chainInfo.denom,
-            type: 'native',
-            enable: true,
+      const listChain = getChains()
+      const tokenDetailsListData = await getTokenDetail()
+      const tokenDetailsList = await tokenDetailsListData.json()
+      listTokens = [...tokenDetailsList['ibc'], ...tokenDetailsList['cw20']]
+      const importedConfig =
+        safe?.coinConfig?.filter((c) => {
+          if (c.isAddedToken) {
+            return !listTokens.some((t) => t.address === c.address)
           }
-          balances.push(nativeToken)
-          filteredListTokens.unshift(nativeToken)
+          return false
+        }) || []
+      listTokens = [...listTokens, ...importedConfig]
+      const filteredListTokens = listTokens.map((token) => {
+        const isExist = listSafeTokens.some((t) => t.denom === token.minCoinDenom || t.address === token.address)
+        return { ...token, enable: isExist }
+      })
+      const chainInfo: any = listChain.find((x: any) => x.internalChainId === safeInfo?.internalChainId)
+      const nativeTokenData = safeInfo.balance?.find((balance) => balance.denom == chainInfo.denom)
+      const balances: any[] = []
+      if (nativeTokenData) {
+        const nativeToken = {
+          tokenBalance: `${humanReadableValue(
+            +nativeTokenData?.amount > 0 ? nativeTokenData?.amount : 0,
+            chainInfo.nativeCurrency.decimals,
+          )}`,
+          tokenAddress: '0000000000000000000000000000000000000000',
+          decimals: chainInfo.nativeCurrency.decimals,
+          logoUri: chainInfo.nativeCurrency.logoUri,
+          name: chainInfo.nativeCurrency.name,
+          symbol: chainInfo.nativeCurrency.symbol,
+          denom: chainInfo.denom,
+          type: 'native',
+          enable: true,
         }
+        balances.push(nativeToken)
+        filteredListTokens.unshift(nativeToken)
+      }
 
-        const coinConfig = safe?.coinConfig?.length
-          ? filteredListTokens
-            .filter(
-              (item) =>
-                !safe?.coinConfig?.some((token) => token.denom === item.denom || token.address === item.address),
-            )
-            .concat(safe?.coinConfig)
-          : filteredListTokens
+      const coinConfig = safe?.coinConfig?.length
+        ? filteredListTokens
+          .filter(
+            (item) =>
+              !safe?.coinConfig?.some((token) => token.denom === item.denom || token.address === item.address),
+          )
+          .concat(safe?.coinConfig)
+        : filteredListTokens
 
-        safeInfo.balance
-          .filter((balance) => balance.denom != chainInfo.denom)
-          .forEach((data: any) => {
-            const tokenDetail = listTokens.find((token) => token.cosmosDenom == data.minimal_denom)
+      safeInfo.balance
+        ?.filter((balance) => balance.denom != chainInfo.denom)
+        .forEach((data: any) => {
+          const tokenDetail = listTokens.find((token) => token.cosmosDenom == data.minimal_denom)
+          balances.push({
+            tokenBalance: `${humanReadableValue(+data?.amount > 0 ? data?.amount : 0, tokenDetail?.decimals || 6)}`,
+            tokenAddress: tokenDetail?.address,
+            decimals: tokenDetail?.decimals || 6,
+            logoUri:
+              tokenDetail?.icon ||
+              tokenDetail?.logoUri ||
+              'https://aura-nw.github.io/token-registry/images/undefined.png',
+            name: tokenDetail?.name,
+            symbol: tokenDetail?.coinDenom,
+            denom: tokenDetail?.minCoinDenom,
+            cosmosDenom: tokenDetail?.cosmosDenom,
+            type: 'ibc',
+          })
+        })
+
+      if (safeInfo.assets.CW20.asset?.length > 0) {
+        safeInfo.assets.CW20.asset.forEach((data) => {
+          const tokenDetail = listTokens.find((token) => token.address == data.contract_address)
+          if (tokenDetail) {
             balances.push({
-              tokenBalance: `${humanReadableValue(+data?.amount > 0 ? data?.amount : 0, tokenDetail?.decimals || 6)}`,
+              tokenBalance: `${humanReadableValue(+data?.balance > 0 ? data?.balance : 0, tokenDetail?.decimals || 6)}`,
               tokenAddress: tokenDetail?.address,
               decimals: tokenDetail?.decimals || 6,
+              name: tokenDetail?.name,
               logoUri:
                 tokenDetail?.icon ||
                 tokenDetail?.logoUri ||
                 'https://aura-nw.github.io/token-registry/images/undefined.png',
-              name: tokenDetail?.name,
-              symbol: tokenDetail?.coinDenom,
-              denom: tokenDetail?.minCoinDenom,
-              cosmosDenom: tokenDetail?.cosmosDenom,
-              type: 'ibc',
+              symbol: tokenDetail?.symbol,
+              denom: tokenDetail?.symbol,
+              type: 'CW20',
             })
-          })
-
-        if (safeInfo.assets.CW20.asset.length > 0) {
-          safeInfo.assets.CW20.asset.forEach((data) => {
-            const tokenDetail = listTokens.find((token) => token.address == data.contract_address)
-            if (tokenDetail) {
-              balances.push({
-                tokenBalance: `${humanReadableValue(+data?.balance > 0 ? data?.balance : 0, tokenDetail?.decimals || 6)}`,
-                tokenAddress: tokenDetail?.address,
-                decimals: tokenDetail?.decimals || 6,
-                name: tokenDetail?.name,
-                logoUri:
-                  tokenDetail?.icon ||
-                  tokenDetail?.logoUri ||
-                  'https://aura-nw.github.io/token-registry/images/undefined.png',
-                symbol: tokenDetail?.symbol,
-                denom: tokenDetail?.symbol,
-                type: 'CW20',
-              })
-            } else {
-              listTokens.forEach((token) => {
-                if (token.tokenType !== 'ibc' && token.tokenType !== 'native') {
-                  const isTokenInAsset = safeInfo.assets.CW20.asset.some(
-                    (data) => data.contract_address === token.address,
-                  )
-                  if (!isTokenInAsset) {
-                    balances.push({
-                      tokenBalance: `${humanReadableValue(0, tokenDetail?.decimals || 6)}`,
-                      tokenAddress: token?.address,
-                      decimals: token?.decimals || 6,
-                      name: token?.name,
-                      logoUri:
-                        token?.icon || token?.logoUri || 'https://aura-nw.github.io/token-registry/images/undefined.png',
-                      symbol: token?.symbol,
-                      denom: token?.symbol,
-                      type: 'CW20',
-                    })
-                  }
+          } else {
+            listTokens.forEach((token) => {
+              if (token.tokenType !== 'ibc' && token.tokenType !== 'native') {
+                const isTokenInAsset = safeInfo.assets.CW20.asset.some(
+                  (data) => data.contract_address === token.address,
+                )
+                if (!isTokenInAsset) {
+                  balances.push({
+                    tokenBalance: `${humanReadableValue(0, tokenDetail?.decimals || 6)}`,
+                    tokenAddress: token?.address,
+                    decimals: token?.decimals || 6,
+                    name: token?.name,
+                    logoUri:
+                      token?.icon || token?.logoUri || 'https://aura-nw.github.io/token-registry/images/undefined.png',
+                    symbol: token?.symbol,
+                    denom: token?.symbol,
+                    type: 'CW20',
+                  })
                 }
-              })
-            }
-          })
-        }
-
-        const nativeBalance = humanReadableValue(
-          nativeTokenData?.amount ? nativeTokenData?.amount : '0',
-          chainInfo.nativeCurrency.decimals,
-        )
-
-        dispatch(
-          updateSafe({
-            address: safeInfo.address,
-            balances,
-            nativeBalance,
-            coinConfig,
-          }),
-        )
+              }
+            })
+          }
+        })
       }
+
+      const nativeBalance = humanReadableValue(
+        nativeTokenData?.amount ? nativeTokenData?.amount : '0',
+        chainInfo.nativeCurrency.decimals,
+      )
+      dispatch(
+        updateSafe({
+          address: safeInfo.address,
+          balances,
+          nativeBalance,
+          coinConfig,
+        }),
+      )
     }
