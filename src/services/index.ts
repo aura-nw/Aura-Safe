@@ -417,7 +417,7 @@ export async function getDetailToken(address: string): Promise<IResponse<any>> {
 export async function fetchAccountInfo(safeAddress: string) {
   try {
     const response = await getAccountInfo(safeAddress);
-    const accountInfo = response.account[0];
+    const accountInfo = response.account[0] ?? { account_number: 0, sequence: 0, balances: [] };
     return accountInfo;
   } catch (error) {
     try {

@@ -231,7 +231,7 @@ async function _getSafeInfo(safeAddress: string, safeId: number): Promise<[IMSaf
     throw new Error("Get Safe Info failed");
   }
 
-  const isSafeLoaded = accountAssetData && mSafeInfotData && accountInfoData
+  const isSafeLoaded = !!(accountAssetData && mSafeInfotData && accountInfoData)
   const formatMSafeInfotData: IMSafeInfo = {
     ...mSafeInfotData,
     accountNumber: String(accountInfoData?.account_number),
@@ -315,7 +315,4 @@ async function _getSafeInfo(safeAddress: string, safeId: number): Promise<[IMSaf
   }
 
   return [formatMSafeInfotData, safeInfoData, accountInfoData, isSafeLoaded]
-
-
-
 }
