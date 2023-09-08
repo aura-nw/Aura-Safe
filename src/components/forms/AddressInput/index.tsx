@@ -1,23 +1,17 @@
+import CircularProgress from '@material-ui/core/CircularProgress'
+import InputAdornment from '@material-ui/core/InputAdornment'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Field } from 'react-final-form'
 import { OnChange } from 'react-final-form-listeners'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import CircularProgress from '@material-ui/core/CircularProgress'
 
 import TextField from 'src/components/forms/TextField'
-import {
-  Validator,
-  composeValidators,
-  mustBeEthereumAddress,
-  required,
-  mustBeValidAddress,
-} from 'src/components/forms/validator'
-import { trimSpaces } from 'src/utils/strings'
-import { getAddressFromDomain } from 'src/logic/wallets/getWeb3'
-import { isValidEnsName, isValidCryptoDomainName } from 'src/logic/wallets/ethAddresses'
-import { checksumAddress } from 'src/utils/checksumAddress'
+import { Validator, composeValidators, mustBeValidAddress, required } from 'src/components/forms/validator'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
+import { isValidCryptoDomainName, isValidEnsName } from 'src/logic/wallets/ethAddresses'
+import { getAddressFromDomain } from 'src/logic/wallets/getWeb3'
+import { checksumAddress } from 'src/utils/checksumAddress'
 import { parsePrefixedAddress } from 'src/utils/prefixedAddress'
+import { trimSpaces } from 'src/utils/strings'
 
 interface AddressInputProps {
   fieldMutator: (address: string) => void

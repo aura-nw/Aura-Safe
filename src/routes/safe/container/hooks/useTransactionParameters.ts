@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { toWei } from 'web3-utils'
 
-import { currentSafeCurrentVersion } from 'src/logic/safe/store/selectors'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
-import { extractSafeAddress } from 'src/routes/routes'
 import { ParametersStatus } from 'src/utils/transactionHelpers/utils'
-import { AppReduxState } from 'src/logic/safe/store'
 import { sameString } from 'src/utils/strings'
 
 export type TxParameters = {
@@ -37,10 +32,6 @@ type Props = {
  */
 export const useTransactionParameters = (props?: Props): TxParameters => {
   const isCancelTransaction = sameString(props?.parameterStatus || 'ENABLED', 'CANCEL_TRANSACTION')
-  const connectedWalletAddress = useSelector(userAccountSelector)
-  const safeAddress = extractSafeAddress()
-  const safeVersion = useSelector(currentSafeCurrentVersion) as string
-  const state = useSelector((state: AppReduxState) => state)
 
   // Safe Params
   const [safeNonce, setSafeNonce] = useState<string | undefined>(props?.initialSafeNonce)

@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { getCoinMinimalDenom } from 'src/config'
-import { SpendingLimit } from 'src/logic/safe/store/models/safe'
 
 import { extendedSafeTokensSelector } from 'src/utils/safeUtils/selector'
 

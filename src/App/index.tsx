@@ -76,7 +76,7 @@ const App: React.FC = ({ children }) => {
   const { name: safeName, totalFiatBalance: currentSafeBalance } = useSelector(currentSafeWithNames)
   const safeAddress = extractSafeAddress()
   const safeId = extractSafeId()
-  const { safeActionsState, onShow, onHide, showSendFunds, hideSendFunds } = useSafeActions()
+  const { onShow, showSendFunds } = useSafeActions()
   const { connectWalletState, onConnectWalletShow, onConnectWalletHide } = useConnectWallet()
   const currentCurrency = useSelector(currentCurrencySelector)
   const granted = useSelector(grantedSelector)
@@ -86,13 +86,11 @@ const App: React.FC = ({ children }) => {
   useSafeScheduledUpdates(safeAddress, safeId) // load every X seconds
   useAddressBookSync()
 
-  const sendFunds = safeActionsState.sendFunds
   const formattedTotalBalance = currentSafeBalance ? formatAmountInUsFormat(currentSafeBalance.toString()) : ''
   const balance =
     !!formattedTotalBalance && !!currentCurrency ? `${formattedTotalBalance} ${currentCurrency}` : undefined
 
   const onReceiveShow = () => onShow('Receive')
-  const onReceiveHide = () => onHide('Receive')
 
   const onTermHide = () => {
     termContext?.SetTerm(false)

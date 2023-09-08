@@ -1,16 +1,6 @@
-import { createStyles } from '@material-ui/core'
 import styled from 'styled-components'
 import { lg } from '../../theme/variables'
 import Row from '../layout/Row'
-
-const styles = createStyles({
-  heading: {
-    padding: lg,
-    justifyContent: 'space-between',
-    maxHeight: '75px',
-    boxSizing: 'border-box',
-  },
-})
 
 const WalletList = styled.div`
   height: fit-content;
@@ -46,4 +36,4 @@ const ImageTitle = styled.span`
   text-align: left;
 `
 
-export { WalletList, ImageContainer, ImageItem, ImageTitle }
+export { ImageContainer, ImageItem, ImageTitle, WalletList }

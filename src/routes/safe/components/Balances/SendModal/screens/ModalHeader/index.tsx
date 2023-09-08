@@ -4,7 +4,6 @@ import Close from '@material-ui/icons/Close'
 import { ReactElement } from 'react'
 
 import ChainIndicator from 'src/components/ChainIndicator'
-import Col from 'src/components/layout/Col'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
 import { getChainInfo } from 'src/config'

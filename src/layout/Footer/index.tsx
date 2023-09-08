@@ -1,10 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
-import cn from 'classnames'
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
 
-import GnoButtonLink from 'src/components/layout/ButtonLink'
-import Link from 'src/components/layout/Link'
 import { openCookieBanner } from 'src/logic/cookies/store/actions/openCookieBanner'
 import { screenSm, secondary, sm } from 'src/theme/variables'
 

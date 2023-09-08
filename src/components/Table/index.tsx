@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Loader } from '@aura/safe-react-components'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TablePagination from '@material-ui/core/TablePagination'
@@ -7,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import TableHead from 'src/components/Table/TableHead'
 import { getSorting, stableSort } from 'src/components/Table/sorting'
 import Row from 'src/components/layout/Row'
-import { styles, getEmptyStyle } from './styles'
+import { styles } from './styles'
 const backProps = {
   'aria-label': 'Previous Page',
 }

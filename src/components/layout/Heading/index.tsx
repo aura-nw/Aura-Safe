@@ -1,8 +1,6 @@
 import classNames from 'classnames/bind'
-import * as React from 'react'
-
 import styles from './index.module.scss'
-
+import React from 'react'
 import { capitalize } from 'src/utils/css'
 
 const cx = classNames.bind(styles)

@@ -19,7 +19,7 @@ export default function TxAmount({ amount = 0, token }: TxAmountProps) {
           )}
 
           <p>
-            {convertAmount(amount, false, token?.decimals)} {token?.symbol ?? token?.coinDenom}
+            {convertAmount(amount, false, token?.decimals)} {token?.symbol ?? token?.coinDenom ?? nativeCurrency.symbol}
           </p>
         </>
       ) : (

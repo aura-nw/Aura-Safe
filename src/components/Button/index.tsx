@@ -1,6 +1,6 @@
 import { Button } from '@aura/safe-react-components'
 import styled from 'styled-components'
-import { borderLinear, colorLinear } from 'src/theme/variables'
+import { borderLinear } from 'src/theme/variables'
 
 export const OutlinedButton = ({ children, ...rest }) => {
   return (

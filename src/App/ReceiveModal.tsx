@@ -1,4 +1,3 @@
-import { Button, Text } from '@aura/safe-react-components'
 import IconButton from '@material-ui/core/IconButton'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Close from '@material-ui/icons/Close'
@@ -13,9 +12,8 @@ import Hairline from 'src/components/layout/Hairline'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
 import { getChainInfo, getExplorerInfo } from 'src/config'
-import { fontColor, lg, md, screenSm, secondaryText } from 'src/theme/variables'
+import { borderLinear, lg, md, screenSm, secondaryText } from 'src/theme/variables'
 import PrefixedEthHashInfo from '../components/PrefixedEthHashInfo'
-import { borderLinear } from 'src/theme/variables'
 const useStyles = (chainInfo: ChainInfo) =>
   makeStyles(
     createStyles({
