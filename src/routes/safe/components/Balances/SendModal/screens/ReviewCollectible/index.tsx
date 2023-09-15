@@ -1,8 +1,7 @@
+import { makeStyles } from '@material-ui/core/styles'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
 
-import { getExplorerInfo } from 'src/config'
 import Divider from 'src/components/Divider'
 import Block from 'src/components/layout/Block'
 import Col from 'src/components/layout/Col'
@@ -10,27 +9,24 @@ import Hairline from 'src/components/layout/Hairline'
 import Img from 'src/components/layout/Img'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
+import { getExplorerInfo } from 'src/config'
 import { nftTokensSelector } from 'src/logic/collectibles/store/selectors'
-import { createTransaction } from 'src/logic/safe/store/actions/createTransaction'
-import { TX_NOTIFICATION_TYPES } from 'src/logic/safe/transactions'
+import { generateERC721TransferTxData } from 'src/logic/collectibles/utils'
 import SafeInfo from 'src/routes/safe/components/Balances/SendModal/SafeInfo'
 import { setImageToPlaceholder } from 'src/routes/safe/components/Balances/utils'
 import { textShortener } from 'src/utils/strings'
-import { generateERC721TransferTxData } from 'src/logic/collectibles/utils'
 
-import { styles } from './style'
-import { EstimationStatus, useEstimateTransactionGas } from 'src/logic/hooks/useEstimateTransactionGas'
-import { useEstimationStatus } from 'src/logic/hooks/useEstimationStatus'
-import { ButtonStatus } from 'src/components/Modal/type'
-import { Modal } from 'src/components/Modal'
+import ExecuteCheckbox from 'src/components/ExecuteCheckbox'
 import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
 import { ReviewInfoText } from 'src/components/ReviewInfoText'
+import { useEstimateTransactionGas } from 'src/logic/hooks/useEstimateTransactionGas'
+import { useEstimationStatus } from 'src/logic/hooks/useEstimationStatus'
+import { extractSafeAddress } from 'src/routes/routes'
+import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 import { EditableTxParameters } from 'src/utils/transactionHelpers/EditableTxParameters'
 import { TxParametersDetail } from 'src/utils/transactionHelpers/TxParametersDetail'
-import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 import { ModalHeader } from '../ModalHeader'
-import { extractSafeAddress } from 'src/routes/routes'
-import ExecuteCheckbox from 'src/components/ExecuteCheckbox'
+import { styles } from './style'
 
 const useStyles = makeStyles(styles)
 
@@ -104,31 +100,31 @@ const ReviewCollectible = ({ onClose, onPrev, tx }: Props): React.ReactElement =
     }
   }, [safeAddress, tx])
 
-  const submitTx = (txParameters: TxParameters) => {
-    try {
-      if (safeAddress) {
-        dispatch(
-          createTransaction({
-            safeAddress,
-            to: tx.assetAddress,
-            valueInWei: '0',
-            txData: data,
-            txNonce: txParameters.safeNonce,
-            safeTxGas: txParameters.safeTxGas,
-            ethParameters: txParameters,
-            notifiedTransaction: TX_NOTIFICATION_TYPES.STANDARD_TX,
-            delayExecution: !executionApproved,
-          }),
-        )
-      } else {
-        console.error('There was an error trying to submit the transaction, the safeAddress was not found')
-      }
-    } catch (error) {
-      console.error('Error creating sendCollectible Tx:', error)
-    } finally {
-      onClose()
-    }
-  }
+  // const submitTx = (txParameters: TxParameters) => {
+  //   try {
+  //     if (safeAddress) {
+  //       dispatch(
+  //         createTransaction({
+  //           safeAddress,
+  //           to: tx.assetAddress,
+  //           valueInWei: '0',
+  //           txData: data,
+  //           txNonce: txParameters.safeNonce,
+  //           safeTxGas: txParameters.safeTxGas,
+  //           ethParameters: txParameters,
+  //           notifiedTransaction: TX_NOTIFICATION_TYPES.STANDARD_TX,
+  //           delayExecution: !executionApproved,
+  //         }),
+  //       )
+  //     } else {
+  //       console.error('There was an error trying to submit the transaction, the safeAddress was not found')
+  //     }
+  //   } catch (error) {
+  //     console.error('Error creating sendCollectible Tx:', error)
+  //   } finally {
+  //     onClose()
+  //   }
+  // }
 
   const closeEditModalCallback = (txParameters: TxParameters) => {
     const oldGasPrice = gasPriceFormatted
@@ -214,7 +210,7 @@ const ReviewCollectible = ({ onClose, onPrev, tx }: Props): React.ReactElement =
             safeNonce={txParameters.safeNonce}
             txEstimationExecutionStatus={txEstimationExecutionStatus}
           />
-          <Modal.Footer withoutBorder={buttonStatus !== ButtonStatus.LOADING}>
+          {/* <Modal.Footer withoutBorder={buttonStatus !== ButtonStatus.LOADING}>
             <Modal.Footer.Buttons
               cancelButtonProps={{ onClick: onPrev, text: 'Back' }}
               confirmButtonProps={{
@@ -225,7 +221,7 @@ const ReviewCollectible = ({ onClose, onPrev, tx }: Props): React.ReactElement =
                 testId: 'submit-tx-btn',
               }}
             />
-          </Modal.Footer>
+          </Modal.Footer> */}
         </>
       )}
     </EditableTxParameters>

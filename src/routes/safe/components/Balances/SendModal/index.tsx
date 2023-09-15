@@ -5,12 +5,10 @@ import { Suspense, useEffect, useState, lazy } from 'react'
 import Modal from 'src/components/Modal'
 import { CollectibleTx } from './screens/ReviewCollectible'
 import { ReviewCustomTxProps } from './screens/ContractInteraction/ReviewCustomTx'
-import { ContractInteractionTx } from './screens/ContractInteraction'
 import { CustomTxProps } from './screens/ContractInteraction/SendCustomTx'
 import { ReviewTxProp } from './screens/ReviewSendFundsTx'
 import { NFTToken } from 'src/logic/collectibles/sources/collectibles.d'
 import { SendCollectibleTxInfo } from './screens/SendCollectible'
-import { Erc721Transfer } from '@gnosis.pm/safe-react-gateway-sdk'
 
 const ChooseTxType = lazy(() => import('./screens/ChooseTxType'))
 
@@ -22,14 +20,11 @@ const ReviewCollectible = lazy(() => import('./screens/ReviewCollectible'))
 
 const ReviewSendFundsTx = lazy(() => import('./screens/ReviewSendFundsTx'))
 
-const ContractInteraction = lazy(() => import('./screens/ContractInteraction'))
-
 const ContractInteractionReview: any = lazy(() => import('./screens/ContractInteraction/Review'))
 
 const SendCustomTx = lazy(() => import('./screens/ContractInteraction/SendCustomTx'))
 
 const ReviewCustomTx = lazy(() => import('./screens/ContractInteraction/ReviewCustomTx'))
-
 
 const useStyles = makeStyles({
   loaderStyle: {
@@ -62,7 +57,7 @@ type Props = {
   onClose: () => void
   recipientAddress?: string
   recipientName?: string
-  selectedToken?: string | NFTToken | Erc721Transfer
+  selectedToken?: string | NFTToken
   tokenAmount?: string
 }
 
@@ -118,8 +113,6 @@ const SendModal = ({
     setActiveScreen(screen)
   }
 
-  const handleVoting = (screen: TxType) => {}
-
   return (
     <Modal
       description="Send Tokens Form"
@@ -165,7 +158,7 @@ const SendModal = ({
           />
         )}
 
-        {activeScreen === 'contractInteraction' && isABI && (
+        {/* {activeScreen === 'contractInteraction' && isABI && (
           <ContractInteraction
             contractAddress={recipient}
             initialValues={tx as ContractInteractionTx}
@@ -174,7 +167,7 @@ const SendModal = ({
             onNext={handleContractInteractionCreation}
             switchMethod={handleSwitchMethod}
           />
-        )}
+        )} */}
 
         {activeScreen === 'contractInteractionReview' && isABI && tx && (
           <ContractInteractionReview onClose={onClose} onPrev={() => handleOnPrev('contractInteraction')} tx={tx} />

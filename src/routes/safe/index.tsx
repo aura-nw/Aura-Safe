@@ -99,16 +99,6 @@ const Container = (): React.ReactElement => {
       exact: true,
     },
     {
-      path: SAFE_ROUTES.APPS,
-      render: ({ history }) => {
-        if (!featuresEnabled.includes(FEATURES.SAFE_APPS)) {
-          history.push(generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES, extractPrefixedSafeAddress()))
-        }
-        return hasLoadFailed ? <SafeLoadError /> : <Apps />
-      },
-      exact: true,
-    },
-    {
       path: SAFE_ROUTES.SETTINGS,
       component: hasLoadFailed ? <SafeLoadError /> : <Settings />,
     },
@@ -144,7 +134,7 @@ const Container = (): React.ReactElement => {
             key={index}
             exact={route.exact}
             path={route.path}
-            render={route.render || (() => wrapInSuspense(route.component, null))}
+            render={() => wrapInSuspense(route.component, null)}
           />
         ))}
         <Redirect to={SAFE_ROUTES.ASSETS_BALANCES} />

@@ -1,12 +1,11 @@
 import { FORM_ERROR, Mutator, SubmissionErrors } from 'final-form'
 import createDecorator from 'final-form-calculate'
-import { ContractSendMethod } from 'web3-eth-contract'
 
-import { AbiItemExtended } from 'src/logic/contractInteraction/sources/ABIService'
-import { getAddressFromDomain, getWeb3 } from 'src/logic/wallets/getWeb3'
-import { TransactionReviewType } from 'src/routes/safe/components/Balances/SendModal/screens/ContractInteraction/Review'
-import { isValidCryptoDomainName, isValidEnsName } from 'src/logic/wallets/ethAddresses'
 import { BigNumber } from 'bignumber.js'
+import { AbiItemExtended } from 'src/logic/contractInteraction/sources/ABIService'
+import { isValidCryptoDomainName, isValidEnsName } from 'src/logic/wallets/ethAddresses'
+import { getAddressFromDomain } from 'src/logic/wallets/getWeb3'
+import { TransactionReviewType } from '../Review'
 
 export const NO_CONTRACT = 'no contract'
 
@@ -97,24 +96,24 @@ export const generateFormFieldKey = (type: string, signatureHash: string, index:
 
 const extractMethodArgs =
   (signatureHash: string, values: Record<string, string>) =>
-  ({ type }, index) => {
-    const key = generateFormFieldKey(type, signatureHash, index)
+    ({ type }, index) => {
+      const key = generateFormFieldKey(type, signatureHash, index)
 
-    return getParsedJSONOrArrayFromString(values[key]) || values[key]
-  }
+      return getParsedJSONOrArrayFromString(values[key]) || values[key]
+    }
 
-export const createTxObject = (
-  method: AbiItemExtended,
-  contractAddress: string,
-  values: Record<string, string>,
-): ContractSendMethod => {
-  const web3 = getWeb3()
-  const contract = new web3.eth.Contract([method], contractAddress)
-  const { inputs, name = '', signatureHash } = method
-  const args = inputs?.map(extractMethodArgs(signatureHash, values)) || []
+// export const createTxObject = (
+//   method: AbiItemExtended,
+//   contractAddress: string,
+//   values: Record<string, string>,
+// ): ContractSendMethod => {
+//   const web3 = getWeb3()
+//   const contract = new web3.eth.Contract([method], contractAddress)
+//   const { inputs, name = '', signatureHash } = method
+//   const args = inputs?.map(extractMethodArgs(signatureHash, values)) || []
 
-  return contract.methods[name](...args)
-}
+//   return contract.methods[name](...args)
+// }
 
 export const isReadMethod = (method: AbiItemExtended): boolean => method && method.action === 'read'
 

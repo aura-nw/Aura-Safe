@@ -92,7 +92,7 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
 
   const chainDefaultGasPrice = getChainDefaultGasPrice()
   const decimal = getCoinDecimal()
-  const msgSendGas = chainDefaultGas.find((chain) => chain.typeUrl === '/cosmos.bank.v1beta1.MsgSend')
+  const msgSendGas = chainDefaultGas?.find((chain) => chain.typeUrl === '/cosmos.bank.v1beta1.MsgSend')
 
   const { multiplier, gasAmount } = msgSendGas || { multiplier: 0, gasAmount: 0 }
 

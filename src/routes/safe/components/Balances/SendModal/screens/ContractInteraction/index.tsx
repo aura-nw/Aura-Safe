@@ -1,26 +1,26 @@
+import Switch from '@material-ui/core/Switch'
 import { makeStyles } from '@material-ui/core/styles'
 import { useMemo } from 'react'
-import Switch from '@material-ui/core/Switch'
 
-import { styles } from './style'
 import Divider from 'src/components/Divider'
 import GnoForm from 'src/components/forms/GnoForm'
 import Block from 'src/components/layout/Block'
 import Hairline from 'src/components/layout/Hairline'
-import SafeInfo from 'src/routes/safe/components/Balances/SendModal/SafeInfo'
 import Paragraph from 'src/components/layout/Paragraph'
+import { extractSafeAddress } from 'src/routes/routes'
+import SafeInfo from 'src/routes/safe/components/Balances/SendModal/SafeInfo'
+import { ModalHeader } from '../ModalHeader'
 import Buttons from './Buttons'
 import ContractABI from './ContractABI'
 import { EthAddressInput } from './EthAddressInput'
 import FormErrorMessage from './FormErrorMessage'
 import { MethodsDropdown } from './MethodsDropdown'
+import { NativeCoinValue } from './NativeCoinValue'
 import { RenderInputParams } from './RenderInputParams'
 import { RenderOutputParams } from './RenderOutputParams'
-import { createTxObject, formMutators, handleSubmitError, isReadMethod, ensResolver } from './utils'
 import { TransactionReviewType } from './Review'
-import { NativeCoinValue } from './NativeCoinValue'
-import { ModalHeader } from '../ModalHeader'
-import { extractSafeAddress } from 'src/routes/routes'
+import { styles } from './style'
+import { ensResolver, formMutators } from './utils'
 
 const useStyles = makeStyles(styles)
 
@@ -71,24 +71,21 @@ const ContractInteraction: React.FC<ContractInteractionProps> = ({
     { contractAddress, selectedMethod, value, ...values },
     submit = true,
   ): Promise<void | Record<string, string>> => {
-    if (value || (contractAddress && selectedMethod)) {
-      try {
-        const txObject = createTxObject(selectedMethod, contractAddress, values)
-        const data = txObject.encodeABI()
-
-        if (isReadMethod(selectedMethod) && submit) {
-          const result = await txObject.call({ from: safeAddress })
-          setCallResults(result)
-
-          // this was a read method, so we won't go to the 'review' screen
-          return
-        }
-
-        onNext({ ...values, contractAddress, data, selectedMethod, value }, submit)
-      } catch (error) {
-        return handleSubmitError(error, values)
-      }
-    }
+    // if (value || (contractAddress && selectedMethod)) {
+    //   try {
+    //     const txObject = createTxObject(selectedMethod, contractAddress, values)
+    //     const data = txObject.encodeABI()
+    //     if (isReadMethod(selectedMethod) && submit) {
+    //       const result = await txObject.call({ from: safeAddress })
+    //       setCallResults(result)
+    //       // this was a read method, so we won't go to the 'review' screen
+    //       return
+    //     }
+    //     onNext({ ...values, contractAddress, data, selectedMethod, value }, submit)
+    //   } catch (error) {
+    //     return handleSubmitError(error, values)
+    //   }
+    // }
   }
 
   return (

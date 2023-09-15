@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles'
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -10,14 +10,12 @@ import { composeValidators, required, validAddressBookName } from 'src/component
 import Block from 'src/components/layout/Block'
 import Heading from 'src/components/layout/Heading'
 import Paragraph from 'src/components/layout/Paragraph'
-import Modal from 'src/components/Modal'
 import { makeAddressBookEntry } from 'src/logic/addressBook/model/addressBook'
 import { addressBookAddOrUpdate } from 'src/logic/addressBook/store/actions'
 import { enhanceSnackbarForAction, getNotificationsFromTxType } from 'src/logic/notifications'
 import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
 import { TX_NOTIFICATION_TYPES } from 'src/logic/safe/transactions'
-import { UpdateSafeModal } from 'src/routes/safe/components/Settings/UpdateSafeModal'
 import { StyledBorder, StyledButtonBorder, StyledButtonLabel, styles } from './style'
 
 import ChainIndicator from 'src/components/ChainIndicator'
@@ -44,12 +42,6 @@ const SafeDetails = (): ReactElement => {
 
   const dispatch = useDispatch()
   const { trackEvent } = useAnalytics()
-
-  const [isModalOpen, setModalOpen] = useState(false)
-
-  const toggleModal = () => {
-    setModalOpen((prevOpen) => !prevOpen)
-  }
 
   const updateAddressBook = (values) => {
     dispatch(
@@ -107,25 +99,6 @@ const SafeDetails = (): ReactElement => {
               </Block>
             </Block>
           )}
-
-          {/* <Row align="end" className={classes.controlsRow} grow>
-            <Col end="xs">
-              <StyledBorder>
-                <StyledButtonBorder
-                  testId={SAFE_NAME_SUBMIT_BTN_TEST_ID}
-                  iconType="safe"
-                  iconSize="sm"
-                  size="lg"
-                  type="submit"
-                >
-                  <StyledButtonLabel size="xl"> Save </StyledButtonLabel>
-                </StyledButtonBorder>
-              </StyledBorder>
-            </Col>
-          </Row> */}
-          <Modal description="Update Safe" handleClose={toggleModal} open={isModalOpen} title="Update Safe">
-            <UpdateSafeModal onClose={toggleModal} safeAddress={safeAddress} safeCurrentVersion={safeCurrentVersion} />
-          </Modal>
         </>
       )}
     </GnoForm>
