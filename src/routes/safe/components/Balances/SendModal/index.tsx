@@ -5,7 +5,6 @@ import { Suspense, useEffect, useState, lazy } from 'react'
 import Modal from 'src/components/Modal'
 import { CollectibleTx } from './screens/ReviewCollectible'
 import { ReviewCustomTxProps } from './screens/ContractInteraction/ReviewCustomTx'
-import { ContractInteractionTx } from './screens/ContractInteraction'
 import { CustomTxProps } from './screens/ContractInteraction/SendCustomTx'
 import { ReviewTxProp } from './screens/ReviewSendFundsTx'
 import { NFTToken } from 'src/logic/collectibles/sources/collectibles.d'
@@ -20,8 +19,6 @@ const SendCollectible = lazy(() => import('./screens/SendCollectible'))
 const ReviewCollectible = lazy(() => import('./screens/ReviewCollectible'))
 
 const ReviewSendFundsTx = lazy(() => import('./screens/ReviewSendFundsTx'))
-
-const ContractInteraction = lazy(() => import('./screens/ContractInteraction'))
 
 const ContractInteractionReview: any = lazy(() => import('./screens/ContractInteraction/Review'))
 
@@ -80,8 +77,6 @@ const SendModal = ({
 
   const [recipient, setRecipient] = useState<string | undefined>(recipientAddress)
 
-  console.log(activeScreen, 'activeScreenactiveScreen')
-
   useEffect(() => {
     setActiveScreen(activeScreenType || 'chooseTxType')
     setIsABI(true)
@@ -117,8 +112,6 @@ const SendModal = ({
     setRecipient((tx as ReviewTxProp).recipientAddress)
     setActiveScreen(screen)
   }
-
-  const handleVoting = (screen: TxType) => {}
 
   return (
     <Modal
@@ -165,7 +158,7 @@ const SendModal = ({
           />
         )}
 
-        {activeScreen === 'contractInteraction' && isABI && (
+        {/* {activeScreen === 'contractInteraction' && isABI && (
           <ContractInteraction
             contractAddress={recipient}
             initialValues={tx as ContractInteractionTx}
@@ -174,7 +167,7 @@ const SendModal = ({
             onNext={handleContractInteractionCreation}
             switchMethod={handleSwitchMethod}
           />
-        )}
+        )} */}
 
         {activeScreen === 'contractInteractionReview' && isABI && tx && (
           <ContractInteractionReview onClose={onClose} onPrev={() => handleOnPrev('contractInteraction')} tx={tx} />
