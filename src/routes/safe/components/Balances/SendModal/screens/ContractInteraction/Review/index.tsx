@@ -1,38 +1,34 @@
-import { useEffect, useState, Fragment } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getExplorerInfo, getNativeCurrency } from 'src/config'
-import { toTokenUnit } from 'src/logic/tokens/utils/humanReadableValue'
+import ExecuteCheckbox from 'src/components/ExecuteCheckbox'
+import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
+import { ReviewInfoText } from 'src/components/ReviewInfoText'
 import Block from 'src/components/layout/Block'
 import Col from 'src/components/layout/Col'
 import Hairline from 'src/components/layout/Hairline'
 import Img from 'src/components/layout/Img'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
-import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
+import { getExplorerInfo, getNativeCurrency } from 'src/config'
+import { addressBookEntryName } from 'src/logic/addressBook/store/selectors'
 import { AbiItemExtended } from 'src/logic/contractInteraction/sources/ABIService'
-import { TX_NOTIFICATION_TYPES } from 'src/logic/safe/transactions'
+import { useEstimateTransactionGas } from 'src/logic/hooks/useEstimateTransactionGas'
+import { useEstimationStatus } from 'src/logic/hooks/useEstimationStatus'
+import { toTokenUnit } from 'src/logic/tokens/utils/humanReadableValue'
 import { getEthAsToken } from 'src/logic/tokens/utils/tokenHelpers'
+import { extractSafeAddress } from 'src/routes/routes'
 import { styles } from 'src/routes/safe/components/Balances/SendModal/screens/ContractInteraction/style'
-import { setImageToPlaceholder } from 'src/routes/safe/components/Balances/utils'
-import { createTransaction } from 'src/logic/safe/store/actions/createTransaction'
-import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
-import { TxParametersDetail } from 'src/utils/transactionHelpers/TxParametersDetail'
 import {
   generateFormFieldKey,
   getValueFromTxInputs,
 } from 'src/routes/safe/components/Balances/SendModal/screens/ContractInteraction/utils'
-import { useEstimateTransactionGas, EstimationStatus } from 'src/logic/hooks/useEstimateTransactionGas'
-import { addressBookEntryName } from 'src/logic/addressBook/store/selectors'
-import { useEstimationStatus } from 'src/logic/hooks/useEstimationStatus'
-import { Modal } from 'src/components/Modal'
-import { ButtonStatus } from 'src/components/Modal/type'
-import { ReviewInfoText } from 'src/components/ReviewInfoText'
-import { EditableTxParameters } from 'src/utils/transactionHelpers/EditableTxParameters'
 import { ModalHeader } from 'src/routes/safe/components/Balances/SendModal/screens/ModalHeader'
-import { extractSafeAddress } from 'src/routes/routes'
-import ExecuteCheckbox from 'src/components/ExecuteCheckbox'
+import { setImageToPlaceholder } from 'src/routes/safe/components/Balances/utils'
+import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
+import { EditableTxParameters } from 'src/utils/transactionHelpers/EditableTxParameters'
+import { TxParametersDetail } from 'src/utils/transactionHelpers/TxParametersDetail'
 
 const useStyles = makeStyles(styles)
 
@@ -98,27 +94,6 @@ const ContractInteractionReview = ({ onClose, onPrev, tx }: Props): React.ReactE
       txData: tx.data ? tx.data.trim() : '',
     })
   }, [tx.contractAddress, tx.value, tx.data, safeAddress, nativeCurrency.decimals])
-
-  const submitTx = (txParameters: TxParameters) => {
-    if (safeAddress && txInfo) {
-      dispatch(
-        createTransaction({
-          safeAddress,
-          to: txInfo?.txRecipient,
-          valueInWei: txInfo?.txAmount,
-          txData: txInfo?.txData,
-          txNonce: txParameters.safeNonce,
-          safeTxGas: txParameters.safeTxGas,
-          ethParameters: txParameters,
-          notifiedTransaction: TX_NOTIFICATION_TYPES.STANDARD_TX,
-          delayExecution: !executionApproved,
-        }),
-      )
-    } else {
-      console.error('There was an error trying to submit the transaction, the safeAddress was not found')
-    }
-    onClose()
-  }
 
   const closeEditModalCallback = (txParameters: TxParameters) => {
     const oldGasPrice = gasPriceFormatted
@@ -246,18 +221,6 @@ const ContractInteractionReview = ({ onClose, onPrev, tx }: Props): React.ReactE
             safeNonce={txParameters.safeNonce}
             txEstimationExecutionStatus={txEstimationExecutionStatus}
           />
-
-          <Modal.Footer withoutBorder={buttonStatus !== ButtonStatus.LOADING}>
-            <Modal.Footer.Buttons
-              cancelButtonProps={{ onClick: onPrev, text: 'Back' }}
-              confirmButtonProps={{
-                onClick: () => submitTx(txParameters),
-                status: buttonStatus,
-                text: txEstimationExecutionStatus === EstimationStatus.LOADING ? 'Estimating' : undefined,
-                testId: 'submit-tx-btn',
-              }}
-            />
-          </Modal.Footer>
         </>
       )}
     </EditableTxParameters>

@@ -10,7 +10,6 @@ import { CustomTxProps } from './screens/ContractInteraction/SendCustomTx'
 import { ReviewTxProp } from './screens/ReviewSendFundsTx'
 import { NFTToken } from 'src/logic/collectibles/sources/collectibles.d'
 import { SendCollectibleTxInfo } from './screens/SendCollectible'
-import { Erc721Transfer } from '@gnosis.pm/safe-react-gateway-sdk'
 
 const ChooseTxType = lazy(() => import('./screens/ChooseTxType'))
 
@@ -29,7 +28,6 @@ const ContractInteractionReview: any = lazy(() => import('./screens/ContractInte
 const SendCustomTx = lazy(() => import('./screens/ContractInteraction/SendCustomTx'))
 
 const ReviewCustomTx = lazy(() => import('./screens/ContractInteraction/ReviewCustomTx'))
-
 
 const useStyles = makeStyles({
   loaderStyle: {
@@ -62,7 +60,7 @@ type Props = {
   onClose: () => void
   recipientAddress?: string
   recipientName?: string
-  selectedToken?: string | NFTToken | Erc721Transfer
+  selectedToken?: string | NFTToken
   tokenAmount?: string
 }
 
@@ -81,6 +79,8 @@ const SendModal = ({
   const [isABI, setIsABI] = useState(true)
 
   const [recipient, setRecipient] = useState<string | undefined>(recipientAddress)
+
+  console.log(activeScreen, 'activeScreenactiveScreen')
 
   useEffect(() => {
     setActiveScreen(activeScreenType || 'chooseTxType')
