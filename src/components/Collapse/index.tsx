@@ -35,7 +35,7 @@ const Collapse: React.FC<CollapseProps> = ({
       <HeaderWrapper tabIndex={0} role="button" aria-pressed="false" onClick={handleClick} onKeyDown={handleKeyDown}>
         <TitleWrapper>{title}</TitleWrapper>
         <Header>
-          <IconButton disableRipple size="small" color='primary'>
+          <IconButton disableRipple size="small" color="primary">
             {open ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
           {description}

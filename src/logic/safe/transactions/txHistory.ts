@@ -1,4 +1,4 @@
-import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
+// import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
 import { _getChainId } from 'src/config'
 
 import { checksumAddress } from 'src/utils/checksumAddress'
@@ -6,7 +6,7 @@ import { proposeTransaction, TransactionDetails } from '@gnosis.pm/safe-react-ga
 import { GATEWAY_URL } from 'src/utils/constants'
 
 const calculateBodyFrom = async (
-  safeInstance: GnosisSafe,
+  safeInstance: any,
   to,
   valueInWei,
   data,
@@ -44,7 +44,7 @@ const calculateBodyFrom = async (
 }
 
 interface SaveTxToHistoryArgs {
-  safeInstance: GnosisSafe
+  safeInstance: any
   [key: string]: any
 }
 

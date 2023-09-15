@@ -1,6 +1,6 @@
 import { getWeb3ReadOnly } from 'src/logic/wallets/getWeb3'
-import { BatchRequest } from 'web3-core'
-import { AbiItem } from 'web3-utils'
+// import { BatchRequest } from 'web3-core'
+// import { AbiItem } from 'web3-utils'
 
 /**
  * Generates a batch request for grouping RPC calls
@@ -15,9 +15,9 @@ import { AbiItem } from 'web3-utils'
 type MethodsArgsType = Array<string | number>
 
 interface Props {
-  abi: AbiItem[]
+  abi: any[]
   address: string
-  batch?: BatchRequest
+  batch?: any
   context?: unknown
   methods: Array<string | { method: string; type?: string; args: MethodsArgsType }>
 }

@@ -1,4 +1,4 @@
-import { AbstractProvider } from 'web3-core'
+// import { AbstractProvider } from 'web3-core'
 import semverSatisfies from 'semver/functions/satisfies'
 
 import { getWeb3, getChainIdFrom } from 'src/logic/wallets/getWeb3'

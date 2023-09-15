@@ -37,6 +37,7 @@ const Container = (): React.ReactElement => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    console.log(isSafeLoaded)
     if (isSafeLoaded) {
       dispatch(fetchAllDelegations())
       return

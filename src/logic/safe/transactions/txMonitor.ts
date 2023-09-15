@@ -1,4 +1,4 @@
-import { Transaction, TransactionReceipt } from 'web3-core'
+// import { Transaction, TransactionReceipt } from 'web3-core'
 
 import { getWeb3ReadOnly } from 'src/logic/wallets/getWeb3'
 import { sameAddress } from 'src/logic/wallets/ethAddresses'
@@ -21,7 +21,7 @@ type TxMonitorOptions = {
 const MAX_RETRIES = 720
 const DEFAULT_DELAY = 5000
 
-async function findSpeedupTx({ sender, hash, nonce, data }: TxMonitorProps): Promise<Transaction | undefined> {
+async function findSpeedupTx({ sender, hash, nonce, data }: TxMonitorProps): Promise<any | undefined> {
   const web3 = getWeb3ReadOnly()
   const latestBlock = await web3.eth.getBlock('latest', true)
 
@@ -50,15 +50,15 @@ async function findSpeedupTx({ sender, hash, nonce, data }: TxMonitorProps): Pro
  * @param {string | undefined} txParams.gasPrice
  * @param {object} options
  * @param {number} options.delay
- * @returns {Promise<TransactionReceipt>}
+ * @returns {Promise<any>}
  */
 export const txMonitor = (
   { sender, hash, data, nonce, gasPrice }: TxMonitorProps,
   options?: TxMonitorOptions,
   tries = 0,
-): Promise<TransactionReceipt> => {
+): Promise<any> => {
   const web3 = getWeb3ReadOnly()
-  return new Promise<TransactionReceipt>((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
     const { maxRetries = MAX_RETRIES } = options || {}
     if (tries > maxRetries) {
       reject(new CodedException(Errors._805, 'max retries reached'))

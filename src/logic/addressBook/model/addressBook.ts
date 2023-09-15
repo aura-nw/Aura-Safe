@@ -20,7 +20,6 @@ export const makeAddressBookEntry = ({
   address,
   name,
   chainId,
-  
 })
 
 export type AddressBookState = AddressBookEntry[]

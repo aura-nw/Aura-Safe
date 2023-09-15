@@ -1,4 +1,3 @@
-
 import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 
 export interface CreateTransactionArgs {
@@ -15,6 +14,3 @@ export interface CreateTransactionArgs {
   ethParameters?: Pick<TxParameters, 'ethNonce' | 'ethGasLimit' | 'ethGasPriceInGWei'>
   delayExecution?: boolean
 }
-
-
-

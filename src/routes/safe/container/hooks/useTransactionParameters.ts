@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { toWei } from 'web3-utils'
+// import { toWei } from 'web3-utils'
 
 import { ParametersStatus } from 'src/utils/transactionHelpers/utils'
 import { sameString } from 'src/utils/strings'
@@ -66,7 +66,7 @@ export const useTransactionParameters = (props?: Props): TxParameters => {
       setEthGasPrice('0')
       return
     }
-    setEthGasPriceInGWei(toWei(ethGasPrice, 'Gwei'))
+    // setEthGasPriceInGWei(toWei(ethGasPrice, 'Gwei'))
   }, [ethGasPrice, isCancelTransaction])
 
   // Calc safe nonce

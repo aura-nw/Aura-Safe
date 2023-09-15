@@ -188,8 +188,8 @@ function Voting(): ReactElement {
       />
 
       <WarningPopup open={openWarningPopup} onClose={() => setOpenWarningPopup(false)}>
-        You don't have the right to vote on this proposal because the voting period of this proposal started before you
-        staked Aura.
+        You don&apos;t have the right to vote on this proposal because the voting period of this proposal started before
+        you staked Aura.
       </WarningPopup>
       <ConnectWalletModal isOpen={connectWalletState.showConnect} onClose={onConnectWalletHide}></ConnectWalletModal>
     </>
