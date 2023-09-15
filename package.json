@@ -17,7 +17,7 @@
   },
   "homepage": "https://pyxis.network",
   "scripts": {
-    "build": "rescripts --openssl-legacy-provider --max-old-space-size=11192 build",
+    "build": "rescripts --max-old-space-size=11192 build",
     "start:dev16": "DISABLE_ESLINT_PLUGIN=true rescripts --max-old-space-size=11192 start",
     "format:staged": "lint-staged",
     "lint:check": "eslint './src/**/*.{js,jsx,ts,tsx}'",
