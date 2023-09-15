@@ -1,20 +1,10 @@
-FROM node:18.17 as build
-
-# Grab needed environment variables from .env.example
-ENV REACT_APP_ENV=production
-ENV NODE_OPTIONS=--openssl-legacy-provider
+FROM node:16 as build
 
 WORKDIR /app
 
 COPY package.json yarn.lock ./
 COPY ./src/logic/contracts/artifacts/*.json ./src/logic/contracts/artifacts/
-# Due to some dependencies yarn may randomly throw an error about invalid cache
-# This approach is taken from https://github.com/yarnpkg/yarn/issues/7212#issuecomment-506155894 to fix the issue
-# Another approach is to install with flag --network-concurrency 1, but this will make the installation pretty slow (default value is 8)
-RUN mkdir .yarncache
-RUN yarn install --cache-folder ./.yarncache --frozen-lockfile
-RUN rm -rf .yarncache
-RUN yarn cache clean
+RUN yarn install --frozen-lockfile --network-concurrency 1
 
 COPY . .
 RUN yarn build
