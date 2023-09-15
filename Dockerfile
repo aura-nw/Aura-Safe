@@ -7,6 +7,7 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 WORKDIR /app
 
 COPY package.json yarn.lock ./
+COPY ./src/logic/contracts/artifacts/*.json ./src/logic/contracts/artifacts/
 # Due to some dependencies yarn may randomly throw an error about invalid cache
 # This approach is taken from https://github.com/yarnpkg/yarn/issues/7212#issuecomment-506155894 to fix the issue
 # Another approach is to install with flag --network-concurrency 1, but this will make the installation pretty slow (default value is 8)
