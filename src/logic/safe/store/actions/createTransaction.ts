@@ -2,9 +2,20 @@ import { Operation, TransactionDetails } from '@gnosis.pm/safe-react-gateway-sdk
 import { AnyAction } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 
+import { generatePath } from 'react-router-dom'
 import { onboardUser } from 'src/components/ConnectButton'
+import { currentChainId } from 'src/logic/config/store/selectors'
 import { getGnosisSafeInstanceAt } from 'src/logic/contracts/safeContracts'
+import { Errors, logError } from 'src/logic/exceptions/CodedException'
 import { getNotificationsFromTxType, NOTIFICATIONS } from 'src/logic/notifications'
+import closeSnackbarAction from 'src/logic/notifications/store/actions/closeSnackbar'
+import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
+import { checkIfOffChainSignatureIsPossible, getPreValidatedSignatures } from 'src/logic/safe/safeTxSigner'
+import { AppReduxState } from 'src/logic/safe/store'
+import { generateSafeTxHash } from 'src/logic/safe/store/actions/transactions/utils/transactionHelpers'
+import { shouldExecuteTransaction } from 'src/logic/safe/store/actions/utils'
+import { TxArgs } from 'src/logic/safe/store/models/types/transaction'
+import { currentSafeCurrentVersion } from 'src/logic/safe/store/selectors'
 import {
   getApprovalTransaction,
   getExecutionTransaction,
@@ -13,31 +24,18 @@ import {
 } from 'src/logic/safe/transactions'
 import { estimateSafeTxGas, getGasParam } from 'src/logic/safe/transactions/gas'
 import * as aboutToExecuteTx from 'src/logic/safe/utils/aboutToExecuteTx'
-import { currentSafeCurrentVersion } from 'src/logic/safe/store/selectors'
 import { ZERO_ADDRESS } from 'src/logic/wallets/ethAddresses'
 import { EMPTY_DATA } from 'src/logic/wallets/ethTransactions'
-import { providerSelector } from 'src/logic/wallets/store/selectors'
-import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
-import closeSnackbarAction from 'src/logic/notifications/store/actions/closeSnackbar'
-import { generateSafeTxHash } from 'src/logic/safe/store/actions/transactions/utils/transactionHelpers'
-import { shouldExecuteTransaction } from 'src/logic/safe/store/actions/utils'
-import fetchTransactions from './transactions/fetchTransactions'
-import { TxArgs } from 'src/logic/safe/store/models/types/transaction'
-import { PayableTx } from 'src/types/contracts/types.d'
-import { AppReduxState } from 'src/logic/safe/store'
-import { Dispatch, DispatchReturn } from './types'
-import { checkIfOffChainSignatureIsPossible, getPreValidatedSignatures } from 'src/logic/safe/safeTxSigner'
-import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 import { isTxPendingError } from 'src/logic/wallets/getWeb3'
-import { Errors, logError } from 'src/logic/exceptions/CodedException'
-import { currentChainId } from 'src/logic/config/store/selectors'
-import { extractShortChainName, history, SAFE_ROUTES } from 'src/routes/routes'
-import { getPrefixedSafeAddressSlug, SAFE_ADDRESS_SLUG, TRANSACTION_ID_SLUG } from 'src/routes/routes'
-import { generatePath } from 'react-router-dom'
-import { getContractErrorMessage } from 'src/logic/contracts/safeContractErrors'
-import { getLastTransaction } from '../selectors/gatewayTransactions'
+import { providerSelector } from 'src/logic/wallets/store/selectors'
+import { extractShortChainName, getPrefixedSafeAddressSlug, history, SAFE_ADDRESS_SLUG, SAFE_ROUTES, TRANSACTION_ID_SLUG } from 'src/routes/routes'
+import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
+import { PayableTx } from 'src/types/contracts/types.d'
 import { getRecommendedNonce } from '../../api/fetchSafeTxGasEstimation'
 import { isMultiSigExecutionDetails, LocalTransactionStatus } from '../models/types/gateway.d'
+import { getLastTransaction } from '../selectors/gatewayTransactions'
+import fetchTransactions from './transactions/fetchTransactions'
+import { Dispatch, DispatchReturn } from './types'
 import { updateTransactionStatus } from './updateTransactionStatus'
 
 export interface CreateTransactionArgs {
@@ -97,7 +95,9 @@ export const createTransaction =
     onUserConfirm?: ConfirmEventHandler,
     onError?: ErrorEventHandler,
   ): CreateTransactionAction =>
-  async (dispatch: Dispatch, getState: () => AppReduxState): Promise<DispatchReturn> => {
+  async (dispatch: Dispatch, getState: () => AppReduxState): Promise<DispatchReturn> => {    
+    console.log('createTransaction');
+    
     const state = getState()
 
     const ready = await onboardUser()
@@ -228,26 +228,14 @@ export const createTransaction =
         dispatch(updateTransactionStatus({ safeTxHash, status: LocalTransactionStatus.PENDING_FAILED }))
       }
 
-      const executeDataUsedSignatures = safeInstance.methods
-        .execTransaction(to, valueInWei, txData, operation, 0, 0, 0, ZERO_ADDRESS, ZERO_ADDRESS, sigs)
-        .encodeABI()
-
-      const contractErrorMessage = await getContractErrorMessage({
-        safeInstance,
-        from,
-        data: executeDataUsedSignatures,
-      })
-
-      if (contractErrorMessage) {
-        logError(Errors._803, contractErrorMessage)
-      }
+      
 
       const notification = isTxPendingError(err)
         ? NOTIFICATIONS.TX_PENDING_MSG
         : {
             ...notificationsQueue.afterExecutionError,
-            ...(contractErrorMessage && {
-              message: `${notificationsQueue.afterExecutionError.message} - ${contractErrorMessage}`,
+            ...( {
+              message: `${notificationsQueue.afterExecutionError.message}`,
             }),
           }
 

@@ -42,8 +42,6 @@ import {
   confirmSafeTransaction,
   createSafeTransaction,
   fetchAccountInfo,
-  getAccountInfo,
-  getAccountInfoByLcd
 } from 'src/services'
 import { MESSAGES_CODE } from 'src/services/constant/message'
 import { ICreateSafeTransaction } from 'src/types/transaction'

@@ -21,27 +21,6 @@ export const onboardUser = async (): Promise<boolean> => {
   return walletSelected && checkWallet()
 }
 
-// export const onConnectButtonClick = async (): Promise<void> => {
-//   const chainId = _getChainId()
-//   await connectKeplr()
-//     .then(async (status) => {
-//       if (status === KeplrErrors.NoChainInfo) {
-//         await suggestChain(chainId)
-//         return true
-//       }
-
-//       return null
-//     })
-//     .then((e) => {
-//       if (e) {
-//         connectKeplr()
-//       }
-//     })
-//     .catch(() => {
-//       store.dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.CONNECT_WALLET_ERROR_MSG)))
-//     })
-// }
-
 const ConnectButton = (props: { 'data-testid': string; onConnect: () => void }): ReactElement => (
   <StyledConnectButton
     color="primary"

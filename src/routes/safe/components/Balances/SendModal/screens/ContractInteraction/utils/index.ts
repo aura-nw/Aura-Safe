@@ -4,9 +4,9 @@ import { ContractSendMethod } from 'web3-eth-contract'
 
 import { AbiItemExtended } from 'src/logic/contractInteraction/sources/ABIService'
 import { getAddressFromDomain, getWeb3 } from 'src/logic/wallets/getWeb3'
-import { TransactionReviewType } from 'src/routes/safe/components/Balances/SendModal/screens/ContractInteraction/Review'
 import { isValidCryptoDomainName, isValidEnsName } from 'src/logic/wallets/ethAddresses'
 import { BigNumber } from 'bignumber.js'
+import { TransactionReviewType } from '../Review'
 
 export const NO_CONTRACT = 'no contract'
 
@@ -97,11 +97,11 @@ export const generateFormFieldKey = (type: string, signatureHash: string, index:
 
 const extractMethodArgs =
   (signatureHash: string, values: Record<string, string>) =>
-  ({ type }, index) => {
-    const key = generateFormFieldKey(type, signatureHash, index)
+    ({ type }, index) => {
+      const key = generateFormFieldKey(type, signatureHash, index)
 
-    return getParsedJSONOrArrayFromString(values[key]) || values[key]
-  }
+      return getParsedJSONOrArrayFromString(values[key]) || values[key]
+    }
 
 export const createTxObject = (
   method: AbiItemExtended,

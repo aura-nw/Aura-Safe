@@ -17,10 +17,10 @@ import { MethodsDropdown } from './MethodsDropdown'
 import { RenderInputParams } from './RenderInputParams'
 import { RenderOutputParams } from './RenderOutputParams'
 import { createTxObject, formMutators, handleSubmitError, isReadMethod, ensResolver } from './utils'
-import { TransactionReviewType } from './Review'
 import { NativeCoinValue } from './NativeCoinValue'
 import { ModalHeader } from '../ModalHeader'
 import { extractSafeAddress } from 'src/routes/routes'
+import { TransactionReviewType } from './Review'
 
 const useStyles = makeStyles(styles)
 
