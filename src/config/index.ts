@@ -13,7 +13,7 @@ import {
   INFURA_TOKEN,
   SAFE_APPS_RPC_TOKEN,
   TX_SERVICE_VERSION,
-} from 'src/utils/constants';
+} from 'src/utils/constants'
 import { ChainId, ChainName, ShortName } from './chain.d'
 import { emptyChainInfo, getChains } from './cache/chains'
 import { evalTemplate } from './utils'

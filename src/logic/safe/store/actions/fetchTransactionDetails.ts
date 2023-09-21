@@ -34,7 +34,7 @@ export const fetchTransactionDetailsById =
       if (ErrorCode !== MESSAGES_CODE.SUCCESSFUL.ErrorCode) {
         return
       }
-      let extraDetails: any = {}
+      const extraDetails: any = {}
 
       if (Data?.Messages?.[0]?.proposalId) {
         const respone = await getProposalDetail(internalChainId, Data?.Messages?.[0]?.proposalId)
@@ -89,7 +89,7 @@ export const fetchTransactionDetailsById =
         extraDetails,
         autoClaimAmount: Data?.AutoClaimAmount,
         sequence: Data?.Sequence,
-        logs: Data?.Logs
+        logs: Data?.Logs,
       }
 
       dispatch(

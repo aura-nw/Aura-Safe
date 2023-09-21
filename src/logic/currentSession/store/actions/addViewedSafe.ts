@@ -5,7 +5,7 @@ import updateViewedSafes from 'src/logic/currentSession/store/actions/updateView
 const addViewedSafe =
   (safeAddress: string, safeId: string) =>
   (dispatch: Dispatch): void => {
-    dispatch(updateViewedSafes({safeAddress,safeId}))
+    dispatch(updateViewedSafes({ safeAddress, safeId }))
   }
 
 export default addViewedSafe

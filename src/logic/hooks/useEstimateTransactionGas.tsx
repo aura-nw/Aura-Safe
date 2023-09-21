@@ -2,7 +2,7 @@ import { Operation } from '@gnosis.pm/safe-react-gateway-sdk'
 import { List } from 'immutable'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { fromWei } from 'web3-utils'
+// import { fromWei } from 'web3-utils'
 
 import { getNativeCurrency } from 'src/config'
 import { checkIfOffChainSignatureIsPossible } from 'src/logic/safe/safeTxSigner'
@@ -187,7 +187,8 @@ export const useEstimateTransactionGas = ({
         }
 
         const gasPrice = manualGasPrice || '1' // ? toWei(manualGasPrice, 'gwei') : await calculateGasPrice()
-        const gasPriceFormatted = fromWei(gasPrice, 'gwei')
+        const gasPriceFormatted = ''
+        // const gasPriceFormatted = fromWei(gasPrice, 'gwei')
         const gasLimit = manualGasLimit || ''
         const estimatedGasCosts = parseInt(gasLimit, 10) * parseInt(gasPrice as any, 10)
         const gasCost = fromTokenUnit(estimatedGasCosts, nativeCurrency.decimals)

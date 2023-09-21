@@ -1,4 +1,3 @@
-
 import { CONTRACT_ERRORS, CONTRACT_ERROR_CODES } from 'src/logic/contracts/contracts.d'
 
 export const decodeMessage = (message: string): string => {

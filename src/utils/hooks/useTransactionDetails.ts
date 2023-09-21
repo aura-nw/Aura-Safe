@@ -9,7 +9,11 @@ type LoadTransactionDetails = {
   loading: boolean
 }
 
-export const useTransactionDetails = (transactionId?: string, txHash?: string, auraTxId?: string): LoadTransactionDetails => {
+export const useTransactionDetails = (
+  transactionId?: string,
+  txHash?: string,
+  auraTxId?: string,
+): LoadTransactionDetails => {
   const dispatch = useRef(useDispatch())
   const [txDetails, setTxDetails] = useState<LoadTransactionDetails>({
     loading: true,

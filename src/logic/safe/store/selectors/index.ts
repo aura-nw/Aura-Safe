@@ -51,7 +51,6 @@ export const currentSafeSpendingLimits = createSelector(currentSafe, safeFieldSe
 
 export const currentSafeLoaded = createSelector(currentSafe, safeFieldSelector('isSafeLoaded'))
 
-
 /*************************/
 /* With AddressBook Data */
 /*************************/
