@@ -59,7 +59,7 @@ export const isNumberKeyPress = (event): boolean => {
   return true
 }
 
-export const convertAmount = (amount: string | number, isMulti: boolean = false, decimal?: number) => {
+export const convertAmount = (amount: string | number, isMulti = false, decimal?: number) => {
   const nativeCurrency = getNativeCurrency()
   if (isNaN(+amount)) return '0'
   return isMulti

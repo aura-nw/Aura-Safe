@@ -1,6 +1,6 @@
-import { NonPayableTransactionObject } from 'src/types/contracts/types.d'
+// import { NonPayableTransactionObject } from 'src/types/contracts/types.d'
 import { TxArgs } from 'src/logic/safe/store/models/types/transaction'
-import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
+// import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
 
 export const getTransactionHash = async ({
   baseGas,
@@ -25,7 +25,7 @@ export const getTransactionHash = async ({
   return txHash
 }
 
-export const getApprovalTransaction = (safeInstance: GnosisSafe, txHash: string): NonPayableTransactionObject<void> => {
+export const getApprovalTransaction = (safeInstance: any, txHash: string): any => {
   try {
     return safeInstance.methods.approveHash(txHash)
   } catch (err) {
@@ -46,7 +46,7 @@ export const getExecutionTransaction = ({
   sigs,
   to,
   valueInWei,
-}: TxArgs): NonPayableTransactionObject<boolean> => {
+}: TxArgs): any => {
   try {
     return safeInstance.methods.execTransaction(
       to,

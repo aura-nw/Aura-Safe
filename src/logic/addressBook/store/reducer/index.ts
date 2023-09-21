@@ -42,7 +42,7 @@ const addressBookReducer = handleActions<AddressBookState, Payloads>(
       const newState = [...state]
       const addressBookEntry = { ...action.payload, name: action.payload.name.trim() }
       const entryIndex = getEntryIndex(newState, addressBookEntry)
-      
+
       // update
       if (entryIndex >= 0) {
         newState[entryIndex] = addressBookEntry

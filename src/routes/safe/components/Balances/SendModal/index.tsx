@@ -1,35 +1,16 @@
 import { Loader } from '@aura/safe-react-components'
 import { makeStyles } from '@material-ui/core/styles'
-import { Suspense, useEffect, useState, lazy } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 
 import Modal from 'src/components/Modal'
-import { CollectibleTx } from './screens/ReviewCollectible'
-import { ReviewCustomTxProps } from './screens/ContractInteraction/ReviewCustomTx'
-import { ContractInteractionTx } from './screens/ContractInteraction'
-import { CustomTxProps } from './screens/ContractInteraction/SendCustomTx'
-import { ReviewTxProp } from './screens/ReviewSendFundsTx'
 import { NFTToken } from 'src/logic/collectibles/sources/collectibles.d'
-import { SendCollectibleTxInfo } from './screens/SendCollectible'
-import { Erc721Transfer } from '@gnosis.pm/safe-react-gateway-sdk'
+import { ReviewTxProp } from './screens/ReviewSendFundsTx'
 
 const ChooseTxType = lazy(() => import('./screens/ChooseTxType'))
 
 const SendFunds = lazy(() => import('./screens/SendFunds'))
 
-const SendCollectible = lazy(() => import('./screens/SendCollectible'))
-
-const ReviewCollectible = lazy(() => import('./screens/ReviewCollectible'))
-
 const ReviewSendFundsTx = lazy(() => import('./screens/ReviewSendFundsTx'))
-
-const ContractInteraction = lazy(() => import('./screens/ContractInteraction'))
-
-const ContractInteractionReview: any = lazy(() => import('./screens/ContractInteraction/Review'))
-
-const SendCustomTx = lazy(() => import('./screens/ContractInteraction/SendCustomTx'))
-
-const ReviewCustomTx = lazy(() => import('./screens/ContractInteraction/ReviewCustomTx'))
-
 
 const useStyles = makeStyles({
   loaderStyle: {
@@ -40,6 +21,16 @@ const useStyles = makeStyles({
     alignItems: 'center',
   },
 })
+
+type SendCollectibleTxInfo = {
+  assetAddress: string
+  assetName: string
+  nftTokenId: string
+  recipientAddress?: string
+  recipientName?: string
+  amount?: number
+  gasLimit?: number
+}
 
 type TxType =
   | 'chooseTxType'
@@ -62,7 +53,7 @@ type Props = {
   onClose: () => void
   recipientAddress?: string
   recipientName?: string
-  selectedToken?: string | NFTToken | Erc721Transfer
+  selectedToken?: string | NFTToken
   tokenAmount?: string
 }
 
@@ -78,13 +69,11 @@ const SendModal = ({
   const classes = useStyles()
   const [activeScreen, setActiveScreen] = useState<TxType>(activeScreenType || 'chooseTxType')
   const [tx, setTx] = useState<unknown>({})
-  const [isABI, setIsABI] = useState(true)
 
   const [recipient, setRecipient] = useState<string | undefined>(recipientAddress)
 
   useEffect(() => {
     setActiveScreen(activeScreenType || 'chooseTxType')
-    setIsABI(true)
     setTx({})
     setRecipient(recipientAddress)
   }, [activeScreenType, isOpen, recipientAddress])
@@ -94,31 +83,10 @@ const SendModal = ({
     setTx(txInfo)
   }
 
-  const handleContractInteractionCreation = (contractInteractionInfo: any, submit: boolean): void => {
-    setTx(contractInteractionInfo)
-    if (submit) setActiveScreen('contractInteractionReview')
-  }
-
-  const handleCustomTxCreation = (customTxInfo: any, submit: boolean): void => {
-    setTx(customTxInfo)
-    if (submit) setActiveScreen('reviewCustomTx')
-  }
-
-  const handleSendCollectible = (txInfo) => {
-    setActiveScreen('reviewCollectible')
-    setTx(txInfo)
-  }
-
-  const handleSwitchMethod = (): void => {
-    setIsABI(!isABI)
-  }
-
   const handleOnPrev = (screen: TxType) => {
     setRecipient((tx as ReviewTxProp).recipientAddress)
     setActiveScreen(screen)
   }
-
-  const handleVoting = (screen: TxType) => {}
 
   return (
     <Modal
@@ -162,57 +130,6 @@ const SendModal = ({
               handleOnPrev('sendFunds')
             }}
             tx={tx as ReviewTxProp}
-          />
-        )}
-
-        {activeScreen === 'contractInteraction' && isABI && (
-          <ContractInteraction
-            contractAddress={recipient}
-            initialValues={tx as ContractInteractionTx}
-            isABI={isABI}
-            onClose={onClose}
-            onNext={handleContractInteractionCreation}
-            switchMethod={handleSwitchMethod}
-          />
-        )}
-
-        {activeScreen === 'contractInteractionReview' && isABI && tx && (
-          <ContractInteractionReview onClose={onClose} onPrev={() => handleOnPrev('contractInteraction')} tx={tx} />
-        )}
-
-        {activeScreen === 'contractInteraction' && !isABI && (
-          <SendCustomTx
-            initialValues={tx as CustomTxProps}
-            isABI={isABI}
-            onClose={onClose}
-            onNext={handleCustomTxCreation}
-            switchMethod={handleSwitchMethod}
-          />
-        )}
-
-        {activeScreen === 'reviewCustomTx' && (
-          <ReviewCustomTx
-            onClose={onClose}
-            onPrev={() => handleOnPrev('contractInteraction')}
-            tx={tx as ReviewCustomTxProps}
-          />
-        )}
-
-        {activeScreen === 'sendCollectible' && (
-          <SendCollectible
-            initialValues={tx}
-            onClose={onClose}
-            onNext={handleSendCollectible}
-            recipientAddress={recipient}
-            selectedToken={selectedToken as NFTToken | undefined}
-          />
-        )}
-
-        {activeScreen === 'reviewCollectible' && (
-          <ReviewCollectible
-            onClose={onClose}
-            onPrev={() => handleOnPrev('sendCollectible')}
-            tx={tx as CollectibleTx}
           />
         )}
       </Suspense>

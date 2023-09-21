@@ -1,1 +1,0 @@
-export const SET_COPY_SHORT_NAME = 'SET_COPY_SHORT_NAME'

@@ -8,7 +8,7 @@ import {
 } from '@gnosis.pm/safe-react-gateway-sdk'
 import get from 'lodash/get'
 import { Text, CopyToClipboardBtn, IconText, FixedIcon } from '@aura/safe-react-components'
-import { hexToBytes } from 'web3-utils'
+// import { hexToBytes } from 'web3-utils'
 
 import { getExplorerInfo, getNativeCurrency } from 'src/config'
 import { DecodedTxDetail } from 'src/routes/safe/components/Apps/components/ConfirmTxModal'
@@ -61,8 +61,9 @@ export const getByteLength = (data: string | string[]): number => {
     }
     // Return the sum of the byte sizes of each hex string
     return data.reduce((result, hex) => {
-      const bytes = hexToBytes(hex)
-      return result + bytes.length
+      // const bytes = hexToBytes(hex)
+      // return result + bytes.length
+      return 0
     }, 0)
   } catch (err) {
     return 0

@@ -1,8 +1,8 @@
-import { AbiItem } from 'web3-utils'
+// import { AbiItem } from 'web3-utils'
 
 import { getWeb3 } from 'src/logic/wallets/getWeb3'
 import { SPENDING_LIMIT_MODULE_ADDRESS } from 'src/utils/constants'
-import { AllowanceModule } from 'src/types/contracts/AllowanceModule.d'
+// import { AllowanceModule } from 'src/types/contracts/AllowanceModule.d'
 
 import SpendingLimitModule from './artifacts/AllowanceModule.json'
 
@@ -12,8 +12,5 @@ import SpendingLimitModule from './artifacts/AllowanceModule.json'
 export const getSpendingLimitContract = () => {
   const web3 = getWeb3()
 
-  return new web3.eth.Contract(
-    SpendingLimitModule.abi as AbiItem[],
-    SPENDING_LIMIT_MODULE_ADDRESS,
-  ) as unknown as AllowanceModule
+  return new web3.eth.Contract(SpendingLimitModule.abi as any[], SPENDING_LIMIT_MODULE_ADDRESS) as unknown as any
 }

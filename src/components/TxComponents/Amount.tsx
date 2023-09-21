@@ -49,6 +49,7 @@ export default function Amount({
             )}
           </div>
           {otherToken?.map((token: IFund) => (
+            // eslint-disable-next-line react/jsx-key
             <OtherToken token={token} hideLogo={hideLogo} nativeCurrency={nativeCurrency} />
           ))}
         </>

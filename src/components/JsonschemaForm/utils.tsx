@@ -24,7 +24,7 @@ function getProperties(schema: Schema, validator: Validator) {
     if (!fieldName) throw new Error('No property')
     const ref = (schema.properties?.[fieldName] as any)?.['$ref']
 
-    let props = ref ? getRef(validator.schemas, ref) : schema.properties?.[fieldName]
+    const props = ref ? getRef(validator.schemas, ref) : schema.properties?.[fieldName]
 
     const childProps = props?.properties
     let fieldList: any

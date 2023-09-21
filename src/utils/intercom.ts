@@ -22,7 +22,6 @@ const getIntercomUserId = async () => {
   return userId
 }
 
-
 export const closeIntercom = (): void => {
   if (!isIntercomLoaded()) return
   intercomLoaded = false
