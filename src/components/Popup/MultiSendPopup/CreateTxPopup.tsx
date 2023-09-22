@@ -36,7 +36,7 @@ export default function CreateTxPopup({
   gasUsed: string
 }) {
   const safeAddress = extractSafeAddress()
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, nextQueueSeq } = useSelector(currentSafeWithNames)
   const dispatch = useDispatch()
   const denom = getCoinMinimalDenom()
   const chainDefaultGasPrice = getChainDefaultGasPrice()

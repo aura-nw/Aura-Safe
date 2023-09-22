@@ -1,23 +1,23 @@
-import { ReactElement } from 'react'
+import { Divider, Text, Title } from '@aura/safe-react-components'
 import IconButton from '@material-ui/core/IconButton'
-import Close from '@material-ui/icons/Close'
 import { makeStyles } from '@material-ui/core/styles'
-import { Title, Text, Divider, Link, Icon } from '@aura/safe-react-components'
+import Close from '@material-ui/icons/Close'
+import { ReactElement } from 'react'
 import styled from 'styled-components'
 
+import { Modal } from 'src/components/Modal'
 import Field from 'src/components/forms/Field'
+import GnoForm from 'src/components/forms/GnoForm'
 import TextField from 'src/components/forms/TextField'
+import { minValue } from 'src/components/forms/validator'
 import Block from 'src/components/layout/Block'
 import Row from 'src/components/layout/Row'
-import { styles } from './style'
-import GnoForm from 'src/components/forms/GnoForm'
 import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
-import { minValue } from 'src/components/forms/validator'
-import { Modal } from 'src/components/Modal'
+import { styles } from './style'
 
-import { ParametersStatus, areSafeParamsEnabled, areEthereumParamsVisible, ethereumTxParametersTitle } from '../utils'
-import useSafeTxGas from '../useSafeTxGas'
 import { loadLastUsedProvider } from 'src/logic/wallets/store/middlewares/providerWatcher'
+import useSafeTxGas from '../useSafeTxGas'
+import { ParametersStatus, ethereumTxParametersTitle } from '../utils'
 let lastUsedProvider = ''
 
 loadLastUsedProvider().then((result) => {
@@ -46,18 +46,6 @@ const EthereumOptions = styled.div`
   div {
     width: 216px !important;
   }
-`
-const StyledLink = styled(Link)`
-  margin: 16px 0 0 0;
-  display: inline-flex;
-  align-items: center;
-
-  > :first-of-type {
-    margin-right: 5px;
-  }
-`
-const StyledText = styled(Text)`
-  margin: 0 0 4px 0;
 `
 const StyledTextMt = styled(Text)`
   margin: 16px 0 4px 0;

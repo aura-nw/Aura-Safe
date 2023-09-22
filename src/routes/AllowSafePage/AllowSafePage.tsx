@@ -5,35 +5,40 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
+import _ from 'lodash'
+import { Modal } from 'src/components/Modal'
+import NetworkLabel from 'src/components/NetworkLabel/NetworkLabel'
+import StepperForm, { StepFormElement } from 'src/components/StepperForm/StepperForm'
 import Block from 'src/components/layout/Block'
 import Heading from 'src/components/layout/Heading'
 import Page from 'src/components/layout/Page'
+import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
-import StepperForm, { StepFormElement } from 'src/components/StepperForm/StepperForm'
 import { getShortName } from 'src/config'
 import { AddressBookEntry, makeAddressBookEntry } from 'src/logic/addressBook/model/addressBook'
 import { addressBookSafeLoad } from 'src/logic/addressBook/store/actions'
 import { currentNetworkAddressBookAsMap } from 'src/logic/addressBook/store/selectors'
 import { currentChainId } from 'src/logic/config/store/selectors'
 import { useMnemonicSafeName } from 'src/logic/hooks/useMnemonicName'
-import { enhanceSnackbarForAction, ERROR } from 'src/logic/notifications'
+import { ERROR, enhanceSnackbarForAction } from 'src/logic/notifications'
 import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
 import { SafeStatus } from 'src/logic/safe/hooks/useOwnerSafes'
 import { addOrUpdateSafe } from 'src/logic/safe/store/actions/addOrUpdateSafe'
 import { buildMSafe } from 'src/logic/safe/store/actions/fetchSafe'
 import { loadStoredSafes, saveSafes } from 'src/logic/safe/utils'
+import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { PendingSafeListStorage } from 'src/routes/CreateSafePage/CreateSafePage'
 import { SAFES_PENDING_STORAGE_KEY } from 'src/routes/CreateSafePage/fields/createSafeFields'
 import { allowMSafe, getMSafeInfo } from 'src/services'
 import { MESSAGES_CODE } from 'src/services/constant/message'
-import { secondary, sm } from 'src/theme/variables'
+import { borderLinear, secondary, sm } from 'src/theme/variables'
 import { loadFromStorage, saveToStorage } from 'src/utils/storage'
 import {
   ALLOW_SPECIFIC_SAFE_ROUTE,
-  extractPrefixedSafeAddress,
-  generateSafeRoute,
   SAFE_ROUTES,
   WELCOME_ROUTE,
+  extractPrefixedSafeAddress,
+  generateSafeRoute,
 } from '../routes'
 import {
   AllowSafeFormValues,
@@ -50,12 +55,6 @@ import { getLoadSafeName } from './fields/utils'
 import AllowSafeOwnersStep, { loadSafeOwnersStepLabel } from './steps/AllowSafeOwnersStep'
 import NameAllowSafeStep, { loadSafeStepValidations, nameNewSafeStepLabel } from './steps/NameAllowSafeStep'
 import ReviewAllowStep, { reviewLoadStepLabel } from './steps/ReviewAllowStep'
-import _, { toNumber } from 'lodash'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
-import { Modal } from 'src/components/Modal'
-import Paragraph from 'src/components/layout/Paragraph'
-import NetworkLabel from 'src/components/NetworkLabel/NetworkLabel'
-import { borderLinear } from 'src/theme/variables'
 
 import { Text } from '@aura/safe-react-components'
 import Button from 'src/components/layout/Button'

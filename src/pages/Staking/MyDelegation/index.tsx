@@ -15,7 +15,6 @@ export default function MyDelegation(props): ReactElement {
     validatorOfUser,
     allValidator,
     claimReward,
-    nativeCurrency,
     disabledButton,
     simulateLoading,
   } = props

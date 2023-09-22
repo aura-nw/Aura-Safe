@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-import { Icon, IconTypes } from '@aura/safe-react-components'
 import { useMemo } from 'react'
+import styled from 'styled-components'
 
 const StyledIcon = styled.div`
   margin-right: 8px;

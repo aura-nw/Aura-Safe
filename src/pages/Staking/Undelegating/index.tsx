@@ -1,5 +1,3 @@
-import { Text } from '@aura/safe-react-components'
-import { Divider } from '@material-ui/core'
 import { ReactElement, useEffect, useState } from 'react'
 import Col from 'src/components/layout/Col'
 import DenseTable, { StyledTableCell, StyledTableRow } from 'src/components/Table/DenseTable'
@@ -42,7 +40,6 @@ const BoxImg = styled.div`
 
 function Undelegating(props): ReactElement {
   const { unValidatorOfUser, allValidator } = props
-  const nativeCurrency = getNativeCurrency()
   const [data, setData] = useState([])
 
   useEffect(() => {

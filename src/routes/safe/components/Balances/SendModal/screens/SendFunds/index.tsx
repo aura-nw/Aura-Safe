@@ -14,7 +14,6 @@ import {
   minValue,
   minMaxDecimalsLength,
   mustBeFloat,
-  mustBeEthereumAddress,
   required,
   mustBeValidAddress,
 } from 'src/components/forms/validator'

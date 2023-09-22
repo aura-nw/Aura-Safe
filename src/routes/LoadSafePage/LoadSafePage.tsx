@@ -1,26 +1,22 @@
-import { ReactElement, useState, useEffect } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import ChevronLeft from '@material-ui/icons/ChevronLeft'
-import Block from 'src/components/layout/Block'
-import Page from 'src/components/layout/Page'
-import Heading from 'src/components/layout/Heading'
-import Row from 'src/components/layout/Row'
-import SelectNetworkStep, { selectNetworkStepLabel } from './steps/SelectNetworkStep/SelectNetworkStep'
-import LoadSafeAddressStep, {
-  loadSafeAddressStepLabel,
-  loadSafeAddressStepValidations,
-} from './steps/LoadSafeAddressStep/LoadSafeAddressStep'
-import LoadSafeOwnersStep, { loadSafeOwnersStepLabel } from './steps/LoadSafeOwnersStep/LoadSafeOwnersStep'
-import ReviewLoadStep, { reviewLoadStepLabel } from './steps/ReviewLoadStep/ReviewLoadStep'
-import { useMnemonicSafeName } from 'src/logic/hooks/useMnemonicName'
 import StepperForm, { StepFormElement } from 'src/components/StepperForm/StepperForm'
+import Block from 'src/components/layout/Block'
+import Heading from 'src/components/layout/Heading'
+import Page from 'src/components/layout/Page'
+import Row from 'src/components/layout/Row'
+import { getShortName } from 'src/config'
 import { AddressBookEntry, makeAddressBookEntry } from 'src/logic/addressBook/model/addressBook'
 import { addressBookSafeLoad } from 'src/logic/addressBook/store/actions'
-import { checksumAddress } from 'src/utils/checksumAddress'
-import { buildMSafe, buildSafe } from 'src/logic/safe/store/actions/fetchSafe'
-import { loadStoredSafes, saveSafes } from 'src/logic/safe/utils'
+import { currentNetworkAddressBookAsMap } from 'src/logic/addressBook/store/selectors'
+import { currentChainId } from 'src/logic/config/store/selectors'
+import { useMnemonicSafeName } from 'src/logic/hooks/useMnemonicName'
 import { addOrUpdateSafe } from 'src/logic/safe/store/actions/addOrUpdateSafe'
+import { buildMSafe } from 'src/logic/safe/store/actions/fetchSafe'
+import { loadStoredSafes, saveSafes } from 'src/logic/safe/utils'
+import ArrowBack from '../CreateSafePage/assets/arrow-left.svg'
+import { LOAD_SPECIFIC_SAFE_ROUTE, SAFE_ROUTES, extractPrefixedSafeAddress, generateSafeRoute } from '../routes'
 import {
   FIELD_LOAD_IS_LOADING_SAFE_ADDRESS,
   FIELD_LOAD_SAFE_ADDRESS,
@@ -29,13 +25,15 @@ import {
   FIELD_SAFE_OWNER_LIST,
   LoadSafeFormValues,
 } from './fields/loadFields'
-import { extractPrefixedSafeAddress, generateSafeRoute, LOAD_SPECIFIC_SAFE_ROUTE, SAFE_ROUTES } from '../routes'
-import { getShortName } from 'src/config'
-import { currentNetworkAddressBookAsMap } from 'src/logic/addressBook/store/selectors'
 import { getLoadSafeName } from './fields/utils'
-import { currentChainId } from 'src/logic/config/store/selectors'
+import LoadSafeAddressStep, {
+  loadSafeAddressStepLabel,
+  loadSafeAddressStepValidations,
+} from './steps/LoadSafeAddressStep/LoadSafeAddressStep'
+import LoadSafeOwnersStep, { loadSafeOwnersStepLabel } from './steps/LoadSafeOwnersStep/LoadSafeOwnersStep'
+import ReviewLoadStep, { reviewLoadStepLabel } from './steps/ReviewLoadStep/ReviewLoadStep'
+import SelectNetworkStep, { selectNetworkStepLabel } from './steps/SelectNetworkStep/SelectNetworkStep'
 import { BackIcon } from './styles'
-import ArrowBack from '../CreateSafePage/assets/arrow-left.svg'
 
 function Load(): ReactElement {
   const dispatch = useDispatch()

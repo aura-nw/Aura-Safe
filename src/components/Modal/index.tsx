@@ -1,4 +1,4 @@
-import { Button, Icon, Loader } from '@aura/safe-react-components'
+import { Icon, Loader } from '@aura/safe-react-components'
 import cn from 'classnames'
 import { ReactElement } from 'react'
 

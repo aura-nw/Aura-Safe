@@ -20,7 +20,6 @@ import { MChainInfo, getProposals } from 'src/services'
 import { IProposal } from 'src/types/proposal'
 import { calcBalance } from 'src/utils/calc'
 import { formatDateTimeDivider } from 'src/utils/date'
-import { usePagedQueuedTransactions } from '../../utils/hooks/usePagedQueuedTransactions'
 import ProposalsCard from './ProposalsCard'
 import VotingModal from './VotingPopup'
 import { GreenText, ProposalsSection, StyledBlock, StyledColumn, TitleNumberStyled } from './styles'
@@ -39,7 +38,6 @@ function Voting(): ReactElement {
   const chainInfo = getChainInfo() as any
   const loaded = useSelector(loadedSelector)
   const { connectWalletState, onConnectWalletShow, onConnectWalletHide } = useConnectWallet()
-  const { count, isLoading, hasMore, next, transactions } = usePagedQueuedTransactions()
 
   const safeAddress = extractSafeAddress()
   const [openVotingModal, setOpenVotingModal] = useState<boolean>(false)

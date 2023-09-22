@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js'
 import { Dispatch } from 'redux'
 
 import { SafeBalanceResponse } from '@gnosis.pm/safe-react-gateway-sdk'
-import { getCoinConfig } from 'src/config'
 import { getChains } from 'src/config/cache/chains'
 import { currentCurrencySelector } from 'src/logic/currencyValues/store/selectors'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
@@ -52,61 +51,60 @@ const extractDataFromResult = (
 
 export const fetchSafeTokens =
   (safeAddress: string, currency?: string) =>
-  async (dispatch: Dispatch, getState: () => AppReduxState): Promise<void> => {
-    const state = getState()
-    const safe = currentSafe(state)
+    async (dispatch: Dispatch, getState: () => AppReduxState): Promise<void> => {
+      const state = getState()
+      const safe = currentSafe(state)
 
-    if (!safe) {
-      return
+      if (!safe) {
+        return
+      }
+      const selectedCurrency = currency ?? currentCurrencySelector(state)
+
+      let tokenCurrenciesBalances: SafeBalanceResponse
+      try {
+        tokenCurrenciesBalances = await fetchTokenCurrenciesBalances({
+          safeAddress,
+          selectedCurrency,
+        })
+      } catch (e) {
+        logError(Errors._601, e.message)
+        return
+      }
+
+      const { balances, nativeBalance, tokens } = tokenCurrenciesBalances.items.reduce<ExtractedData>(
+        extractDataFromResult,
+        {
+          balances: [],
+          nativeBalance: '0',
+          tokens: [],
+        },
+      )
+
+      dispatch(
+        updateSafe({
+          address: safeAddress,
+          balances,
+          nativeBalance: '0',
+          totalFiatBalance: new BigNumber(tokenCurrenciesBalances.fiatTotal).toFixed(6),
+        }),
+      )
+      dispatch(addTokens(tokens))
     }
-    const selectedCurrency = currency ?? currentCurrencySelector(state)
-
-    let tokenCurrenciesBalances: SafeBalanceResponse
-    try {
-      tokenCurrenciesBalances = await fetchTokenCurrenciesBalances({
-        safeAddress,
-        selectedCurrency,
-      })
-    } catch (e) {
-      logError(Errors._601, e.message)
-      return
-    }
-
-    const { balances, nativeBalance, tokens } = tokenCurrenciesBalances.items.reduce<ExtractedData>(
-      extractDataFromResult,
-      {
-        balances: [],
-        nativeBalance: '0',
-        tokens: [],
-      },
-    )
-
-    dispatch(
-      updateSafe({
-        address: safeAddress,
-        balances,
-        nativeBalance: '0',
-        totalFiatBalance: new BigNumber(tokenCurrenciesBalances.fiatTotal).toFixed(6),
-      }),
-    )
-    dispatch(addTokens(tokens))
-  }
 
 export const fetchMSafeTokens =
   (safeInfo: IMSafeInfo) =>
-  async (dispatch: Dispatch, getState: () => AppReduxState): Promise<void> => {
-    let listTokens: any[] = []
-    const cw20Tokens = safeInfo.assets.CW20.asset.map((asset) => ({
-      name: asset.asset_info.data.name,
-      decimals: asset.asset_info.data.decimals,
-      symbol: asset.asset_info.data.symbol,
-      address: asset.contract_address,
-      _id: asset['_id'],
-    }))    
-    const listSafeTokens = [...(safeInfo?.balance || []), ...cw20Tokens];
-    const state = getState()
-    const safe = safeByAddressSelector(state, safeInfo.address)
-    if (safeInfo?.balance) {
+    async (dispatch: Dispatch, getState: () => AppReduxState): Promise<void> => {
+      let listTokens: any[] = []
+      const cw20Tokens = safeInfo.assets.CW20.asset?.map((asset) => ({
+        name: asset.asset_info.data.name,
+        decimals: asset.asset_info.data.decimals,
+        symbol: asset.asset_info.data.symbol,
+        address: asset.contract_address,
+        _id: asset['_id'],
+      }))
+      const listSafeTokens = [...(safeInfo?.balance || []), ...(cw20Tokens || [])];
+      const state = getState()
+      const safe = safeByAddressSelector(state, safeInfo.address)
       const listChain = getChains()
       const tokenDetailsListData = await getTokenDetail()
       const tokenDetailsList = await tokenDetailsListData.json()
@@ -124,7 +122,7 @@ export const fetchMSafeTokens =
         return { ...token, enable: isExist }
       })
       const chainInfo: any = listChain.find((x: any) => x.internalChainId === safeInfo?.internalChainId)
-      const nativeTokenData = safeInfo.balance.find((balance) => balance.denom == chainInfo.denom)
+      const nativeTokenData = safeInfo.balance?.find((balance) => balance.denom == chainInfo.denom)
       const balances: any[] = []
       if (nativeTokenData) {
         const nativeToken = {
@@ -147,15 +145,15 @@ export const fetchMSafeTokens =
 
       const coinConfig = safe?.coinConfig?.length
         ? filteredListTokens
-            .filter(
-              (item) =>
-                !safe?.coinConfig?.some((token) => token.denom === item.denom || token.address === item.address),
-            )
-            .concat(safe?.coinConfig)
+          .filter(
+            (item) =>
+              !safe?.coinConfig?.some((token) => token.denom === item.denom || token.address === item.address),
+          )
+          .concat(safe?.coinConfig)
         : filteredListTokens
 
       safeInfo.balance
-        .filter((balance) => balance.denom != chainInfo.denom)
+        ?.filter((balance) => balance.denom != chainInfo.denom)
         .forEach((data: any) => {
           const tokenDetail = listTokens.find((token) => token.cosmosDenom == data.minimal_denom)
           balances.push({
@@ -174,7 +172,7 @@ export const fetchMSafeTokens =
           })
         })
 
-      if (safeInfo.assets.CW20.asset.length > 0) {
+      if (safeInfo.assets.CW20.asset?.length > 0) {
         safeInfo.assets.CW20.asset.forEach((data) => {
           const tokenDetail = listTokens.find((token) => token.address == data.contract_address)
           if (tokenDetail) {
@@ -220,7 +218,6 @@ export const fetchMSafeTokens =
         nativeTokenData?.amount ? nativeTokenData?.amount : '0',
         chainInfo.nativeCurrency.decimals,
       )
-
       dispatch(
         updateSafe({
           address: safeInfo.address,
@@ -230,4 +227,3 @@ export const fetchMSafeTokens =
         }),
       )
     }
-  }

@@ -1,15 +1,15 @@
-import TextField from 'src/components/Input/TextField'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import ReloadIcon from 'src/assets/icons/reload.svg'
+import TextField from 'src/components/Input/TextField'
 import { getChainDefaultGasPrice, getCoinDecimal, getNativeCurrency } from 'src/config'
+import calculateGasFee from 'src/logic/providers/utils/fee'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import { formatNativeCurrency } from 'src/utils'
+import { usePagedQueuedTransactions } from 'src/utils/hooks/usePagedQueuedTransactions'
 import { FilledButton, LinkButton } from '../Button'
 import Gap from '../Gap'
-import ReloadIcon from 'src/assets/icons/reload.svg'
 import { Info, Wrap } from './styles'
-import { useState, useEffect } from 'react'
-import calculateGasFee from 'src/logic/providers/utils/fee'
-import { usePagedQueuedTransactions } from 'src/utils/hooks/usePagedQueuedTransactions'
 
 export default function FeeAndSequence({
   open,
@@ -22,7 +22,7 @@ export default function FeeAndSequence({
   setSequence,
 }) {
   const { nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
-  const { count, isLoading, hasMore, next, transactions } = usePagedQueuedTransactions()
+  const { transactions } = usePagedQueuedTransactions()
 
   const nativeCurrency = getNativeCurrency()
   const chainDefaultGasPrice = getChainDefaultGasPrice()

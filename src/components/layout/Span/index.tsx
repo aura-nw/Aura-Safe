@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 class Span extends React.PureComponent<any> {
   render(): React.ReactElement {

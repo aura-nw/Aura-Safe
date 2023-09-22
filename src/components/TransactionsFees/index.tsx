@@ -1,8 +1,6 @@
 import { EstimationStatus } from 'src/logic/hooks/useEstimateTransactionGas'
 import Paragraph from 'src/components/layout/Paragraph'
-import { getNativeCurrency } from 'src/config'
 import { TransactionFailText } from 'src/components/TransactionFailText'
-import { Text } from '@aura/safe-react-components'
 import styled from 'styled-components'
 
 const StyledText = styled.span`

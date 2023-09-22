@@ -1,21 +1,10 @@
-import { Text } from '@aura/safe-react-components'
 import { useEffect, useRef } from 'react'
 import Gap from 'src/components/Gap'
 import AmountInput from 'src/components/Input/AmountInput'
 import Col from 'src/components/layout/Col'
 import { convertAmount, formatNativeCurrency } from 'src/utils'
 import SelectValidator from '../SelectValidator'
-import {
-  BorderAura,
-  BorderInput,
-  BoxDelegate,
-  InputAura,
-  PaddingPopup,
-  StyledButtonModal,
-  StyledInputModal,
-  TextDisable,
-  TextGray,
-} from './styles'
+import { BoxDelegate, PaddingPopup } from './styles'
 
 export default function ModalRedelegate(props) {
   const {
@@ -23,7 +12,6 @@ export default function ModalRedelegate(props) {
     handleChangeRedelegate,
     valueDelegate,
     handleDelegatedAmount,
-    nativeCurrency,
     handleMax,
     amount,
     dataDelegateOfUser,

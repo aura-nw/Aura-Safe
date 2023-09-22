@@ -12,8 +12,6 @@ import { getChainDefaultGas, getChainDefaultGasPrice, getCoinDecimal, getCoinMin
 import { allDelegation } from 'src/logic/delegation/store/selectors'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
 import calculateGasFee from 'src/logic/providers/utils/fee'
-import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { extractSafeAddress } from 'src/routes/routes'
 import { DEFAULT_GAS_LIMIT } from 'src/services/constant/common'
 import { convertAmount, formatNativeCurrency, formatNativeToken } from 'src/utils'
@@ -23,9 +21,7 @@ import { Wrapper } from './style'
 export default function Redelegate({ validator, amount, onClose, dstValidator, gasUsed }) {
   const safeAddress = extractSafeAddress()
   const dispatch = useDispatch()
-  const { nativeBalance: balance } = useSelector(currentSafeWithNames)
   const delegations = useSelector(allDelegation)
-  const userWalletAddress = useSelector(userAccountSelector)
   const stakedAmount = delegations?.find(
     (delegation: any) => delegation.operatorAddress == validator.safeStaking,
   )?.staked

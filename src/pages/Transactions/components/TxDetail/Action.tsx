@@ -1,14 +1,14 @@
 import { ReactElement, useContext } from 'react'
 import { useSelector } from 'react-redux'
-import { FilledButton, OutlinedButton, OutlinedNeutralButton } from 'src/components/Button'
+import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
 
+import { Tooltip } from '@material-ui/core'
 import ArrowUpDownIcon from 'src/assets/icons/ArrowsDownUp.png'
 import TrashIcon from 'src/assets/icons/TrashSimple.svg'
+import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import styled from 'styled-components'
 import { TxSignModalContext } from '../../Queue'
-import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { Tooltip } from '@material-ui/core'
 type TxActionsProps = {
   transaction: any
 }

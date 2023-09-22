@@ -1,18 +1,13 @@
 import IconButton from '@material-ui/core/IconButton'
 import Close from '@material-ui/icons/Close'
-import classNames from 'classnames/bind'
 import * as React from 'react'
 
-import Button from 'src/components/layout/Button'
 import Col from 'src/components/layout/Col'
 import Hairline from 'src/components/layout/Hairline'
-import Img from 'src/components/layout/Img'
 import Paragraph from 'src/components/layout/Paragraph'
 import Row from 'src/components/layout/Row'
 import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
 import { useStyles } from 'src/routes/safe/components/Balances/SendModal/screens/ChooseTxType/style'
-
-import Token from '../assets/token.svg'
 
 import { getExplorerInfo } from 'src/config'
 import { StyledBorder, StyledButtonBorder, StyledButtonLabel } from './style'

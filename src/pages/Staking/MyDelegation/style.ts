@@ -1,7 +1,4 @@
-import { createStyles } from '@material-ui/core'
-import { borderLinear } from 'src/theme/variables'
 import styled from 'styled-components'
-import { Text, Button } from '@aura/safe-react-components'
 
 export const Wrapper = styled.div`
   border-radius: 12px;

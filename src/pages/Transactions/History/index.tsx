@@ -18,7 +18,7 @@ import {
 } from '../styled'
 import Transaction from './Transaction'
 export default function HistoryTransactions(): ReactElement {
-  const { count, isLoading, hasMore, next, transactions: historyTx } = usePagedHistoryTransactions()
+  const { count, isLoading, transactions: historyTx } = usePagedHistoryTransactions()
   const queryParams = useQuery()
   const transactionId = queryParams.get('transactionId')
   const listTokens: any = useSelector(extendedSafeTokensSelector)
