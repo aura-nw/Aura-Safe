@@ -17,7 +17,6 @@ import currentSessionReducer, {
   CurrentSessionState,
 } from 'src/logic/currentSession/store/reducer/currentSession'
 import notificationsReducer, { NOTIFICATIONS_REDUCER_ID } from 'src/logic/notifications/store/reducer/notifications'
-import notificationsMiddleware from 'src/logic/safe/store/middleware/notificationsMiddleware'
 import { safeStorageMiddleware } from 'src/logic/safe/store/middleware/safeStorage'
 import gatewayTransactionsReducer, {
   GATEWAY_TRANSACTIONS_ID,
@@ -40,11 +39,7 @@ import currencyValuesReducer, {
 import termReducer, { TERM_ID, TermState } from 'src/logic/checkTerm/store/reducer/term'
 
 import { AddressBookState } from 'src/logic/addressBook/model/addressBook'
-import appearanceReducer, {
-  APPEARANCE_REDUCER_ID,
-  AppearanceState,
-  initialAppearanceState,
-} from 'src/logic/appearance/reducer/appearance'
+
 import { NFTAssets, NFTTokens } from 'src/logic/collectibles/sources/collectibles'
 import { configMiddleware } from 'src/logic/config/store/middleware'
 import configReducer, { CONFIG_REDUCER_ID, initialConfigState } from 'src/logic/config/store/reducer'
@@ -62,13 +57,12 @@ import { IFund } from 'src/components/JsonschemaForm/FundForm'
 const CURRENCY_KEY = `${CURRENCY_REDUCER_ID}.selectedCurrency`
 
 const LS_CONFIG: RLSOptions | LoadOptions = {
-  states: [ADDRESS_BOOK_REDUCER_ID, CURRENCY_KEY, APPEARANCE_REDUCER_ID, CONFIG_REDUCER_ID, TERM_ID],
+  states: [ADDRESS_BOOK_REDUCER_ID, CURRENCY_KEY, CONFIG_REDUCER_ID, TERM_ID],
   namespace: LS_NAMESPACE,
   namespaceSeparator: LS_SEPARATOR,
   disableWarnings: true,
   preloadedState: {
     [CURRENCY_REDUCER_ID]: initialCurrencyState,
-    [APPEARANCE_REDUCER_ID]: initialAppearanceState,
     [CONFIG_REDUCER_ID]: initialConfigState,
   },
 }
@@ -81,7 +75,6 @@ const enhancer = composeEnhancers(
   applyMiddleware(
     thunk,
     save(LS_CONFIG),
-    notificationsMiddleware,
     safeStorageMiddleware,
     // providerWatcher,
     addressBookMiddleware,
@@ -104,7 +97,6 @@ const reducers = {
   [ADDRESS_BOOK_REDUCER_ID]: addressBookReducer,
   [CURRENT_SESSION_REDUCER_ID]: currentSessionReducer,
   [CONFIG_REDUCER_ID]: configReducer,
-  [APPEARANCE_REDUCER_ID]: appearanceReducer,
   [TERM_ID]: termReducer,
   [PROPOSALS_REDUCER_ID]: proposalsReducer,
   [VALIDATOR_REDUCER_ID]: validatorReducer,
@@ -131,7 +123,6 @@ export type AppReduxState = CombinedState<{
   [ADDRESS_BOOK_REDUCER_ID]: AddressBookState
   [CURRENT_SESSION_REDUCER_ID]: CurrentSessionState
   [CONFIG_REDUCER_ID]: ConfigState
-  [APPEARANCE_REDUCER_ID]: AppearanceState
   [TERM_ID]: TermState
   [PROPOSALS_REDUCER_ID]: IProposal[]
   [VALIDATOR_REDUCER_ID]: ValidatorStateType
