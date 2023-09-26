@@ -54,18 +54,11 @@
     ]
   },
   "productName": "Safe",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@aura/safe-react-components": "https://github.com/aura-nw/safe-react-components.git",
     "@codemirror/lang-javascript": "^6.1.6",

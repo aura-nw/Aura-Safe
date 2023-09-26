@@ -14,7 +14,7 @@ import {
   createAuthzAminoConverters,
   createBankAminoConverters,
   createDistributionAminoConverters,
-  createFreegrantAminoConverters,
+  createFeegrantAminoConverters,
   createGovAminoConverters,
   createIbcAminoConverters,
   createStakingAminoConverters,
@@ -402,12 +402,12 @@ const signMessage = async (
       const registry = new Registry(TxTypes)
       const aminoTypes = new AminoTypes({
         ...createBankAminoConverters(),
-        ...createStakingAminoConverters(getChainInfo().shortName),
+        ...createStakingAminoConverters(),
         ...createDistributionAminoConverters(),
         ...createGovAminoConverters(),
         ...createWasmAminoConverters(),
         ...createAuthzAminoConverters(),
-        ...createFreegrantAminoConverters(),
+        ...createFeegrantAminoConverters(),
         ...createIbcAminoConverters(),
       })
 
@@ -433,6 +433,8 @@ const signMessage = async (
         [{ pubkey, sequence: signedSequence }],
         signed.fee.amount,
         signedGasLimit,
+        undefined,
+        undefined,
         signMode,
       )
       const respone = TxRaw.fromPartial({
