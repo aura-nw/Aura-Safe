@@ -278,7 +278,7 @@ export async function getAllValidators(): Promise<IResponse<any>> {
     .post(chainInfo.indexerV2, {
       query: `query GetAllValidator {
       ${chainInfo.environment || ''} {
-        validator(limit: 1000) {
+        validator(limit: 1000, where: {status: {_neq: "UNRECOGNIZED"}} ) {
           account_address
           commission
           description
