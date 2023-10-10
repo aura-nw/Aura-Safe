@@ -54,26 +54,19 @@
     ]
   },
   "productName": "Safe",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@aura/safe-react-components": "https://github.com/aura-nw/safe-react-components.git",
     "@codemirror/lang-javascript": "^6.1.6",
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/language": "^6.6.0",
-    "@cosmjs/cosmwasm-stargate": "^0.28.11",
-    "@cosmjs/encoding": "^0.31.0",
-    "@cosmjs/stargate": "^0.28.11",
+    "@cosmjs/cosmwasm-stargate": "^0.31.1",
+    "@cosmjs/encoding": "^0.31.1",
+    "@cosmjs/stargate": "^0.31.1",
     "@gnosis.pm/safe-apps-sdk": "6.1.0",
     "@gnosis.pm/safe-apps-sdk-v1": "npm:@gnosis.pm/safe-apps-sdk@0.4.2",
     "@gnosis.pm/safe-core-sdk": "^1.1.1",
