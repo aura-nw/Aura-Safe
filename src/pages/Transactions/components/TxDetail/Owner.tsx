@@ -35,6 +35,7 @@ export const TxOwners = ({ txDetails }: { txDetails: any }): ReactElement | null
   if (!txDetails.confirmations) {
     return null
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [showErr, setShowErr] = useState<boolean>(false)
   const confirmationsNeeded = txDetails.confirmationsRequired - txDetails.confirmations.length
   const CreationNode = (

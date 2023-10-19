@@ -1,6 +1,6 @@
 #!/bin/sh
 # . "$(dirname "$0")/_/husky.sh"
 
-# yarn lint-staged --allow-empty
+yarn lint-staged --allow-empty
 
 # yarn update-mocks

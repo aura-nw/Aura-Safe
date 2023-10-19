@@ -3,7 +3,7 @@ import semverSatisfies from 'semver/functions/satisfies'
 import semverValid from 'semver/functions/valid'
 import { FEATURES } from '@gnosis.pm/safe-react-gateway-sdk'
 
-import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
+// import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
 import { getSafeMasterContract } from 'src/logic/contracts/safeContracts'
 import { LATEST_SAFE_VERSION } from 'src/utils/constants'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
@@ -24,7 +24,7 @@ export const safeNeedsUpdate = (currentVersion?: string, latestVersion?: string)
   return latest ? semverLessThan(current, latest) : false
 }
 
-export const getCurrentSafeVersion = (gnosisSafeInstance: GnosisSafe): Promise<string> =>
+export const getCurrentSafeVersion = (gnosisSafeInstance: any): Promise<string> =>
   gnosisSafeInstance.methods.VERSION().call()
 
 const isEnabledByVersion = (feature: FEATURES, version: string): boolean => {

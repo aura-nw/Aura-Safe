@@ -1,4 +1,4 @@
-import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
+// import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
 
 import { SafeInfo } from '@gnosis.pm/safe-react-gateway-sdk'
 import { ChainId } from 'src/config/chain.d'
@@ -14,7 +14,7 @@ import { getSpendingLimits } from 'src/logic/safe/utils/spendingLimits'
 import { LATEST_SAFE_VERSION } from 'src/utils/constants'
 
 export const shouldExecuteTransaction = async (
-  safeInstance: GnosisSafe,
+  safeInstance: any,
   nonce: string,
   lastTx: Transaction | null,
 ): Promise<boolean> => {

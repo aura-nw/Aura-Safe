@@ -184,7 +184,6 @@ export const differentFrom =
     return undefined
   }
 
-
 export const validAddressBookName = (name: string): string | undefined => {
   const lengthError = minMaxLength(1, 50)(name)
 

@@ -15,8 +15,7 @@ import { useEffect, useCallback, MutableRefObject } from 'react'
 
 import { getChainName, getTxServiceUrl } from 'src/config/'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { TransactionParams } from '../components/AppFrame'
-import { SafeApp } from 'src/routes/safe/components/Apps/types'
+import { SafeApp, TransactionParams } from 'src/routes/safe/components/Apps/types'
 
 type InterfaceMessageProps<T extends InterfaceMessageIds> = {
   messageId: T

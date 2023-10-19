@@ -1,6 +1,6 @@
 import { Operation } from '@gnosis.pm/safe-react-gateway-sdk'
 import { BigNumber } from 'bignumber.js'
-import { AbiItem } from 'web3-utils'
+// import { AbiItem } from 'web3-utils'
 
 import { CreateTransactionArgs } from 'src/logic/safe/store/actions/createTransaction'
 import { TX_NOTIFICATION_TYPES } from 'src/logic/safe/transactions'
@@ -30,7 +30,7 @@ const requestTokensByDelegate = async (
 
   const whenRequestValues = delegates.map((delegateAddress: string) =>
     generateBatchRequests<[string, string[] | undefined]>({
-      abi: SpendingLimitModule.abi as AbiItem[],
+      abi: SpendingLimitModule.abi as any[],
       address: SPENDING_LIMIT_MODULE_ADDRESS,
       methods: [{ method: 'getTokens', args: [safeAddress, delegateAddress] }],
       batch,
@@ -86,7 +86,7 @@ const requestAllowancesByDelegatesAndTokens = async (
       for (const token of tokens) {
         whenRequestValues.push(
           generateBatchRequests<[TokenSpendingLimitContext, TokenSpendingLimit]>({
-            abi: SpendingLimitModule.abi as AbiItem[],
+            abi: SpendingLimitModule.abi as any[],
             address: SPENDING_LIMIT_MODULE_ADDRESS,
             methods: [{ method: 'getTokenAllowance', args: [safeAddress, delegate, token] }],
             batch,

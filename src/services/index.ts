@@ -164,8 +164,9 @@ export async function getMSafeInfo(safeId: number): Promise<IMSafeInfo> {
 
 export async function getAccountAsset(safeAddress: string): Promise<any> {
   const chainInfo = getChainInfo() as any
-  return axios.post(chainInfo.indexerV2, {
-    query: `query QueryAccountAsset($address: String = "") {
+  return axios
+    .post(chainInfo.indexerV2, {
+      query: `query QueryAccountAsset($address: String = "") {
       ${chainInfo.environment} {
         cw20_holder(where: {address: {_eq: $address}}) {
           amount
@@ -188,11 +189,12 @@ export async function getAccountAsset(safeAddress: string): Promise<any> {
         }
       }
     }`,
-    variables: {
-      address: safeAddress
-    },
-    operationName: 'QueryAccountAsset',
-  }).then((res) => res.data.data[chainInfo.environment])
+      variables: {
+        address: safeAddress,
+      },
+      operationName: 'QueryAccountAsset',
+    })
+    .then((res) => res.data.data[chainInfo.environment])
 }
 
 export async function getMSafeInfoWithAdress(query: string, internalChainId: number): Promise<IMSafeInfo> {
@@ -272,8 +274,9 @@ export async function simulate(payload: any): Promise<IResponse<any>> {
 export async function getAllValidators(): Promise<IResponse<any>> {
   const chainInfo = getChainInfo() as any
 
-  return axios.post(chainInfo.indexerV2, {
-    query: `query GetAllValidator {
+  return axios
+    .post(chainInfo.indexerV2, {
+      query: `query GetAllValidator {
       ${chainInfo.environment || ''} {
         validator(limit: 1000, where: {status: {_neq: "UNRECOGNIZED"}} ) {
           account_address
@@ -289,20 +292,18 @@ export async function getAllValidators(): Promise<IResponse<any>> {
         }
       }
     }`,
-    variables: {},
-    operationName: 'GetAllValidator',
-  }).then((res) => res.data?.data[chainInfo.environment])
+      variables: {},
+      operationName: 'GetAllValidator',
+    })
+    .then((res) => res.data?.data[chainInfo.environment])
 }
-
 
 export async function getAllDelegateOfUser(internalChainId: any, delegatorAddress: any): Promise<IResponse<any>> {
   return axios.get(`${baseUrl}/distribution/${internalChainId}/${delegatorAddress}/delegations`).then((res) => res.data)
 }
 
 export async function getAllDelegations(chainLcd: string, delegatorAddress: any): Promise<any> {
-  return axios
-    .get(`${chainLcd}/cosmos/staking/v1beta1/delegations/${delegatorAddress}`)
-    .then((res) => res.data)
+  return axios.get(`${chainLcd}/cosmos/staking/v1beta1/delegations/${delegatorAddress}`).then((res) => res.data)
 }
 
 export async function getAllUnDelegateOfUser(chainLcd: string, delegatorAddress: any): Promise<any> {
@@ -342,9 +343,7 @@ export async function getAccountInfo(contractAddress: string): Promise<any> {
 
 export async function getAccountInfoByLcd(contractAddress: string): Promise<any> {
   const currentChainInfo = getChainInfo() as any
-  return axios
-    .get(`${currentChainInfo.lcd}/cosmos/auth/v1beta1/accounts/${contractAddress}`)
-    .then((res) => res.data)
+  return axios.get(`${currentChainInfo.lcd}/cosmos/auth/v1beta1/accounts/${contractAddress}`).then((res) => res.data)
 }
 
 export async function getNumberOfDelegator(validatorId: any): Promise<IResponse<any>> {
@@ -363,11 +362,13 @@ export async function getNumberOfDelegator(validatorId: any): Promise<IResponse<
 export const getProposals = async () => {
   const chainInfo = getChainInfo() as any
 
-  return axios.post(chainInfo.indexerV2, {
-    query: `query GetProposals {\n      ${chainInfo.environment} {\n        proposal(order_by: {proposal_id: desc}, limit: 10) {\n          proposer_address\n          content\n          tally\n          proposal_id\n          status\n          submit_time\n          deposit_end_time\n          total_deposit\n          voting_start_time\n          voting_end_time\n        }\n      }\n    }`,
-    variables: {},
-    operationName: 'GetProposals',
-  }).then((res) => res.data)
+  return axios
+    .post(chainInfo.indexerV2, {
+      query: `query GetProposals {\n      ${chainInfo.environment} {\n        proposal(order_by: {proposal_id: desc}, limit: 10) {\n          proposer_address\n          content\n          tally\n          proposal_id\n          status\n          submit_time\n          deposit_end_time\n          total_deposit\n          voting_start_time\n          voting_end_time\n        }\n      }\n    }`,
+      variables: {},
+      operationName: 'GetProposals',
+    })
+    .then((res) => res.data)
 }
 
 export async function getProposalDetail(
@@ -416,17 +417,17 @@ export async function getDetailToken(address: string): Promise<IResponse<any>> {
 
 export async function fetchAccountInfo(safeAddress: string) {
   try {
-    const response = await getAccountInfo(safeAddress);
-    const accountInfo = response.account[0] ?? { account_number: 0, sequence: 0, balances: [] };
-    return accountInfo;
+    const response = await getAccountInfo(safeAddress)
+    const accountInfo = response.account[0] ?? { account_number: 0, sequence: 0, balances: [] }
+    return accountInfo
   } catch (error) {
     try {
-      const lcdResponse = await getAccountInfoByLcd(safeAddress);
-      const accountInfoFromLcd = lcdResponse.account;
-      return accountInfoFromLcd;
+      const lcdResponse = await getAccountInfoByLcd(safeAddress)
+      const accountInfoFromLcd = lcdResponse.account
+      return accountInfoFromLcd
     } catch (lcdError) {
-      console.error("Error while fetching account info:", lcdError);
-      return null;
+      console.error('Error while fetching account info:', lcdError)
+      return null
     }
   }
 }

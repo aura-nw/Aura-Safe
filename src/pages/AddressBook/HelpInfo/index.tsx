@@ -11,12 +11,7 @@ const StyledIcon = styled(Icon)`
 `
 
 const HelpInfo = (): ReactElement => (
-  <Link
-    href="https://aura.network/"
-    target="_blank"
-    rel="noreferrer"
-    title="Export & import info"
-  >
+  <Link href="https://aura.network/" target="_blank" rel="noreferrer" title="Export & import info">
     <Text size="xl" as="span" color="primary">
       Learn about the address book import and export
     </Text>

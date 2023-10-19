@@ -138,7 +138,7 @@ const GlobalErrorBoundaryFallback: FallbackRender = ({ error, componentStack }) 
         <img className="astronaut-image" src={Astronaut} alt="" />
         <div>
           <p className="title">OH NO! SOMETHING WENT WRONG!!</p>
-          <p>Don't be alone wanderer. Let us help you.</p>
+          <p>Don&apos;t be alone wanderer. Let us help you.</p>
           <p>
             Please contact us via{' '}
             <a className="discord-anchor" href="https://discord.gg/bzm3dyxJxR">

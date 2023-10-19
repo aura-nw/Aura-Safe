@@ -16,7 +16,7 @@ const ProviderDisconnected = ({ classes }): ReactElement => (
         transform="capitalize"
         weight="semiBold"
         data-testid="not-connected-wallet"
-        color='gray'
+        color="gray"
       >
         Not Connected
       </Paragraph>

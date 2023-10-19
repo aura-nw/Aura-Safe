@@ -1,25 +1,21 @@
-import { useState, useEffect, ReactElement } from 'react'
 import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableRow from '@material-ui/core/TableRow'
 import cn from 'classnames'
+import { ReactElement, useEffect } from 'react'
 
-import { AddOwnerModal } from './AddOwnerModal'
-import { EditOwnerModal } from './EditOwnerModal'
-import { RemoveOwnerModal } from './RemoveOwnerModal'
-import { ReplaceOwnerModal } from './ReplaceOwnerModal'
-import { OWNERS_TABLE_ADDRESS_ID, generateColumns, getOwnerData, OwnerData } from './dataFetcher'
+import { OWNERS_TABLE_ADDRESS_ID, generateColumns, getOwnerData } from './dataFetcher'
 import { useStyles } from './style'
 
-import { getExplorerInfo } from 'src/config'
+import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
 import Table from 'src/components/Table'
 import { cellWidth } from 'src/components/Table/TableHead'
 import Block from 'src/components/layout/Block'
 import Heading from 'src/components/layout/Heading'
 import Paragraph from 'src/components/layout/Paragraph/index'
-import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
-import { useAnalytics, SETTINGS_EVENTS } from 'src/utils/googleAnalytics'
+import { getExplorerInfo } from 'src/config'
 import { AddressBookState } from 'src/logic/addressBook/model/addressBook'
+import { SETTINGS_EVENTS, useAnalytics } from 'src/utils/googleAnalytics'
 
 export const RENAME_OWNER_BTN_TEST_ID = 'rename-owner-btn'
 export const REMOVE_OWNER_BTN_TEST_ID = 'remove-owner-btn'
@@ -35,32 +31,6 @@ type Props = {
 const ManageOwners = ({ granted, owners }: Props): ReactElement => {
   const { trackEvent } = useAnalytics()
   const classes = useStyles()
-
-  const [selectedOwner, setSelectedOwner] = useState<OwnerData | undefined>()
-  const [modalsStatus, setModalStatus] = useState({
-    showAddOwner: false,
-    showRemoveOwner: false,
-    showReplaceOwner: false,
-    showEditOwner: false,
-  })
-
-  const onShow = (action, row?: OwnerData) => () => {
-    setModalStatus((prevState) => ({
-      ...prevState,
-      [`show${action}`]: !prevState[`show${action}`],
-    }))
-    if (row) {
-      setSelectedOwner(row)
-    }
-  }
-
-  const onHide = (action) => () => {
-    setModalStatus((prevState) => ({
-      ...prevState,
-      [`show${action}`]: !Boolean(prevState[`show${action}`]),
-    }))
-    setSelectedOwner(undefined)
-  }
 
   useEffect(() => {
     trackEvent(SETTINGS_EVENTS.OWNERS)
@@ -118,65 +88,12 @@ const ManageOwners = ({ granted, owners }: Props): ReactElement => {
                       )}
                     </TableCell>
                   ))}
-                  {/* <TableCell component="td">
-                    <Row align="end" className={classes.actions}>
-                      <ButtonHelper onClick={onShow('EditOwner', row)} dataTestId={RENAME_OWNER_BTN_TEST_ID}>
-                        <Icon size="sm" type="edit" color="icon" tooltip="Edit owner" />
-                      </ButtonHelper>
-                      {granted && (
-                        <>
-                          <ButtonHelper onClick={onShow('ReplaceOwner', row)} dataTestId={REPLACE_OWNER_BTN_TEST_ID}>
-                            <Icon size="sm" type="replaceOwner" color="icon" tooltip="Replace owner" />
-                          </ButtonHelper>
-                          {ownerData.length > 1 && (
-                            <ButtonHelper onClick={onShow('RemoveOwner', row)} dataTestId={REMOVE_OWNER_BTN_TEST_ID}>
-                              <Icon size="sm" type="delete" color="error" tooltip="Remove owner" />
-                            </ButtonHelper>
-                          )}
-                        </>
-                      )}
-                    </Row>
-                  </TableCell> */}
                 </TableRow>
               ))
             }
           </Table>
         </TableContainer>
       </Block>
-      {/* {granted && (
-        <>
-          <Hairline />
-          <Row align="end" className={classes.controlsRow} grow>
-            <Col end="xs">
-              <Button
-                color="primary"
-                onClick={onShow('AddOwner')}
-                size="small"
-                testId={ADD_OWNER_BTN_TEST_ID}
-                variant="contained"
-              >
-                Add new owner
-              </Button>
-            </Col>
-          </Row>
-        </>
-      )} */}
-      <AddOwnerModal isOpen={modalsStatus.showAddOwner} onClose={onHide('AddOwner')} />
-      {selectedOwner && (
-        <>
-          <RemoveOwnerModal
-            isOpen={modalsStatus.showRemoveOwner}
-            onClose={onHide('RemoveOwner')}
-            owner={selectedOwner}
-          />
-          <ReplaceOwnerModal
-            isOpen={modalsStatus.showReplaceOwner}
-            onClose={onHide('ReplaceOwner')}
-            owner={selectedOwner}
-          />
-          <EditOwnerModal isOpen={modalsStatus.showEditOwner} onClose={onHide('EditOwner')} owner={selectedOwner} />
-        </>
-      )}
     </>
   )
 }

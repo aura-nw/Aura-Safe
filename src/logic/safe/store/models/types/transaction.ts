@@ -1,5 +1,5 @@
 import { Operation } from '@gnosis.pm/safe-react-gateway-sdk'
-import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
+// import { GnosisSafe } from 'src/types/contracts/gnosis_safe.d'
 
 export type TxArgs = {
   baseGas: string
@@ -9,7 +9,7 @@ export type TxArgs = {
   nonce: number
   operation: Operation
   refundReceiver: string
-  safeInstance: GnosisSafe
+  safeInstance: any
   safeTxGas: string
   sender?: string
   sigs: string
