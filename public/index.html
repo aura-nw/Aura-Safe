@@ -1,72 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:url" content="/" />
+    <meta property="og:type" content="network" />
+    <meta property="og:title" content="Aura Safe" />
+    <meta property="og:description" content="Aura Safe" />
+    <meta property="og:image" content="https://safe.serenity.aura.network/ThumbnailPyxis.png" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta property="og:url" content="/" />
-  <meta property="og:type" content="network" />
-  <meta property="og:title" content="Aura Safe" />
-  <meta property="og:description" content="Aura Safe" />
-  <meta property="og:image" content="https://safe.serenity.aura.network/ThumbnailPyxis.png" />
+    <link rel="shortcut icon" href="./resources/Logo.svg" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
-  <link rel="shortcut icon" href="./resources/Logo.svg" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-
-  <meta property="og:url" content="/" />
+    <meta property="og:url" content="/" />
     <meta property="og:type" content="network" />
     <meta property="og:title" content="Pyxis Safe" />
     <meta property="og:description" content="Pyxis Safe" />
     <meta property="og:image" content="https://safe.serenity.aura.network/ThumbnailPyxis.png" />
 
-  <base href="%PUBLIC_URL%/" />
-  <!-- Google Tag Manager -->
-  <!-- <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-K3NWXQS');</script> -->
-  <!-- End Google Tag Manager -->
-  <title>Pyxis Safe</title>
-</head>
-<style>
-  #safe-preloader-animation {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 120px;
-    height: 120px;
-    margin: -60px 0 0 -60px;
-    animation: sk-bounce 2s infinite ease-in-out;
-    animation-delay: -1s;
-    background-color: rgba(18,18,18,1);
-  }
-
-  @keyframes sk-bounce {
-
-    0%,
-    100% {
-      transform: scale(0.8);
-      -webkit-transform: scale(0.8);
+    <base href="%PUBLIC_URL%/" />
+    <!-- Google Tag Manager -->
+    <script>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({
+          'gtm.start': new Date().getTime(),
+          event: 'gtm.js',
+        })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-KH82ML5N')
+    </script>
+    <!-- End Google Tag Manager -->
+    <title>Pyxis Safe</title>
+  </head>
+  <style>
+    #safe-preloader-animation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px;
+      height: 120px;
+      margin: -60px 0 0 -60px;
+      animation: sk-bounce 2s infinite ease-in-out;
+      animation-delay: -1s;
+      background-color: rgba(18, 18, 18, 1);
     }
 
-    50% {
-      transform: scale(1);
-      -webkit-transform: scale(1);
+    @keyframes sk-bounce {
+      0%,
+      100% {
+        transform: scale(0.8);
+        -webkit-transform: scale(0.8);
+      }
+
+      50% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+      }
     }
-  }
-</style>
+  </style>
 
-<body style="background-color: rgba(18,18,18,1);">
-  <!-- Google Tag Manager (noscript) -->
-  <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3NWXQS" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript> -->
-  <!-- End Google Tag Manager (noscript) -->
-  <img id="safe-preloader-animation" src="./resources/Logo.svg" />
-  <div id="root" style="overflow: hidden"></div>
-</body>
-
+  <body style="background-color: rgba(18, 18, 18, 1)">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KH82ML5N"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <img id="safe-preloader-animation" src="./resources/Logo.svg" />
+    <div id="root" style="overflow: hidden"></div>
+  </body>
 </html>
