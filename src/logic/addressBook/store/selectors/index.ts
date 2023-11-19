@@ -38,7 +38,6 @@ const getNameByAddress = (addressBook, address: string, chainId: ChainId): strin
   return addressBook?.[chainId]?.[address]?.name || ''
 }
 
-
 type GetNameParams = Overwrite<Partial<AddressBookEntry>, { address: string }>
 
 export const addressBookEntryName = createSelector(

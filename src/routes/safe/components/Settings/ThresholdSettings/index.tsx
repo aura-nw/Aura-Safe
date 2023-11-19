@@ -7,7 +7,7 @@ import Bold from 'src/components/layout/Bold'
 import Heading from 'src/components/layout/Heading'
 import Paragraph from 'src/components/layout/Paragraph'
 import { currentSafe } from 'src/logic/safe/store/selectors'
-import { useAnalytics, SETTINGS_EVENTS } from 'src/utils/googleAnalytics'
+import { SETTINGS_EVENTS, useAnalytics } from 'src/utils/googleAnalytics'
 
 import { styles } from './style'
 
@@ -15,13 +15,7 @@ const useStyles = makeStyles(styles)
 
 const ThresholdSettings = (): React.ReactElement => {
   const classes = useStyles()
-  // const [isModalOpen, setModalOpen] = useState(false)
-  const { /* address: safeAddress = '',  */ owners, threshold = 1 } = useSelector(currentSafe) ?? {}
-  // const granted = useSelector(grantedSelector)
-
-  // const toggleModal = () => {
-  //   setModalOpen((prevOpen) => !prevOpen)
-  // }
+  const { owners, threshold = 1 } = useSelector(currentSafe) ?? {}
 
   const { trackEvent } = useAnalytics()
 
@@ -37,33 +31,7 @@ const ThresholdSettings = (): React.ReactElement => {
         <Paragraph className={classes.ownersText} size="lg">
           <Bold>{threshold}</Bold> out of <Bold>{owners?.length || 0}</Bold> owners
         </Paragraph>
-        {/* {owners && owners.length > 1 && granted && (
-          <Row className={classes.buttonRow}>
-            <Button
-              className={classes.modifyBtn}
-              color="primary"
-              minWidth={120}
-              onClick={toggleModal}
-              variant="contained"
-            >
-              Change
-            </Button>
-          </Row>
-        )} */}
       </Block>
-      {/* <Modal
-        description="Change Required Confirmations Form"
-        handleClose={toggleModal}
-        open={isModalOpen}
-        title="Change Required Confirmations"
-      >
-        <ChangeThresholdModal
-          onClose={toggleModal}
-          ownersCount={owners?.length}
-          safeAddress={safeAddress}
-          threshold={threshold}
-        />
-      </Modal> */}
     </>
   )
 }

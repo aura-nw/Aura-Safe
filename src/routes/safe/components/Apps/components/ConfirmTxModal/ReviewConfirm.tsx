@@ -1,37 +1,31 @@
-import { Operation } from '@gnosis.pm/safe-react-gateway-sdk'
 import { Text } from '@aura/safe-react-components'
+import { DecodedDataResponse, Operation } from '@gnosis.pm/safe-react-gateway-sdk'
 import { ReactElement, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { toBN } from 'web3-utils'
-import { DecodedDataResponse } from '@gnosis.pm/safe-react-gateway-sdk'
+// import { toBN } from 'web3-utils'
 
-import { createTransaction } from 'src/logic/safe/store/actions/createTransaction'
-import { getMultisendContractAddress } from 'src/logic/contracts/safeContracts'
-import { TX_NOTIFICATION_TYPES } from 'src/logic/safe/transactions'
-import { encodeMultiSendCall } from 'src/logic/safe/transactions/multisend'
-import { getExplorerInfo, getNativeCurrency } from 'src/config'
-import { EstimationStatus, useEstimateTransactionGas } from 'src/logic/hooks/useEstimateTransactionGas'
-import { ModalHeader } from 'src/routes/safe/components/Balances/SendModal/screens/ModalHeader'
-import { EditableTxParameters } from 'src/utils/transactionHelpers/EditableTxParameters'
-import { TxParametersDetail } from 'src/utils/transactionHelpers/TxParametersDetail'
-import { lg, md } from 'src/theme/variables'
-import { useEstimationStatus } from 'src/logic/hooks/useEstimationStatus'
-import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 import { BasicTxInfo, DecodeTxs } from 'src/components/DecodeTxs'
-import { fetchTxDecoder } from 'src/utils/decodeTx'
-import { fromTokenUnit } from 'src/logic/tokens/utils/humanReadableValue'
-import Block from 'src/components/layout/Block'
-import Hairline from 'src/components/layout/Hairline'
 import Divider from 'src/components/Divider'
-import { Modal } from 'src/components/Modal'
-import { ButtonStatus } from 'src/components/Modal/type'
 import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
 import { ReviewInfoText } from 'src/components/ReviewInfoText'
+import Block from 'src/components/layout/Block'
+import Hairline from 'src/components/layout/Hairline'
+import { getExplorerInfo, getNativeCurrency } from 'src/config'
+import { getMultisendContractAddress } from 'src/logic/contracts/safeContracts'
+import { EstimationStatus, useEstimateTransactionGas } from 'src/logic/hooks/useEstimateTransactionGas'
+import { encodeMultiSendCall } from 'src/logic/safe/transactions/multisend'
+import { fromTokenUnit } from 'src/logic/tokens/utils/humanReadableValue'
+import { ModalHeader } from 'src/routes/safe/components/Balances/SendModal/screens/ModalHeader'
+import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
+import { lg, md } from 'src/theme/variables'
+import { fetchTxDecoder } from 'src/utils/decodeTx'
+import { EditableTxParameters } from 'src/utils/transactionHelpers/EditableTxParameters'
+import { TxParametersDetail } from 'src/utils/transactionHelpers/TxParametersDetail'
 
-import { ConfirmTxModalProps, DecodedTxDetail } from '.'
-import { grantedSelector } from 'src/utils/safeUtils/selector'
 import ExecuteCheckbox from 'src/components/ExecuteCheckbox'
+import { grantedSelector } from 'src/utils/safeUtils/selector'
+import { ConfirmTxModalProps, DecodedTxDetail } from '.'
 
 const Container = styled.div`
   max-width: 480px;
@@ -63,7 +57,8 @@ type Props = ConfirmTxModalProps & {
 }
 
 const parseTxValue = (value: string | number): string => {
-  return toBN(value).toString()
+  // return toBN(value).toString()
+  return ''
 }
 
 export const ReviewConfirm = ({
@@ -87,10 +82,7 @@ export const ReviewConfirm = ({
   const explorerUrl = getExplorerInfo(safeAddress)
   const isOwner = useSelector(grantedSelector)
 
-  const txRecipient: string | undefined = useMemo(
-    () => (isMultiSend ? getMultisendContractAddress() : txs[0]?.to),
-    [txs, isMultiSend],
-  )
+  const txRecipient = useMemo(() => (isMultiSend ? getMultisendContractAddress() : txs[0]?.to), [txs, isMultiSend])
   const txData: string | undefined = useMemo(
     () => (isMultiSend ? encodeMultiSendCall(txs) : txs[0]?.data),
     [txs, isMultiSend],
@@ -123,7 +115,6 @@ export const ReviewConfirm = ({
     manualGasLimit,
   })
 
-  const [buttonStatus, setButtonStatus] = useEstimationStatus(txEstimationExecutionStatus)
   const [executionApproved, setExecutionApproved] = useState<boolean>(true)
   const doExecute = isExecution && executionApproved
 
@@ -136,38 +127,6 @@ export const ReviewConfirm = ({
 
     decodeTxData()
   }, [txData])
-
-  const handleUserConfirmation = (safeTxHash: string): void => {
-    onUserConfirm(safeTxHash, requestId)
-    onClose()
-  }
-
-  const confirmTransactions = (txParameters: TxParameters) => {
-    setButtonStatus(ButtonStatus.LOADING)
-
-    dispatch(
-      createTransaction(
-        {
-          safeAddress,
-          to: txRecipient,
-          valueInWei: txValue,
-          txData,
-          operation,
-          origin: app.id,
-          navigateToTransactionsTab: false,
-          txNonce: txParameters.safeNonce,
-          safeTxGas: txParameters.safeTxGas,
-          ethParameters: txParameters,
-          notifiedTransaction: TX_NOTIFICATION_TYPES.STANDARD_TX,
-          delayExecution: !executionApproved,
-        },
-        handleUserConfirmation,
-        onReject,
-      ),
-    )
-
-    setButtonStatus(ButtonStatus.READY)
-  }
 
   const closeEditModalCallback = (txParameters: TxParameters) => {
     const oldGasPrice = gasPriceFormatted
@@ -249,19 +208,6 @@ export const ReviewConfirm = ({
               txEstimationExecutionStatus={txEstimationExecutionStatus}
             />
           )}
-
-          {/* Buttons */}
-          <Modal.Footer withoutBorder={txEstimationExecutionStatus !== EstimationStatus.LOADING}>
-            <Modal.Footer.Buttons
-              cancelButtonProps={{ onClick: onReject }}
-              confirmButtonProps={{
-                onClick: () => confirmTransactions(txParameters),
-                disabled: !isOwner,
-                status: buttonStatus,
-                text: txEstimationExecutionStatus === EstimationStatus.LOADING ? 'Estimating' : undefined,
-              }}
-            />
-          </Modal.Footer>
         </div>
       )}
     </EditableTxParameters>

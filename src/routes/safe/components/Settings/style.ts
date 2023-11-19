@@ -51,8 +51,7 @@ export const styles = createStyles({
   checkbox: {
     '& input[type="checkbox"]': {
       backgroundColor: '#fff !important',
-      color: '#dddfff'
-    }
-  }
+      color: '#dddfff',
+    },
+  },
 })
- 

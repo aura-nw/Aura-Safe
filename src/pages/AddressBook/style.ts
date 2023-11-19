@@ -63,8 +63,8 @@ export const styles = createStyles({
   },
   tableCell: {
     // padding: '6px 0px',
-    height: '56px'
-  }
+    height: '56px',
+  },
 })
 
 const StyledButtonLink = styled(ButtonLink)`

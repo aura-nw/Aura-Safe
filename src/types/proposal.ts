@@ -6,7 +6,6 @@ export enum ProposalStatus {
   Failed = 'PROPOSAL_STATUS_FAILED',
 }
 
-
 export enum VoteMapping {
   'yes' = 'Yes',
   'abstain' = 'Abstain',

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import memoize from 'lodash/memoize'
 
-import { getContentFromENS } from 'src/logic/wallets/getWeb3'
+// import { getContentFromENS } from 'src/logic/wallets/getWeb3'
 import appsIconSvg from 'src/assets/icons/apps.svg'
 import { FETCH_STATUS } from 'src/utils/requests'
 
@@ -106,15 +106,16 @@ export const getAppInfoFromUrl = memoize(async (appUrl: string): Promise<SafeApp
 })
 
 export const getIpfsLinkFromEns = memoize(async (name: string): Promise<string | undefined> => {
-  try {
-    const content = await getContentFromENS(name)
-    if (content && content.protocolType === 'ipfs') {
-      return `${process.env.REACT_APP_IPFS_GATEWAY}/${content.decoded}/`
-    }
-  } catch (error) {
-    console.error(error)
-    return
-  }
+  return
+  // try {
+  //   const content = await getContentFromENS(name)
+  //   if (content && content.protocolType === 'ipfs') {
+  //     return `${process.env.REACT_APP_IPFS_GATEWAY}/${content.decoded}/`
+  //   }
+  // } catch (error) {
+  //   console.error(error)
+  //   return
+  // }
 })
 
 export const uniqueApp =

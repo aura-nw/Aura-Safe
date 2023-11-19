@@ -52,7 +52,6 @@ export const styles = () => ({
   },
 })
 
-
 export const DevelopBanner = styled.div`
   color: #868a97;
   border-radius: 4px;

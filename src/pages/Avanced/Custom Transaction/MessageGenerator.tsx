@@ -3,7 +3,6 @@ import { githubDark } from '@uiw/codemirror-theme-github'
 import CodeMirror from '@uiw/react-codemirror'
 import { ReactElement, useEffect, useState } from 'react'
 import { Message } from 'src/components/CustomTransactionMessage/BigMsg'
-import { getInternalChainId } from 'src/config'
 import styled from 'styled-components'
 
 import { linter } from '@codemirror/lint'
@@ -34,7 +33,6 @@ const Wrap = styled.div`
 `
 
 function MessageGenerator({ setMessage, setIsError }): ReactElement {
-  const internalChainId = getInternalChainId()
   const [rawMsg, setRawMsg] = useState('')
   const [parsedMsg, setParsedMsg] = useState<any[]>([])
   const [errorMsg, setErrorMsg] = useState('')
