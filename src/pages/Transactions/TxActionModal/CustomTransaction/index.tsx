@@ -9,7 +9,7 @@ import { Popup } from 'src/components/Popup'
 import Footer from 'src/components/Popup/Footer'
 import Header from 'src/components/Popup/Header'
 import Amount from 'src/components/TxComponents/Amount'
-import { getCoinMinimalDenom, getNativeCurrency } from 'src/config'
+import { getCoinMinimalDenom } from 'src/config'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import { extractSafeAddress } from 'src/routes/routes'
 import { formatNativeCurrency, formatNativeToken, formatNumber } from 'src/utils'
@@ -19,30 +19,18 @@ import { ReviewTxPopupWrapper } from '../../styled'
 import BigNumber from 'bignumber.js'
 import { Message } from 'src/components/CustomTransactionMessage/SmallMsg'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { signAndChangeTransactionSequence, signAndConfirmTransaction } from 'src/utils/signer'
 import { getNotice, getTitle } from '..'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
-export default function Execute({
-  open,
-  onClose,
-  data,
-  sendTx,
-  rejectTx,
-  disabled,
-  setDisabled,
 
-  deleteTx,
-}) {
+export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
   const { action } = useContext(TxSignModalContext)
-  const userWalletAddress = useSelector(userAccountSelector)
   const [sequence, setSequence] = useState(data?.txSequence)
   const safeAddress = extractSafeAddress()
   const dispatch = useDispatch()
   const [amount, setAmount] = useState('0')
-  const nativeCurrency = getNativeCurrency()
 
   useEffect(() => {
     let newTotalAmount = new BigNumber(0)
@@ -71,6 +59,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          undefined,
           () => {
             setDisabled(true)
           },
@@ -93,6 +82,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          undefined,
           () => {
             setDisabled(true)
           },

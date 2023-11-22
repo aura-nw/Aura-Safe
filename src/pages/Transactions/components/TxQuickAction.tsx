@@ -71,6 +71,7 @@ export default function TxQuickAction({ transaction, curSeq }) {
             gas: data?.txDetails?.gas.toString(),
           },
           data?.txSequence as string,
+          undefined,
           () => {},
           () => {
             setLoading(false)

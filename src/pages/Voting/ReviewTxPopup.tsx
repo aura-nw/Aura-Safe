@@ -84,6 +84,7 @@ const ReviewTxPopup = ({ open, onClose, proposal, vote, onBack, gasUsed }: Revie
         manualGasLimit || '250000',
         sequence,
         undefined,
+        undefined,
         () => {
           setDisabled(true)
         },

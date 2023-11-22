@@ -6,7 +6,6 @@ import { Popup } from 'src/components/Popup'
 import Footer from 'src/components/Popup/Footer'
 import Header from 'src/components/Popup/Header'
 import { getCoinMinimalDenom } from 'src/config'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { formatNativeToken } from 'src/utils'
 import { formatWithSchema } from 'src/utils/date'
 
@@ -27,21 +26,10 @@ const voteMapping = {
   4: 'Nowithveto',
 }
 
-export default function Execute({
-  open,
-  onClose,
-  data,
-  sendTx,
-  rejectTx,
-  disabled,
-  setDisabled,
-
-  deleteTx,
-}) {
+export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
   const [sequence, setSequence] = useState(data?.txSequence)
   const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
-  const userWalletAddress = useSelector(userAccountSelector)
   const dispatch = useDispatch()
 
   const txHandler = async (type) => {
@@ -55,6 +43,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          undefined,
           () => {
             setDisabled(true)
           },
@@ -77,6 +66,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          undefined,
           () => {
             setDisabled(true)
           },

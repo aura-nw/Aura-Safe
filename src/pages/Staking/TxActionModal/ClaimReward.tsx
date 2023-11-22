@@ -42,6 +42,7 @@ export default function ClaimReward({ listReward, onClose, gasUsed }) {
         manualGasLimit || '250000',
         sequence,
         undefined,
+        undefined,
         () => {
           setDisabled(true)
         },

@@ -64,6 +64,7 @@ export default function Redelegate({ validator, amount, onClose, dstValidator, g
         manualGasLimit || '250000',
         sequence,
         undefined,
+        undefined,
         () => {
           setDisabled(true)
         },
