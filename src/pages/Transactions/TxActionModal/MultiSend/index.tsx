@@ -130,11 +130,11 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
               {action == 'change-sequence' && (
                 <>
                   <EditSequence defaultSequence={data?.txSequence} sequence={sequence} setSequence={setSequence} />
-                  <Gap height={24} />
+                  <Gap height={16} />
                 </>
               )}
               <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
-              <Gap height={24} />
+              <Gap height={16} />
               <Amount label="Total Amount" amount={formatNativeToken(totalAmount)} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={totalAllocationAmount} />
