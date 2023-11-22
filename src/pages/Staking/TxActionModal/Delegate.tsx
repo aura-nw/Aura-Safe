@@ -59,6 +59,7 @@ export default function Delegate({ validator, amount, onClose, gasUsed }) {
         manualGasLimit || '250000',
         sequence,
         undefined,
+        undefined,
         () => {
           setDisabled(true)
         },

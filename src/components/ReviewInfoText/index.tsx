@@ -1,13 +1,13 @@
-import styled from 'styled-components'
 import { Text } from '@aura/safe-react-components'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
 
+import { useState } from 'react'
 import Paragraph from 'src/components/layout/Paragraph'
+import { EstimationStatus } from 'src/logic/hooks/useEstimateTransactionGas'
 import { currentSafe } from 'src/logic/safe/store/selectors'
 import { getLastTxNonce } from 'src/logic/safe/store/selectors/gatewayTransactions'
 import { TransactionFees } from '../TransactionsFees'
-import { useState } from 'react'
-import { EstimationStatus } from 'src/logic/hooks/useEstimateTransactionGas'
 
 type CustomReviewInfoTextProps = {
   safeNonce?: string

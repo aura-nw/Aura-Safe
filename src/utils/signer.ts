@@ -53,6 +53,7 @@ export const signAndCreateTransaction =
     gasLimit: string,
     sequence: string,
     toAddress?: string,
+    memo?: string,
     beforeSigningCallback?: () => void,
     successSigningCallback?: () => void,
     errorSigningCallback?: (error: any) => void,
@@ -95,7 +96,7 @@ export const signAndCreateTransaction =
       beforeSigningCallback && beforeSigningCallback()
       dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.SIGN_TX_MSG)))
 
-      const signResult = await signMessage(chainId, chainInfo.environment, safeAddress, msgs, sendFee, sequence)
+      const signResult = await signMessage(chainId, chainInfo.environment, safeAddress, msgs, sendFee, sequence, memo)
       if (!signResult) throw new Error()
       const signatures = toBase64(signResult.signatures[0])
       const bodyBytes = toBase64(signResult.bodyBytes)
@@ -157,6 +158,7 @@ export const signAndConfirmTransaction =
     message: any[],
     sendFee: any,
     sequence: string,
+    memo?: string,
     beforeSigningCallback?: () => void,
     successSigningCallback?: () => void,
     errorSigningCallback?: (error: any) => void,
@@ -196,7 +198,7 @@ export const signAndConfirmTransaction =
       })
       beforeSigningCallback && beforeSigningCallback()
       dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.SIGN_TX_MSG)))
-      const signResult = await signMessage(chainId, chainInfo.environment, safeAddress, msgs, sendFee, sequence)
+      const signResult = await signMessage(chainId, chainInfo.environment, safeAddress, msgs, sendFee, sequence, memo)
       if (!signResult) throw new Error(signResult)
       const signatures = toBase64(signResult.signatures[0])
       const bodyBytes = toBase64(signResult.bodyBytes)
@@ -258,6 +260,7 @@ export const signAndChangeTransactionSequence =
     message: any[],
     sendFee: any,
     sequence: string,
+    memo?: string,
     beforeSigningCallback?: () => void,
     successSigningCallback?: () => void,
     errorSigningCallback?: (error: any) => void,
@@ -297,7 +300,7 @@ export const signAndChangeTransactionSequence =
       })
       beforeSigningCallback && beforeSigningCallback()
       dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.SIGN_TX_MSG)))
-      const signResult = await signMessage(chainId, chainInfo.environment, safeAddress, msgs, sendFee, sequence)
+      const signResult = await signMessage(chainId, chainInfo.environment, safeAddress, msgs, sendFee, sequence, memo)
       if (!signResult) throw new Error()
       const signatures = toBase64(signResult.signatures[0])
       const bodyBytes = toBase64(signResult.bodyBytes)

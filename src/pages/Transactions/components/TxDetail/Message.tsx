@@ -26,6 +26,13 @@ const StyledStatus = styled.div`
   }
 `
 
+const WrapperTxMemo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2;
+  margin-top: 12px !important;
+`
+
 const BtnImport = ({ onImport }) => {
   return (
     <>
@@ -35,6 +42,16 @@ const BtnImport = ({ onImport }) => {
     </>
   )
 }
+
+const TransactionMemo = ({ memo }: { memo: string }) => {
+  return (
+    <WrapperTxMemo>
+      <strong>Transaction memo: </strong>
+      <p>{memo}</p>
+    </WrapperTxMemo>
+  )
+}
+
 export default function TxMsg({ tx, txDetail, token, onImport }) {
   const isTokenNotExist = token?.isNotExist
   const type = tx.txInfo.typeUrl
@@ -165,6 +182,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
           to:
         </strong>
         <AddressInfo address={txDetail?.txMessage[0]?.toAddress} />
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -189,6 +207,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             <AddressInfo showAvatar={false} showName={false} address={recipient.address} />
           </div>
         ))}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }

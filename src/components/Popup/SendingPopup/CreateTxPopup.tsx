@@ -1,19 +1,19 @@
 import { coins } from '@cosmjs/stargate'
 import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import AddressInfo from 'src/components/AddressInfo'
 import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
 import Divider from 'src/components/Divider'
 import FeeAndSequence from 'src/components/FeeAndSequence'
 import Gap from 'src/components/Gap'
+import TxMemo from 'src/components/Input/TxMemo'
 import Loader from 'src/components/Loader'
 import Amount from 'src/components/TxComponents/Amount'
-import { getChainDefaultGasPrice, getCoinDecimal, getCoinMinimalDenom, getNativeCurrency } from 'src/config'
+import { getChainDefaultGasPrice, getCoinDecimal, getCoinMinimalDenom } from 'src/config'
 import { AddressBookEntry } from 'src/logic/addressBook/model/addressBook'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
 import calculateGasFee from 'src/logic/providers/utils/fee'
-import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import { Token } from 'src/logic/tokens/store/model/token'
 import { extractSafeAddress } from 'src/routes/routes'
 import { convertAmount, formatNativeCurrency, formatWithComma } from 'src/utils'
@@ -38,8 +38,6 @@ export default function CreateTxPopup({
   gasUsed: string
 }) {
   const safeAddress = extractSafeAddress()
-  const nativeCurrency = getNativeCurrency()
-  const { nativeBalance: balance } = useSelector(currentSafeWithNames)
   const dispatch = useDispatch()
   const denom = getCoinMinimalDenom()
   const chainDefaultGasPrice = getChainDefaultGasPrice()
@@ -49,6 +47,7 @@ export default function CreateTxPopup({
   const [gasPriceFormatted, setGasPriceFormatted] = useState(gasFee)
   const [openGasInput, setOpenGasInput] = useState<boolean>(false)
   const [isDisabled, setDisabled] = useState(false)
+  const [txMemo, setTxMemo] = useState<string>('')
 
   const [sequence, setSequence] = useState('1')
 
@@ -95,12 +94,14 @@ export default function CreateTxPopup({
         manualGasLimit,
         sequence,
         recipient?.address,
+        txMemo,
         () => {
           setDisabled(true)
         },
         () => {
           setDisabled(false)
           handleClose()
+          setTxMemo('')
         },
         () => {
           setDisabled(false)
@@ -110,8 +111,22 @@ export default function CreateTxPopup({
   }
 
   return (
-    <Popup open={open} handleClose={() => handleClose()} title="">
-      <Header subTitle="Step 2 of 2" title="Send funds" onClose={() => handleClose()} />
+    <Popup
+      open={open}
+      handleClose={() => {
+        handleClose()
+        setTxMemo('')
+      }}
+      title=""
+    >
+      <Header
+        subTitle="Step 2 of 2"
+        title="Send funds"
+        onClose={() => {
+          handleClose()
+          setTxMemo('')
+        }}
+      />
       <Wrapper>
         <AddressInfo address={safeAddress} />
         <div className="balance">
@@ -135,6 +150,8 @@ export default function CreateTxPopup({
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={24} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Divider />
 
         <Amount
