@@ -90,6 +90,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             to:
           </strong>
           <AddressInfo address={JSON.parse(txDetail?.txMessage[0].contractArgs)?.recipient} />
+          {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
         </div>
       )
     }
@@ -132,6 +133,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             )
           }
         })}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -146,6 +148,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
           to:
         </strong>
         <AddressInfo address={txDetail?.txMessage[0]?.validatorAddress} />
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -165,6 +168,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             Auto Claim Reward: <span className="token">{formatNativeToken(txDetail.autoClaimAmount)}</span>
           </strong>
         ) : null}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -229,6 +233,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             Auto Claim Reward: <span className="token">{txDetail.autoClaimAmount}</span>
           </strong>
         ) : null}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -249,6 +254,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
         <StyledStatus>
           <StatusCard status={txDetail?.extraDetails?.proposalDetail?.status} />
         </StyledStatus>
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -273,6 +279,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
               </Fragment>
             )
           })}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
