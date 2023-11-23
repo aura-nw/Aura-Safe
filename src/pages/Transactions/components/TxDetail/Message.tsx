@@ -74,9 +74,10 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
       </div>
     )
   }
+
   if (type == MsgTypeUrl.ExecuteContract) {
     if (tx.txInfo.displayType === 'Receive') {
-      return <></>
+      return <div className="tx-msg">{txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}</div>
     }
     if (txDetail?.txMessage[0].contractFunction === 'transfer') {
       return (
@@ -174,7 +175,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
   }
   if (type == MsgTypeUrl.Send) {
     if (tx.txInfo.displayType === 'Receive') {
-      return <></>
+      return <div className="tx-msg">{txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}</div>
     }
     return (
       <div className="tx-msg">
