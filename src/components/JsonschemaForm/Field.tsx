@@ -1,7 +1,5 @@
-import styled from 'styled-components'
 import TextField from '../Input/TextField'
 
-const Wrap = styled.div``
 export default function Field({ fieldSchema, value, onChange, errorMsg }) {
   if (
     fieldSchema.type == 'integer' ||

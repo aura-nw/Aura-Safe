@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import AlertIcon from 'src/assets/icons/alert.svg'
 import AddressInfo from 'src/components/AddressInfo'
 import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
 import { Message } from 'src/components/CustomTransactionMessage/SmallMsg'
@@ -10,16 +11,17 @@ import { Popup } from 'src/components/Popup'
 import Footer from 'src/components/Popup/Footer'
 import Header from 'src/components/Popup/Header'
 import Amount from 'src/components/TxComponents/Amount'
-import { getChainDefaultGasPrice, getChainInfo, getCoinDecimal, getNativeCurrency } from 'src/config'
+import { getChainDefaultGasPrice, getCoinDecimal, getNativeCurrency } from 'src/config'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
 import calculateGasFee from 'src/logic/providers/utils/fee'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { extractSafeAddress } from 'src/routes/routes'
 import { formatNativeCurrency, formatNumber } from 'src/utils'
 import { signAndCreateTransaction } from 'src/utils/signer'
+import TxMemo from 'src/components/Input/TxMemo'
 import { Wrap } from './styles'
-import AlertIcon from 'src/assets/icons/alert.svg'
+import Gap from 'src/components/Gap'
+
 export default function ReviewPopup({ open, setOpen, gasUsed, msg }) {
   const safeAddress = extractSafeAddress()
   const dispatch = useDispatch()
@@ -39,8 +41,7 @@ export default function ReviewPopup({ open, setOpen, gasUsed, msg }) {
   const [sequence, setSequence] = useState('0')
   const [isDisabled, setDisabled] = useState(false)
   const [amount, setAmount] = useState('0')
-  const userWalletAddress = useSelector(userAccountSelector)
-  const chainInfo = getChainInfo()
+  const [txMemo, setTxMemo] = useState<string>('')
 
   useEffect(() => {
     if (gasUsed) {
@@ -77,7 +78,7 @@ export default function ReviewPopup({ open, setOpen, gasUsed, msg }) {
         manualGasLimit || '250000',
         sequence,
         undefined,
-        undefined,
+        txMemo,
         () => {
           setDisabled(true)
         },
@@ -123,6 +124,8 @@ export default function ReviewPopup({ open, setOpen, gasUsed, msg }) {
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={24} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Divider />
         <Amount
           amount={formatNativeCurrency(

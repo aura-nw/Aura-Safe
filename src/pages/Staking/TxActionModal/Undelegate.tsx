@@ -6,15 +6,10 @@ import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
 import Divider from 'src/components/Divider'
 import FeeAndSequence from 'src/components/FeeAndSequence'
 import Gap from 'src/components/Gap'
+import TxMemo from 'src/components/Input/TxMemo'
 import Footer from 'src/components/Popup/Footer'
 import Amount from 'src/components/TxComponents/Amount'
-import {
-  getChainDefaultGas,
-  getChainDefaultGasPrice,
-  getCoinDecimal,
-  getCoinMinimalDenom,
-  getNativeCurrency,
-} from 'src/config'
+import { getChainDefaultGas, getChainDefaultGasPrice, getCoinDecimal, getCoinMinimalDenom } from 'src/config'
 import { allDelegation } from 'src/logic/delegation/store/selectors'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
 import calculateGasFee from 'src/logic/providers/utils/fee'
@@ -33,7 +28,6 @@ export default function Undelegate({ validator, amount, onClose, gasUsed }) {
   const stakedAmount = delegations?.find(
     (delegation: any) => delegation.operatorAddress == validator.safeStaking,
   )?.staked
-  const nativeCurrency = getNativeCurrency()
   const denom = getCoinMinimalDenom()
   const chainDefaultGas = getChainDefaultGas()
   const chainDefaultGasPrice = getChainDefaultGasPrice()
@@ -51,6 +45,8 @@ export default function Undelegate({ validator, amount, onClose, gasUsed }) {
   const [openGasInput, setOpenGasInput] = useState<boolean>(false)
   const [isDisabled, setDisabled] = useState(false)
   const [sequence, setSequence] = useState('0')
+  const [txMemo, setTxMemo] = useState<string>('')
+
   const signTransaction = async () => {
     const msgs = [
       {
@@ -68,7 +64,7 @@ export default function Undelegate({ validator, amount, onClose, gasUsed }) {
         manualGasLimit || '250000',
         sequence,
         undefined,
-        undefined,
+        txMemo,
         () => {
           setDisabled(true)
         },
@@ -110,6 +106,8 @@ export default function Undelegate({ validator, amount, onClose, gasUsed }) {
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={24} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Divider />
         <Amount amount={formatNativeCurrency(gasPriceFormatted)} label="Total Allocation Amount" />
         <div className="notice">

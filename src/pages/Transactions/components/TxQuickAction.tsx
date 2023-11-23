@@ -31,7 +31,6 @@ const Wrap = styled.div`
 export default function TxQuickAction({ transaction, curSeq }) {
   const userWalletAddress = useSelector(userAccountSelector)
 
-  const chainInfo = getChainInfo()
   const safeAddress = extractSafeAddress()
   const granted = useSelector(grantedSelector)
   const [loading, setLoading] = useState(false)
