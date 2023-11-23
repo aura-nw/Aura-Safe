@@ -18,6 +18,7 @@ import { convertAmount, formatNativeCurrency, formatNativeToken } from 'src/util
 import { signAndCreateTransaction } from 'src/utils/signer'
 import { Wrapper } from './style'
 import { DEFAULT_GAS_LIMIT } from 'src/services/constant/common'
+import TxMemo from 'src/components/Input/TxMemo'
 
 export default function Delegate({ validator, amount, onClose, gasUsed }) {
   const safeAddress = extractSafeAddress()
@@ -41,6 +42,7 @@ export default function Delegate({ validator, amount, onClose, gasUsed }) {
   const [openGasInput, setOpenGasInput] = useState<boolean>(false)
   const [isDisabled, setDisabled] = useState(false)
   const [sequence, setSequence] = useState('0')
+  const [txMemo, setTxMemo] = useState<string>('')
 
   const signTransaction = async () => {
     const msgs = [
@@ -59,7 +61,7 @@ export default function Delegate({ validator, amount, onClose, gasUsed }) {
         manualGasLimit || '250000',
         sequence,
         undefined,
-        undefined,
+        txMemo,
         () => {
           setDisabled(true)
         },
@@ -101,6 +103,8 @@ export default function Delegate({ validator, amount, onClose, gasUsed }) {
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={24} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Divider />
         <Amount amount={formatNativeCurrency(+gasPriceFormatted)} label="Total Allocation Amount" />
         <div className="notice">

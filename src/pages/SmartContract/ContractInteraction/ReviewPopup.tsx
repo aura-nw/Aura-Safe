@@ -17,6 +17,8 @@ import { convertAmount, formatNativeCurrency } from 'src/utils'
 import { signAndCreateTransaction } from 'src/utils/signer'
 import { Wrap } from './styles'
 import { IFund } from 'src/components/JsonschemaForm/FundForm'
+import Gap from 'src/components/Gap'
+import TxMemo from 'src/components/Input/TxMemo'
 
 export default function ReviewPopup({ open, setOpen, gasUsed, data, contractData }) {
   const safeAddress = extractSafeAddress()
@@ -35,6 +37,7 @@ export default function ReviewPopup({ open, setOpen, gasUsed, data, contractData
   const [openGasInput, setOpenGasInput] = useState<boolean>(false)
   const [sequence, setSequence] = useState('0')
   const [isDisabled, setDisabled] = useState(false)
+  const [txMemo, setTxMemo] = useState<string>('')
 
   useEffect(() => {
     if (gasUsed) {
@@ -72,7 +75,7 @@ export default function ReviewPopup({ open, setOpen, gasUsed, data, contractData
         manualGasLimit || '250000',
         sequence,
         undefined,
-        undefined,
+        txMemo,
         () => {
           setDisabled(true)
         },
@@ -117,6 +120,8 @@ export default function ReviewPopup({ open, setOpen, gasUsed, data, contractData
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={24} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Divider />
         <Amount
           listTokens={contractData.funds}

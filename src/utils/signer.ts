@@ -47,6 +47,7 @@ import { MESSAGES_CODE } from 'src/services/constant/message'
 import { ICreateSafeTransaction } from 'src/types/transaction'
 import { calcFee } from 'src/utils'
 import { TxTypes } from './txTypes'
+
 export const signAndCreateTransaction =
   (
     message: any[],

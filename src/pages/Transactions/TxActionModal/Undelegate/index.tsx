@@ -20,13 +20,16 @@ import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
+import TxMemo from '../../../../components/Input/TxMemo'
 
 export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
 
   const delegations = useSelector(allDelegation)
   const [sequence, setSequence] = useState(data?.txSequence)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
+
   const stakedAmount = delegations?.find(
     (delegation: any) => delegation.operatorAddress == data?.txDetails?.txMessage[0]?.validatorAddress,
   )?.staked
@@ -44,7 +47,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
-          undefined,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -67,7 +70,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
-          undefined,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -128,6 +131,8 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={24} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={24} />
               <Amount amount={formatNativeToken(data?.txDetails?.txMessage[0]?.amount)} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />

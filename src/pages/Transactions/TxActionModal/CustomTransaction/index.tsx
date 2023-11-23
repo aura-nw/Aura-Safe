@@ -23,14 +23,16 @@ import { signAndChangeTransactionSequence, signAndConfirmTransaction } from 'src
 import { getNotice, getTitle } from '..'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
+import TxMemo from 'src/components/Input/TxMemo'
 
 export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
   const { action } = useContext(TxSignModalContext)
   const [sequence, setSequence] = useState(data?.txSequence)
   const safeAddress = extractSafeAddress()
   const dispatch = useDispatch()
   const [amount, setAmount] = useState('0')
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
 
   useEffect(() => {
     let newTotalAmount = new BigNumber(0)
@@ -59,7 +61,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
-          undefined,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -82,7 +84,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
-          undefined,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -145,6 +147,8 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={16} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={16} />
               <Divider />
               <Amount
                 label="Total Allocation Amount"

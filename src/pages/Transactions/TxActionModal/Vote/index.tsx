@@ -18,6 +18,7 @@ import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
+import TxMemo from '../../../../components/Input/TxMemo'
 
 const voteMapping = {
   1: 'Yes',
@@ -29,7 +30,8 @@ const voteMapping = {
 export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
   const [sequence, setSequence] = useState(data?.txSequence)
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
+  const { sequence: currentSequence } = useSelector(currentSafeWithNames)
   const dispatch = useDispatch()
 
   const txHandler = async (type) => {
@@ -43,7 +45,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
-          undefined,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -66,7 +68,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
-          undefined,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -128,6 +130,8 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={16} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={16} />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />
             </>
           )}

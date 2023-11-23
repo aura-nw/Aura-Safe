@@ -23,7 +23,7 @@ import { DeleteButton, TxContent } from '../styles'
 
 export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
   const dispatch = useDispatch()
   const [sequence, setSequence] = useState(data?.txSequence)
   const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
