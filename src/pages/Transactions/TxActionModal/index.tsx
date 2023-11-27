@@ -1,19 +1,14 @@
 import { useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getChainInfo, getInternalChainId, getShortName } from 'src/config'
-import { NOTIFICATIONS, enhanceSnackbarForAction } from 'src/logic/notifications'
+import { getChainInfo, getInternalChainId } from 'src/config'
+import { NOTIFICATIONS } from 'src/logic/notifications'
 import enqueueSnackbar from 'src/logic/notifications/store/actions/enqueueSnackbar'
 import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
 import fetchTransactions from 'src/logic/safe/store/actions/transactions/fetchTransactions'
 import { txTransactions } from 'src/logic/safe/store/selectors/gatewayTransactions'
 import { userAccountSelector } from 'src/logic/wallets/store/selectors'
-import { SAFE_ROUTES, extractSafeAddress, generateSafeRoute, history } from 'src/routes/routes'
-import {
-  changeTransactionSequenceById,
-  deleteTransactionById,
-  rejectTransactionById,
-  sendSafeTransaction,
-} from 'src/services'
+import { extractSafeAddress } from 'src/routes/routes'
+import { deleteTransactionById, rejectTransactionById, sendSafeTransaction } from 'src/services'
 import { TxSignModalContext } from '../Queue'
 import ClaimRewardPopup from './ClaimReward'
 import ContractInteractionPopup from './ContractInteraction'

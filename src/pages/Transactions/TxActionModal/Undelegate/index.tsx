@@ -10,7 +10,6 @@ import Header from 'src/components/Popup/Header'
 import { getCoinMinimalDenom } from 'src/config'
 import { allDelegation } from 'src/logic/delegation/store/selectors'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { formatNativeCurrency, formatNativeToken } from 'src/utils'
 
 import AddressInfo from 'src/components/AddressInfo'
@@ -21,28 +20,20 @@ import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
+import TxMemo from '../../../../components/Input/TxMemo'
 
-export default function Execute({
-  open,
-  onClose,
-  data,
-  sendTx,
-  rejectTx,
-  disabled,
-  setDisabled,
-
-  deleteTx,
-}) {
+export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
 
   const delegations = useSelector(allDelegation)
   const [sequence, setSequence] = useState(data?.txSequence)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
+
   const stakedAmount = delegations?.find(
     (delegation: any) => delegation.operatorAddress == data?.txDetails?.txMessage[0]?.validatorAddress,
   )?.staked
 
-  const userWalletAddress = useSelector(userAccountSelector)
   const dispatch = useDispatch()
 
   const txHandler = async (type) => {
@@ -56,6 +47,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -78,6 +70,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -138,6 +131,8 @@ export default function Execute({
                   <Gap height={24} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={24} />
               <Amount amount={formatNativeToken(data?.txDetails?.txMessage[0]?.amount)} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />

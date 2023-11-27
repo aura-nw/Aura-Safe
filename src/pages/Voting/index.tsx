@@ -25,7 +25,7 @@ import VotingModal from './VotingPopup'
 import { GreenText, ProposalsSection, StyledBlock, StyledColumn, TitleNumberStyled } from './styles'
 const parseBalance = (balance: IProposal['totalDeposit'], chainInfo: MChainInfo) => {
   const symbol = chainInfo.nativeCurrency.symbol
-  const amount = calcBalance(balance[0].amount, chainInfo.nativeCurrency.decimals)
+  const amount = calcBalance(balance[0]?.amount, chainInfo.nativeCurrency.decimals)
 
   return {
     amount: Number(amount)?.toFixed(6) || '-',

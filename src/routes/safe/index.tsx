@@ -3,14 +3,13 @@ import React, { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import { FEATURES } from '@gnosis.pm/safe-react-gateway-sdk'
 import { LoadingContainer } from 'src/components/LoaderContainer'
 import { fetchAllDelegations } from 'src/logic/delegation/store/actions'
-import { currentSafeFeaturesEnabled, currentSafeLoaded } from 'src/logic/safe/store/selectors'
+import { currentSafeLoaded } from 'src/logic/safe/store/selectors'
 import Assets from 'src/pages/Assets'
 import CustomTransaction from 'src/pages/Avanced/Custom Transaction'
 import ContractInteraction from 'src/pages/SmartContract/ContractInteraction'
-import { SAFE_ROUTES, extractPrefixedSafeAddress, generateSafeRoute } from 'src/routes/routes'
+import { SAFE_ROUTES } from 'src/routes/routes'
 import { SAFE_POLLING_INTERVAL } from 'src/utils/constants'
 import { wrapInSuspense } from 'src/utils/wrapInSuspense'
 import SafeLoadError from './components/SafeLoadError'
@@ -31,13 +30,11 @@ const Staking = lazy(() => import('src/pages/Staking'))
 const Voting = lazy(() => import('src/pages/Voting'))
 
 const Container = (): React.ReactElement => {
-  const featuresEnabled = useSelector(currentSafeFeaturesEnabled)
   const isSafeLoaded = useSelector(currentSafeLoaded)
   const [hasLoadFailed, setHasLoadFailed] = useState<boolean>(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log(isSafeLoaded)
     if (isSafeLoaded) {
       dispatch(fetchAllDelegations())
       return
