@@ -37,7 +37,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
   useEffect(() => {
     let newTotalAmount = new BigNumber(0)
 
-    JSON.parse(data.txDetails.rawMessage).map((message: any) => {
+    JSON.parse(data.txDetails?.rawMessage).map((message: any) => {
       if ('/cosmos.bank.v1beta1.MsgSend' == message.typeUrl) {
         newTotalAmount = newTotalAmount.plus(+formatNumber(message?.value?.amount[0]?.amount || 0))
       }
@@ -110,7 +110,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
           </div>
           <Divider />
           <div className="msgs">
-            {JSON.parse(data.txDetails.rawMessage).map((message, index) => {
+            {JSON.parse(data.txDetails?.rawMessage).map((message, index) => {
               return <Message key={index} index={index} msgData={message} />
             })}
           </div>
