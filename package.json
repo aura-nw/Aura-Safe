@@ -1,6 +1,6 @@
 {
   "name": "pyxis-safe",
-  "version": "0.4.1",
+  "version": "0.6.0",
   "description": "The multi-signature safe of the Interchain",
   "website": "https://github.com/aura-nw/aura-safe#aura-safe",
   "bugs": {
