@@ -21,6 +21,7 @@ import { RecipientProps } from '.'
 import { Popup } from '..'
 import Header from '../Header'
 import { Footer, Wrapper } from './styles'
+import TxMemo from 'src/components/Input/TxMemo'
 
 export default function CreateTxPopup({
   open,
@@ -48,6 +49,7 @@ export default function CreateTxPopup({
   const [openGasInput, setOpenGasInput] = useState<boolean>(false)
   const [totalAmount, setTotalAmount] = useState('0')
   const [sequence, setSequence] = useState(nextQueueSeq)
+  const [txMemo, setTxMemo] = useState<string>('')
 
   useEffect(() => {
     if (gasUsed != '0') {
@@ -87,12 +89,14 @@ export default function CreateTxPopup({
         manualGasLimit || '250000',
         sequence,
         undefined,
+        txMemo,
         () => {
           setDisabled(true)
         },
         () => {
           setDisabled(false)
           handleClose()
+          setTxMemo('')
         },
         () => {
           setDisabled(false)
@@ -109,6 +113,7 @@ export default function CreateTxPopup({
         onClose={() => {
           setDisabled(false)
           handleClose()
+          setTxMemo('')
         }}
       />
       <Wrapper>
@@ -142,6 +147,8 @@ export default function CreateTxPopup({
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={24} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Divider />
 
         <Amount

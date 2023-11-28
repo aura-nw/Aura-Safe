@@ -12,6 +12,7 @@ import calculateGasFee from 'src/logic/providers/utils/fee'
 import { formatNativeCurrency } from 'src/utils'
 import { signAndCreateTransaction } from 'src/utils/signer'
 import { Wrapper } from './style'
+import TxMemo from 'src/components/Input/TxMemo'
 
 export default function ClaimReward({ listReward, onClose, gasUsed }) {
   const dispatch = useDispatch()
@@ -27,6 +28,7 @@ export default function ClaimReward({ listReward, onClose, gasUsed }) {
   const [openGasInput, setOpenGasInput] = useState<boolean>(false)
   const [isDisabled, setDisabled] = useState(false)
   const [sequence, setSequence] = useState('0')
+  const [txMemo, setTxMemo] = useState<string>('')
 
   const signTransaction = async () => {
     const msgs: any[] = listReward.map((item) => ({
@@ -42,6 +44,7 @@ export default function ClaimReward({ listReward, onClose, gasUsed }) {
         manualGasLimit || '250000',
         sequence,
         undefined,
+        txMemo,
         () => {
           setDisabled(true)
         },
@@ -78,6 +81,8 @@ export default function ClaimReward({ listReward, onClose, gasUsed }) {
           sequence={sequence}
           setSequence={setSequence}
         />
+        <Gap height={16} />
+        <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
         <Gap height={16} />
         <Amount amount={formatNativeCurrency(+gasPriceFormatted)} label="Total Allocation Amount" />
         <div className="notice">

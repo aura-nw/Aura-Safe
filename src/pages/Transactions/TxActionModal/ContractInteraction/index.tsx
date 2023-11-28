@@ -11,26 +11,24 @@ import Header from 'src/components/Popup/Header'
 import Amount from 'src/components/TxComponents/Amount'
 import { getCoinMinimalDenom } from 'src/config'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { extractSafeAddress } from 'src/routes/routes'
 import { formatNativeCurrency, formatNativeToken } from 'src/utils'
 import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 
-import { MsgTypeUrl } from 'src/logic/providers/constants/constant'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { signAndChangeTransactionSequence, signAndConfirmTransaction } from 'src/utils/signer'
 import { getNotice, getTitle } from '..'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
+import TxMemo from '../../../../components/Input/TxMemo'
+
 export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
   const { action } = useContext(TxSignModalContext)
-  const userWalletAddress = useSelector(userAccountSelector)
   const dispatch = useDispatch()
   const [sequence, setSequence] = useState(data?.txSequence)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
 
   const txHandler = async (type) => {
-    const safeAddress = extractSafeAddress()
     if (type == 'confirm') {
       dispatch(
         signAndConfirmTransaction(
@@ -41,6 +39,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -63,6 +62,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -125,6 +125,8 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={24} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={24} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />
             </>

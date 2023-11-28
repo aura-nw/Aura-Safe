@@ -31,7 +31,6 @@ const Wrap = styled.div`
 export default function TxQuickAction({ transaction, curSeq }) {
   const userWalletAddress = useSelector(userAccountSelector)
 
-  const chainInfo = getChainInfo()
   const safeAddress = extractSafeAddress()
   const granted = useSelector(grantedSelector)
   const [loading, setLoading] = useState(false)
@@ -71,6 +70,7 @@ export default function TxQuickAction({ transaction, curSeq }) {
             gas: data?.txDetails?.gas.toString(),
           },
           data?.txSequence as string,
+          undefined,
           () => {},
           () => {
             setLoading(false)

@@ -12,31 +12,22 @@ import Header from 'src/components/Popup/Header'
 import Amount from 'src/components/TxComponents/Amount'
 import { getCoinMinimalDenom } from 'src/config'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { formatNativeCurrency, formatNativeToken } from 'src/utils'
 import { signAndChangeTransactionSequence, signAndConfirmTransaction } from 'src/utils/signer'
 import { getNotice, getTitle } from '..'
 import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 import EditSequence from '../EditSequence'
+import TxMemo from 'src/components/Input/TxMemo'
 import { DeleteButton, TxContent } from '../styles'
 
-export default function Execute({
-  open,
-  onClose,
-  data,
-  sendTx,
-  rejectTx,
-  disabled,
-  setDisabled,
-
-  deleteTx,
-}) {
+export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
-  const userWalletAddress = useSelector(userAccountSelector)
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
   const dispatch = useDispatch()
   const [sequence, setSequence] = useState(data?.txSequence)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
+
   const totalAllocationAmount = formatNativeToken(
     new BigNumber(+data?.txDetails?.txMessage[0]?.amount || 0).plus(+data.txDetails?.fee || 0).toString(),
   )
@@ -51,6 +42,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -73,6 +65,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -129,8 +122,11 @@ export default function Execute({
                   <EditSequence defaultSequence={data?.txSequence} sequence={sequence} setSequence={setSequence} />
                 </>
               )}
+              <Gap height={16} />
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={totalAllocationAmount} />
+              <Divider />
             </>
           )}
           <div className="notice">{getNotice(action)}</div>
