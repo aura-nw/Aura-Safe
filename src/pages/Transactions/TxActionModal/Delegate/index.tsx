@@ -16,31 +16,22 @@ import { formatNativeCurrency, formatNativeToken } from 'src/utils'
 import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { signAndChangeTransactionSequence, signAndConfirmTransaction } from 'src/utils/signer'
 import { getNotice, getTitle } from '..'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
-export default function Execute({
-  open,
-  onClose,
-  data,
-  sendTx,
-  rejectTx,
-  disabled,
-  setDisabled,
+import TxMemo from 'src/components/Input/TxMemo'
 
-  deleteTx,
-}) {
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
+export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
+  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
   const { action } = useContext(TxSignModalContext)
   const delegations = useSelector(allDelegation)
   const stakedAmount = delegations?.find(
     (delegation: any) => delegation.operatorAddress == data?.txDetails?.txMessage[0]?.validatorAddress,
   )?.staked
-  const userWalletAddress = useSelector(userAccountSelector)
   const dispatch = useDispatch()
   const [sequence, setSequence] = useState(data?.txSequence)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
 
   const txHandler = async (type) => {
     if (type == 'confirm') {
@@ -53,6 +44,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -75,6 +67,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -135,6 +128,8 @@ export default function Execute({
                   <Gap height={24} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={24} />
               <Amount amount={formatNativeToken(data?.txDetails?.txMessage[0]?.amount)} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />

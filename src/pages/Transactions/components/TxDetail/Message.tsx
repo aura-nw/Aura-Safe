@@ -26,6 +26,13 @@ const StyledStatus = styled.div`
   }
 `
 
+const WrapperTxMemo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2;
+  margin-top: 12px !important;
+`
+
 const BtnImport = ({ onImport }) => {
   return (
     <>
@@ -35,6 +42,16 @@ const BtnImport = ({ onImport }) => {
     </>
   )
 }
+
+const TransactionMemo = ({ memo }: { memo: string }) => {
+  return (
+    <WrapperTxMemo>
+      <strong>Transaction memo: </strong>
+      <p>{memo}</p>
+    </WrapperTxMemo>
+  )
+}
+
 export default function TxMsg({ tx, txDetail, token, onImport }) {
   const isTokenNotExist = token?.isNotExist
   const type = tx.txInfo.typeUrl
@@ -57,9 +74,10 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
       </div>
     )
   }
+
   if (type == MsgTypeUrl.ExecuteContract) {
     if (tx.txInfo.displayType === 'Receive') {
-      return <></>
+      return <div className="tx-msg">{txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}</div>
     }
     if (txDetail?.txMessage[0].contractFunction === 'transfer') {
       return (
@@ -73,6 +91,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             to:
           </strong>
           <AddressInfo address={JSON.parse(txDetail?.txMessage[0].contractArgs)?.recipient} />
+          {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
         </div>
       )
     }
@@ -115,6 +134,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             )
           }
         })}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -129,6 +149,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
           to:
         </strong>
         <AddressInfo address={txDetail?.txMessage[0]?.validatorAddress} />
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -148,12 +169,13 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             Auto Claim Reward: <span className="token">{formatNativeToken(txDetail.autoClaimAmount)}</span>
           </strong>
         ) : null}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
   if (type == MsgTypeUrl.Send) {
     if (tx.txInfo.displayType === 'Receive') {
-      return <></>
+      return <div className="tx-msg">{txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}</div>
     }
     return (
       <div className="tx-msg">
@@ -165,6 +187,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
           to:
         </strong>
         <AddressInfo address={txDetail?.txMessage[0]?.toAddress} />
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -189,6 +212,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             <AddressInfo showAvatar={false} showName={false} address={recipient.address} />
           </div>
         ))}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -210,6 +234,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             Auto Claim Reward: <span className="token">{txDetail.autoClaimAmount}</span>
           </strong>
         ) : null}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -230,6 +255,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
         <StyledStatus>
           <StatusCard status={txDetail?.extraDetails?.proposalDetail?.status} />
         </StyledStatus>
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
@@ -254,6 +280,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
               </Fragment>
             )
           })}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }

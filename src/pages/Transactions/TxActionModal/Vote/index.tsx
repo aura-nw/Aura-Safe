@@ -6,7 +6,6 @@ import { Popup } from 'src/components/Popup'
 import Footer from 'src/components/Popup/Footer'
 import Header from 'src/components/Popup/Header'
 import { getCoinMinimalDenom } from 'src/config'
-import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { formatNativeToken } from 'src/utils'
 import { formatWithSchema } from 'src/utils/date'
 
@@ -19,6 +18,7 @@ import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 import EditSequence from '../EditSequence'
 import { DeleteButton, TxContent } from '../styles'
+import TxMemo from '../../../../components/Input/TxMemo'
 
 const voteMapping = {
   1: 'Yes',
@@ -27,21 +27,11 @@ const voteMapping = {
   4: 'Nowithveto',
 }
 
-export default function Execute({
-  open,
-  onClose,
-  data,
-  sendTx,
-  rejectTx,
-  disabled,
-  setDisabled,
-
-  deleteTx,
-}) {
+export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
   const [sequence, setSequence] = useState(data?.txSequence)
-  const { nativeBalance: balance, nextQueueSeq, sequence: currentSequence } = useSelector(currentSafeWithNames)
-  const userWalletAddress = useSelector(userAccountSelector)
+  const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
+  const { sequence: currentSequence } = useSelector(currentSafeWithNames)
   const dispatch = useDispatch()
 
   const txHandler = async (type) => {
@@ -55,6 +45,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -77,6 +68,7 @@ export default function Execute({
             gas: data?.txDetails?.gas.toString(),
           },
           sequence,
+          txMemo,
           () => {
             setDisabled(true)
           },
@@ -138,6 +130,8 @@ export default function Execute({
                   <Gap height={16} />
                 </>
               )}
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <Gap height={16} />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />
             </>
           )}
