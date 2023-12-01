@@ -71,6 +71,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
         {msg.map((message, index) => {
           return <Message index={index} msgData={message} key={index} />
         })}
+        {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
   }
