@@ -46,7 +46,7 @@ const BtnImport = ({ onImport }) => {
 const TransactionMemo = ({ memo }: { memo: string }) => {
   return (
     <WrapperTxMemo>
-      <strong>Transaction memo: </strong>
+      <div className="function-name">Transaction memo: </div>
       <div>{memo}</div>
     </WrapperTxMemo>
   )
