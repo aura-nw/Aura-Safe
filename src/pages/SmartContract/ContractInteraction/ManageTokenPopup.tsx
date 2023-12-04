@@ -38,6 +38,7 @@ const Row = styled.div`
 `
 
 const CoinWrapper = styled.div`
+  cursor: pointer;
   margin: 8px 0px;
   min-height: 40px;
   display: flex;
@@ -71,7 +72,7 @@ const WrapToken = styled.div`
 
 const CoinConfig = ({ token, isEnable, setToggle }) => {
   return (
-    <CoinWrapper>
+    <CoinWrapper onClick={() => setToggle()}>
       <Col>
         <Checkbox checked={isEnable} onChange={() => setToggle()} />
         <WrapToken>
