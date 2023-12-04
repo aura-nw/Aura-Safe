@@ -47,7 +47,7 @@ const TransactionMemo = ({ memo }: { memo: string }) => {
   return (
     <WrapperTxMemo>
       <strong>Transaction memo: </strong>
-      <p>{memo}</p>
+      <div>{memo}</div>
     </WrapperTxMemo>
   )
 }
@@ -122,19 +122,20 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
               </div>
             </div>
           ))}
-        {msg[0]?.value?.funds.length > 0 ? <div className="function-name">Transaction funds:</div> : <></>}
-        {msg[0]?.value?.funds?.map((fund, index) => {
-          const foundToken = tokenList.find((token) => token.cosmosDenom === fund.denom || token.denom === fund.denom)
-          if (foundToken) {
-            return (
-              <div key={index}>
-                <p>
+        <div>
+          {msg[0]?.value?.funds.length > 0 ? <div className="function-name">Transaction funds:</div> : <></>}
+          {msg[0]?.value?.funds?.map((fund, index) => {
+            const foundToken = tokenList.find((token) => token.cosmosDenom === fund.denom || token.denom === fund.denom)
+            if (foundToken) {
+              return (
+                <div key={index}>
                   {convertAmount(fund.amount, false, +foundToken?.decimals)} {foundToken.symbol}
-                </p>
-              </div>
-            )
-          }
-        })}
+                </div>
+              )
+            }
+          })}
+        </div>
+
         {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
     )
