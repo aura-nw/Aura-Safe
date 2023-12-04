@@ -123,7 +123,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
             </div>
           ))}
         <div>
-          {msg[0]?.value?.funds.length > 0 ? <div className="function-name">Transaction funds:</div> : <></>}
+          {msg[0]?.value?.funds.length > 0 ? <strong>Transaction funds:</strong> : <></>}
           {msg[0]?.value?.funds?.map((fund, index) => {
             const foundToken = tokenList.find((token) => token.cosmosDenom === fund.denom || token.denom === fund.denom)
             if (foundToken) {

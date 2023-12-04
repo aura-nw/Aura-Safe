@@ -4,7 +4,6 @@ import { getChainInfo } from 'src/config'
 import { WalletKey } from 'src/logic/keplr/keplr'
 import { CHAIN_THEMES, THEME_DF } from 'src/services/constant/chainThemes'
 import { getExplorerUrl, getGatewayUrl } from 'src/services/data/environment'
-import { IProposal } from 'src/types/proposal'
 import { ICreateSafeTransaction, ITransactionListItem, ITransactionListQuery } from 'src/types/transaction'
 import { IMSafeInfo, IMSafeResponse, OwnedMSafes } from '../types/safe'
 
@@ -371,12 +370,6 @@ export const getProposals = async () => {
     .then((res) => res.data)
 }
 
-export async function getProposalDetail(
-  internalChainId: number | string,
-  proposalId: number | string,
-): Promise<IResponse<IProposal>> {
-  return axios.get(`${baseUrl}/gov/${internalChainId}/proposals/${proposalId}`).then((res) => res.data)
-}
 export async function getContract(contractAddress: string): Promise<IResponse<any>> {
   const chainInfo = getChainInfo() as any
   return axios
