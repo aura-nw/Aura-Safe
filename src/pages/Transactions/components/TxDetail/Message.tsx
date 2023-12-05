@@ -26,11 +26,14 @@ const StyledStatus = styled.div`
   }
 `
 
-const WrapperTxMemo = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2;
   margin-top: 12px !important;
+  .label {
+    margin-bottom: 12px;
+  }
 `
 
 const BtnImport = ({ onImport }) => {
@@ -45,10 +48,10 @@ const BtnImport = ({ onImport }) => {
 
 const TransactionMemo = ({ memo }: { memo: string }) => {
   return (
-    <WrapperTxMemo>
-      <strong>Transaction memo: </strong>
+    <Wrapper>
+      <strong className="label">Transaction memo: </strong>
       <div>{memo}</div>
-    </WrapperTxMemo>
+    </Wrapper>
   )
 }
 
@@ -122,8 +125,8 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
               </div>
             </div>
           ))}
-        <div>
-          {msg[0]?.value?.funds.length > 0 ? <strong>Transaction funds:</strong> : <></>}
+        <Wrapper>
+          {msg[0]?.value?.funds.length > 0 ? <strong className="label">Transaction funds:</strong> : <></>}
           {msg[0]?.value?.funds?.map((fund, index) => {
             const foundToken = tokenList.find((token) => token.cosmosDenom === fund.denom || token.denom === fund.denom)
             if (foundToken) {
@@ -134,7 +137,7 @@ export default function TxMsg({ tx, txDetail, token, onImport }) {
               )
             }
           })}
-        </div>
+        </Wrapper>
 
         {txDetail?.txMemo && <TransactionMemo memo={txDetail?.txMemo} />}
       </div>
