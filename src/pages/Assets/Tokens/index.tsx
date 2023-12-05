@@ -14,7 +14,9 @@ import ImportTokenPopup from './ImportTokenPopup'
 import ManageTokenPopup from './ManageTokenPopup'
 import Checkbox from 'src/components/Input/Checkbox'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
-import { loadFromLocalStorage } from '../../../utils/storage/local'
+import { loadFromLocalStorage } from 'src/utils/storage/local'
+import { LS_TOKEN_CONFIG } from 'src/utils/constants'
+
 const Wrap = styled.div`
   background: ${(props) => props.theme.backgroundPrimary};
   border-radius: 8px;
@@ -85,8 +87,7 @@ function Tokens(props): ReactElement {
   const safeTokens: any = useSelector(extendedSafeTokensSelector)
   const { address, isHideZeroBalance } = useSelector(currentSafeWithNames)
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
-
-  const coinConfig = loadFromLocalStorage('tokenConfig') as any[]
+  const coinConfig = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
 
   const filteredTokens = coinConfig
     ?.filter(
@@ -204,7 +205,7 @@ function Tokens(props): ReactElement {
           )
         })}
       </DenseTable>
-      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => {}} onClose={() => setOpen(false)} />
+      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => { }} onClose={() => setOpen(false)} />
       {keepMountedManagePopup && (
         <ManageTokenPopup
           open={manageTokenPopupOpen}
