@@ -27,6 +27,7 @@ export const SPENDING_LIMIT_MODULE_ADDRESS =
 export const LS_NAMESPACE = 'SAFE'
 export const LS_SEPARATOR = '__'
 export const LS_USE_PROD_CGW = 'useProdGateway'
+export const LS_TOKEN_CONFIG = 'tokenConfig'
 
 // For debugging on dev
 const isProdGateway = () => {
