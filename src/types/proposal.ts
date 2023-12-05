@@ -55,6 +55,3 @@ export interface IProposal {
   turnout: Turnout
   requestAmount: Amount
 }
-export interface IProposalRes {
-  proposals: IProposal[]
-}
