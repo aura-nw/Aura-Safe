@@ -93,7 +93,7 @@ function Voting(): ReactElement {
           }
           return {
             id: proposal.proposal_id,
-            title: proposal.content.title,
+            title: proposal.title,
             proposer: proposal.proposer_address,
             status: proposal.status,
             votingStart: proposal.voting_start_time,

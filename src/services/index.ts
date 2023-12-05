@@ -350,7 +350,8 @@ export async function getNumberOfDelegator(validatorId: any): Promise<IResponse<
   const { chainInfo } = await getGatewayUrl()
   return axios
     .get(
-      `${chainInfo.find((chain) => chain.chainId == currentChainInfo.chainId)?.rest
+      `${
+        chainInfo.find((chain) => chain.chainId == currentChainInfo.chainId)?.rest
       }/cosmos/staking/v1beta1/validators/${validatorId}/delegations?pagination.count_total=true`,
     )
     .then((res) => res.data)
@@ -363,7 +364,23 @@ export const getProposals = async () => {
 
   return axios
     .post(chainInfo.indexerV2, {
-      query: `query GetProposals {\n      ${chainInfo.environment} {\n        proposal(order_by: {proposal_id: desc}, limit: 10) {\n          proposer_address\n          content\n          tally\n          proposal_id\n          status\n          submit_time\n          deposit_end_time\n          total_deposit\n          voting_start_time\n          voting_end_time\n        }\n      }\n    }`,
+      query: `query GetProposals {${chainInfo.environment} {  
+        proposal(order_by: {proposal_id: desc}, limit: 10) 
+        {    
+          proposer_address    
+          content    
+          tally    
+          title
+          proposal_id    
+          status    
+          submit_time    
+          deposit_end_time    
+          total_deposit    
+          voting_start_time    
+          voting_end_time  
+        }
+      }
+    }`,
       variables: {},
       operationName: 'GetProposals',
     })
