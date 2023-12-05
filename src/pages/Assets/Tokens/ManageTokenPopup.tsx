@@ -12,6 +12,7 @@ import Header from 'src/components/Popup/Header'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import styled from 'styled-components'
+import { loadFromLocalStorage, saveToLocalStorage } from '../../../utils/storage/local'
 
 const Wrap = styled.div`
   width: 480px;
@@ -55,11 +56,13 @@ export default function ManageTokenPopup({
   setKeepMoutedManagePopup,
 }) {
   const dispatch = useDispatch()
-  const { coinConfig, address } = useSelector(currentSafeWithNames)
+  const { address } = useSelector(currentSafeWithNames)
+  const coinConfig = loadFromLocalStorage('tokenConfig') as any[]
   const [config, setConfig] = useState(coinConfig)
 
   const applyHandler = () => {
     if (config && config?.length > 0) {
+      saveToLocalStorage('tokenConfig', config)
       dispatch(
         updateSafe({
           address,

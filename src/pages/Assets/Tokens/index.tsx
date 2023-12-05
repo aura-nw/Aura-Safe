@@ -14,6 +14,7 @@ import ImportTokenPopup from './ImportTokenPopup'
 import ManageTokenPopup from './ManageTokenPopup'
 import Checkbox from 'src/components/Input/Checkbox'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
+import { loadFromLocalStorage } from '../../../utils/storage/local'
 const Wrap = styled.div`
   background: ${(props) => props.theme.backgroundPrimary};
   border-radius: 8px;
@@ -82,16 +83,34 @@ function Tokens(props): ReactElement {
   const [selectedToken, setSelectedToken] = useState<string>('')
   const [search, setSearch] = useState<string>('')
   const safeTokens: any = useSelector(extendedSafeTokensSelector)
-  const { address, coinConfig, isHideZeroBalance } = useSelector(currentSafeWithNames)
+  const { address, isHideZeroBalance } = useSelector(currentSafeWithNames)
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
-  const tokenConfig = safeTokens.filter((token) => {
-    return (
-      token.type == 'native' ||
-      coinConfig?.find((coin) => {
-        return coin.address == token.address
-      })?.enable
+
+  const coinConfig = loadFromLocalStorage('tokenConfig') as any[]
+
+  const filteredTokens = coinConfig
+    ?.filter(
+      (configToken) =>
+        configToken.enable &&
+        !safeTokens.some(
+          (token) => token.address === configToken.address || token.address === configToken.tokenAddress,
+        ),
     )
-  })
+    .map((token) => ({
+      address: token.address,
+      balance: { tokenBalance: 0 },
+      cosmosDenom: token?.cosmosDenom,
+      decimals: token?.decimals ?? 6,
+      denom: token?.tokenType === 'cw20' ? token.symbol : token.minCoinDenom,
+      logoUri:
+        (token?.icon || token?.logoUri) ?? 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/aura.png',
+      name: token.name,
+      symbol: token?.tokenType === 'cw20' ? token.symbol : token.coinDenom,
+      type: token?.tokenType,
+    }))
+
+  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])]
+
   const [listToken, setListToken] = useState(
     isHideZeroBalance ? tokenConfig.filter((token) => token.balance.tokenBalance > 0) : tokenConfig,
   )
@@ -103,7 +122,7 @@ function Tokens(props): ReactElement {
         return token?.name?.toLowerCase().includes(search) || token?.address?.toLowerCase().includes(search)
       }),
     )
-  }, [coinConfig, safeTokens, hideZeroBalance])
+  }, [safeTokens, hideZeroBalance])
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase()
