@@ -89,6 +89,18 @@ function Tokens(props): ReactElement {
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
   const coinConfig = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
 
+  const getDefaultTokenConfig = (token) => ({
+    address: token.address,
+    balance: { tokenBalance: 0 },
+    cosmosDenom: token?.cosmosDenom,
+    decimals: token?.decimals ?? 6,
+    denom: token?.tokenType === 'cw20' ? token.symbol : token.minCoinDenom,
+    logoUri: (token?.icon || token?.logoUri) ?? 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/aura.png',
+    name: token.name,
+    symbol: token?.tokenType === 'cw20' ? token.symbol : token.coinDenom,
+    type: token?.tokenType,
+  })
+
   const filteredTokens = coinConfig
     ?.filter(
       (configToken) =>
@@ -97,20 +109,12 @@ function Tokens(props): ReactElement {
           (token) => token.address === configToken.address || token.address === configToken.tokenAddress,
         ),
     )
-    .map((token) => ({
-      address: token.address,
-      balance: { tokenBalance: 0 },
-      cosmosDenom: token?.cosmosDenom,
-      decimals: token?.decimals ?? 6,
-      denom: token?.tokenType === 'cw20' ? token.symbol : token.minCoinDenom,
-      logoUri:
-        (token?.icon || token?.logoUri) ?? 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/aura.png',
-      name: token.name,
-      symbol: token?.tokenType === 'cw20' ? token.symbol : token.coinDenom,
-      type: token?.tokenType,
-    }))
+    .map((token) => getDefaultTokenConfig(token))
 
-  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])]
+  const getTokenConfig = (token) =>
+    token.type === 'native' || coinConfig?.find((coin) => coin.address === token.address)?.enable
+
+  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])].filter(getTokenConfig)
 
   const [listToken, setListToken] = useState(
     isHideZeroBalance ? tokenConfig.filter((token) => token.balance.tokenBalance > 0) : tokenConfig,
@@ -205,7 +209,7 @@ function Tokens(props): ReactElement {
           )
         })}
       </DenseTable>
-      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => { }} onClose={() => setOpen(false)} />
+      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => {}} onClose={() => setOpen(false)} />
       {keepMountedManagePopup && (
         <ManageTokenPopup
           open={manageTokenPopupOpen}
