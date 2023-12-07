@@ -63,7 +63,8 @@ const TokenType = styled.div`
     background: #273033;
     color: #67c091;
   }
-  &.CW20 {
+  &.CW20,
+  &.cw20 {
     color: #ffba69;
     background: #3d3730;
   }
@@ -177,7 +178,7 @@ function Tokens(props): ReactElement {
         {listToken.map((token: Token, index: number) => {
           return (
             <StyledTableRow key={index}>
-              <StyledTableCell>
+              <StyledTableCell style={{ width: '30%' }}>
                 <TokenInfo>
                   <img src={token?.logoUri || ''} alt="" />
                   {token.name || 'Unkonwn token'}
