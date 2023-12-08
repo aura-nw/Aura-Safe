@@ -14,6 +14,9 @@ import ImportTokenPopup from './ImportTokenPopup'
 import ManageTokenPopup from './ManageTokenPopup'
 import Checkbox from 'src/components/Input/Checkbox'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
+import { loadFromLocalStorage } from 'src/utils/storage/local'
+import { LS_TOKEN_CONFIG } from 'src/utils/constants'
+
 const Wrap = styled.div`
   background: ${(props) => props.theme.backgroundPrimary};
   border-radius: 8px;
@@ -60,7 +63,8 @@ const TokenType = styled.div`
     background: #273033;
     color: #67c091;
   }
-  &.CW20 {
+  &.CW20,
+  &.cw20 {
     color: #ffba69;
     background: #3d3730;
   }
@@ -82,16 +86,37 @@ function Tokens(props): ReactElement {
   const [selectedToken, setSelectedToken] = useState<string>('')
   const [search, setSearch] = useState<string>('')
   const safeTokens: any = useSelector(extendedSafeTokensSelector)
-  const { address, coinConfig, isHideZeroBalance } = useSelector(currentSafeWithNames)
+  const { address, isHideZeroBalance } = useSelector(currentSafeWithNames)
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
-  const tokenConfig = safeTokens.filter((token) => {
-    return (
-      token.type == 'native' ||
-      coinConfig?.find((coin) => {
-        return coin.address == token.address
-      })?.enable
-    )
+  const coinConfig = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
+
+  const getDefaultTokenConfig = (token) => ({
+    address: token.address,
+    balance: { tokenBalance: 0 },
+    cosmosDenom: token?.cosmosDenom,
+    decimals: token?.decimals ?? 6,
+    denom: token?.tokenType === 'cw20' ? token.symbol : token.minCoinDenom,
+    logoUri: (token?.icon || token?.logoUri) ?? 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/aura.png',
+    name: token.name,
+    symbol: token?.tokenType === 'cw20' ? token.symbol : token.coinDenom,
+    type: token?.tokenType,
   })
+
+  const filteredTokens = coinConfig
+    ?.filter(
+      (configToken) =>
+        configToken.enable &&
+        !safeTokens.some(
+          (token) => token.address === configToken.address || token.address === configToken.tokenAddress,
+        ),
+    )
+    .map((token) => getDefaultTokenConfig(token))
+
+  const getTokenConfig = (token) =>
+    token.type === 'native' || coinConfig?.find((coin) => coin.address === token.address)?.enable
+
+  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])].filter(getTokenConfig)
+
   const [listToken, setListToken] = useState(
     isHideZeroBalance ? tokenConfig.filter((token) => token.balance.tokenBalance > 0) : tokenConfig,
   )
@@ -103,7 +128,7 @@ function Tokens(props): ReactElement {
         return token?.name?.toLowerCase().includes(search) || token?.address?.toLowerCase().includes(search)
       }),
     )
-  }, [coinConfig, safeTokens, hideZeroBalance])
+  }, [safeTokens, hideZeroBalance])
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase()
@@ -153,7 +178,7 @@ function Tokens(props): ReactElement {
         {listToken.map((token: Token, index: number) => {
           return (
             <StyledTableRow key={index}>
-              <StyledTableCell>
+              <StyledTableCell style={{ width: '30%' }}>
                 <TokenInfo>
                   <img src={token?.logoUri || ''} alt="" />
                   {token.name || 'Unkonwn token'}

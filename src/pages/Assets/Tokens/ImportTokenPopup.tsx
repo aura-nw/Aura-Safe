@@ -14,7 +14,9 @@ import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import { extractSafeAddress, extractSafeId } from 'src/routes/routes'
 import { getDetailToken } from 'src/services'
+import { LS_TOKEN_CONFIG } from 'src/utils/constants'
 import { isValidAddress } from 'src/utils/isValidAddress'
+import { saveToLocalStorage } from 'src/utils/storage/local'
 import styled from 'styled-components'
 
 const Wrap = styled.div`
@@ -63,6 +65,7 @@ type IImportTokenPopup = {
   onImport?: () => void
   addressContract?: any
 }
+
 const ImportTokenPopup = ({ open, onBack, onClose, addressContract, onImport }: IImportTokenPopup) => {
   const dispatch = useDispatch()
   const [token, setToken] = useState<IToken>(defaultToken)
@@ -117,6 +120,7 @@ const ImportTokenPopup = ({ open, onBack, onClose, addressContract, onImport }: 
         newCoinConfig.push(token)
       }
     }
+    saveToLocalStorage(LS_TOKEN_CONFIG, newCoinConfig ?? coinConfig)
     dispatch(
       updateSafe({
         address,

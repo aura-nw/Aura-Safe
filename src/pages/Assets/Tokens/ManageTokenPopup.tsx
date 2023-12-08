@@ -12,6 +12,8 @@ import Header from 'src/components/Popup/Header'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
 import styled from 'styled-components'
+import { loadFromLocalStorage, saveToLocalStorage } from 'src/utils/storage/local'
+import { LS_TOKEN_CONFIG } from 'src/utils/constants'
 
 const Wrap = styled.div`
   width: 480px;
@@ -55,11 +57,13 @@ export default function ManageTokenPopup({
   setKeepMoutedManagePopup,
 }) {
   const dispatch = useDispatch()
-  const { coinConfig, address } = useSelector(currentSafeWithNames)
-  const [config, setConfig] = useState(coinConfig)
+  const { address, coinConfig } = useSelector(currentSafeWithNames)
+  const coinConfigSetting = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
+  const [config, setConfig] = useState(coinConfigSetting || coinConfig)
 
   const applyHandler = () => {
     if (config && config?.length > 0) {
+      saveToLocalStorage(LS_TOKEN_CONFIG, config)
       dispatch(
         updateSafe({
           address,
@@ -72,12 +76,12 @@ export default function ManageTokenPopup({
   }
 
   useEffect(() => {
-    setConfig(coinConfig)
+    setConfig(coinConfigSetting || coinConfig)
   }, [address])
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase()
-    const filteredTokens = coinConfig?.filter((token) => {
+    const filteredTokens = coinConfigSetting?.filter((token) => {
       return (
         token?.symbol?.toLowerCase().includes(searchTerm.trim()) ||
         token?.name?.toLowerCase().includes(searchTerm.trim()) ||
@@ -98,7 +102,7 @@ export default function ManageTokenPopup({
         title="Manage token"
         onClose={() => {
           onClose()
-          setConfig(coinConfig)
+          setConfig(coinConfigSetting)
           setKeepMoutedManagePopup(false)
         }}
         hideNetwork={true}
