@@ -86,7 +86,7 @@ function Tokens(props): ReactElement {
   const [selectedToken, setSelectedToken] = useState<string>('')
   const [search, setSearch] = useState<string>('')
   const safeTokens: any = useSelector(extendedSafeTokensSelector)
-  const { address, isHideZeroBalance } = useSelector(currentSafeWithNames)
+  const { address, isHideZeroBalance, coinConfig: coinConfigState } = useSelector(currentSafeWithNames)
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
   const coinConfig = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
 
@@ -128,7 +128,7 @@ function Tokens(props): ReactElement {
         return token?.name?.toLowerCase().includes(search) || token?.address?.toLowerCase().includes(search)
       }),
     )
-  }, [safeTokens, hideZeroBalance])
+  }, [safeTokens, hideZeroBalance, coinConfigState])
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase()
@@ -210,7 +210,7 @@ function Tokens(props): ReactElement {
           )
         })}
       </DenseTable>
-      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => {}} onClose={() => setOpen(false)} />
+      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => { }} onClose={() => setOpen(false)} />
       {keepMountedManagePopup && (
         <ManageTokenPopup
           open={manageTokenPopupOpen}
