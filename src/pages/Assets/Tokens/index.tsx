@@ -112,10 +112,7 @@ function Tokens(props): ReactElement {
     )
     .map((token) => getDefaultTokenConfig(token))
 
-  const getTokenConfig = (token) =>
-    token.type === 'native' || coinConfig?.find((coin) => coin.address === token.address)?.enable
-
-  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])].filter(getTokenConfig)
+  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])].filter((token) => token.type === 'native' || coinConfig?.find((coin) => coin.address === token.address)?.enable)
 
   const [listToken, setListToken] = useState(
     isHideZeroBalance ? tokenConfig.filter((token) => token.balance.tokenBalance > 0) : tokenConfig,
