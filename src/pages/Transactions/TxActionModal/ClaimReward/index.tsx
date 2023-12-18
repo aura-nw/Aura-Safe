@@ -116,7 +116,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={24} />
                 </>
               )}
-              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} disabled={action === 'execute'} />
               <Gap height={24} />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />
             </>
@@ -133,10 +133,10 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                 action == 'confirm'
                   ? txHandler('confirm')
                   : action == 'reject'
-                  ? rejectTx()
-                  : action == 'change-sequence'
-                  ? txHandler('change-sequence')
-                  : sendTx()
+                    ? rejectTx()
+                    : action == 'change-sequence'
+                      ? txHandler('change-sequence')
+                      : sendTx()
               }}
               disabled={disabled || +sequence < +currentSequence}
             >

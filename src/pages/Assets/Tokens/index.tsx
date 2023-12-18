@@ -16,6 +16,10 @@ import Checkbox from 'src/components/Input/Checkbox'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
 import { loadFromLocalStorage } from 'src/utils/storage/local'
 import { LS_TOKEN_CONFIG } from 'src/utils/constants'
+import useSafeActions from 'src/logic/safe/hooks/useSafeActions'
+import Modal from 'src/components/Modal'
+import { extractSafeAddress } from 'src/routes/routes'
+import ReceiveModal from 'src/App/ReceiveModal'
 
 const Wrap = styled.div`
   background: ${(props) => props.theme.backgroundPrimary};
@@ -86,9 +90,14 @@ function Tokens(props): ReactElement {
   const [selectedToken, setSelectedToken] = useState<string>('')
   const [search, setSearch] = useState<string>('')
   const safeTokens: any = useSelector(extendedSafeTokensSelector)
-  const { address, isHideZeroBalance, coinConfig: coinConfigState } = useSelector(currentSafeWithNames)
+  const { name: safeName, address, isHideZeroBalance, coinConfig: coinConfigState } = useSelector(currentSafeWithNames)
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
   const coinConfig = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
+  const { onShow, onHide, safeActionsState } = useSafeActions()
+  const safeAddress = extractSafeAddress()
+
+  const onReceiveShow = () => onShow('Receive')
+  const onReceiveHide = () => onHide('Receive')
 
   const getDefaultTokenConfig = (token) => ({
     address: token.address,
@@ -197,7 +206,7 @@ function Tokens(props): ReactElement {
                     <img src={sendIcon} alt="" />
                     Send
                   </OutlinedNeutralButton>
-                  <OutlinedNeutralButton className="small" style={{ marginLeft: 8 }}>
+                  <OutlinedNeutralButton className="small" style={{ marginLeft: 8 }} onClick={onReceiveShow}>
                     <img style={{ transform: 'rotate(180deg)' }} src={sendIcon} alt="" />
                     Receive
                   </OutlinedNeutralButton>
@@ -233,6 +242,15 @@ function Tokens(props): ReactElement {
           setKeepMoutedManagePopup(false)
         }}
       />
+      <Modal
+        description="Receive Tokens Form"
+        handleClose={onReceiveHide}
+        open={safeActionsState.showReceive}
+        paperClassName="receive-modal"
+        title="Receive Tokens"
+      >
+        <ReceiveModal onClose={onReceiveHide} safeAddress={safeAddress} safeName={safeName} />
+      </Modal>
     </Wrap>
   )
 }
