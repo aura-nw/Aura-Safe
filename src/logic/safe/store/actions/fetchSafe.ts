@@ -13,7 +13,7 @@ import { SafeRecordProps } from 'src/logic/safe/store/models/safe'
 import { getLocalSafe } from 'src/logic/safe/utils'
 import { getSafeInfo } from 'src/logic/safe/utils/safeInformation'
 import { fetchMSafeTokens } from 'src/logic/tokens/store/actions/fetchSafeTokens'
-import { fetchAccountInfo, getAccountAsset, getMSafeInfo } from 'src/services'
+import { fetchAccountInfo, getAccountAsset, getMSafeInfo, getMSafeNextSeq } from 'src/services'
 import { IMSafeInfo } from 'src/types/safe'
 import { humanReadableValue } from 'src/utils'
 import { checksumAddress } from 'src/utils/checksumAddress'
@@ -143,9 +143,10 @@ export const fetchMSafe =
     let mSafeInfo: IMSafeInfo | null = null
     let accountInfo: SequenceResponse | null = null
     let isSafeLoaded = false
+    let nextQueueSeq = ''
 
     try {
-      ;[mSafeInfo, remoteSafeInfo, accountInfo, isSafeLoaded] = await _getSafeInfo(safeAddress, safeId)
+      ;[mSafeInfo, remoteSafeInfo, accountInfo, isSafeLoaded, nextQueueSeq] = await _getSafeInfo(safeAddress, safeId)
     } catch (err) {
       console.error(err)
     }
@@ -164,7 +165,7 @@ export const fetchMSafe =
       safeInfo = await extractRemoteSafeInfo(remoteSafeInfo)
       const onlineData: SequenceResponse | null = accountInfo
 
-      safeInfo.nextQueueSeq = mSafeInfo?.nextQueueSeq || onlineData?.sequence?.toString()
+      safeInfo.nextQueueSeq = nextQueueSeq || onlineData?.sequence?.toString()
       safeInfo.sequence = mSafeInfo?.sequence || onlineData?.sequence?.toString()
       const coinDecimal = getCoinDecimal()
       const { txQueuedTag, txHistoryTag, balances } = currentSafeWithNames(state)
@@ -217,18 +218,25 @@ export const fetchMSafe =
 async function _getSafeInfo(
   safeAddress: string,
   safeId: number,
-): Promise<[IMSafeInfo, SafeInfo, SequenceResponse, boolean]> {
+): Promise<[IMSafeInfo, SafeInfo, SequenceResponse, boolean, string]> {
   const getAccountAssetPromise = getAccountAsset(safeAddress)
   const getMSafeInfoPromise = getMSafeInfo(safeId)
   const getAccountInfoPromise = fetchAccountInfo(safeAddress)
+  const getMSafeNextSeqPromise = getMSafeNextSeq(safeId)
 
-  const results = await Promise.allSettled([getAccountAssetPromise, getMSafeInfoPromise, getAccountInfoPromise])
+  const results = await Promise.allSettled([
+    getAccountAssetPromise,
+    getMSafeInfoPromise,
+    getAccountInfoPromise,
+    getMSafeNextSeqPromise,
+  ])
 
-  const [accountAssetDataResult, mSafeInfotDataResult, accountInfoDataResult] = results
+  const [accountAssetDataResult, mSafeInfotDataResult, accountInfoDataResult, nextQueueSeqResult] = results
 
   const accountAssetData = accountAssetDataResult.status === 'fulfilled' ? accountAssetDataResult.value : null
   const mSafeInfotData = mSafeInfotDataResult.status === 'fulfilled' ? mSafeInfotDataResult.value : null
   const accountInfoData = accountInfoDataResult.status === 'fulfilled' ? accountInfoDataResult.value : null
+  const nextQueueSeq = nextQueueSeqResult.status === 'fulfilled' ? nextQueueSeqResult.value : ''
 
   if (!mSafeInfotData) {
     throw new Error('Get Safe Info failed')
@@ -316,5 +324,5 @@ async function _getSafeInfo(
     txHistoryTag: mSafeInfotData.txHistoryTag,
   }
 
-  return [formatMSafeInfotData, safeInfoData, accountInfoData, isSafeLoaded]
+  return [formatMSafeInfotData, safeInfoData, accountInfoData, isSafeLoaded, nextQueueSeq]
 }

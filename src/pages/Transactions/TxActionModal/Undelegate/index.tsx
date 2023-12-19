@@ -150,10 +150,10 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                 action == 'confirm'
                   ? txHandler('confirm')
                   : action == 'reject'
-                    ? rejectTx()
-                    : action == 'change-sequence'
-                      ? txHandler('change-sequence')
-                      : sendTx()
+                  ? rejectTx()
+                  : action == 'change-sequence'
+                  ? txHandler('change-sequence')
+                  : sendTx()
               }}
               disabled={disabled || +sequence < +currentSequence}
             >
