@@ -31,6 +31,7 @@ export default function FeeAndSequence({
   useEffect(() => {
     setSequence(nextQueueSeq)
   }, [nextQueueSeq])
+
   useEffect(() => {
     recalculateFee()
   }, [manualGasLimit])
