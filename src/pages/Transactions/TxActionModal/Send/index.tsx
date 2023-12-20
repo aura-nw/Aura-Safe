@@ -123,7 +123,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                 </>
               )}
               <Gap height={16} />
-              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} disabled={action === 'execute'} />
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} disabled />
               <Divider />
               <Amount label="Total Allocation Amount" amount={totalAllocationAmount} />
               <Divider />
