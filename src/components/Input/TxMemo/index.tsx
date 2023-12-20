@@ -7,7 +7,13 @@ type Props = {
 }
 const TxMemo = ({ txMemo, setTxMemo, disabled }: Props) => {
   return (
-    <TextField disabled={disabled} placeholder="Transaction memo (optional)" label="Transaction memo" value={txMemo} onChange={setTxMemo} />
+    <TextField
+      disabled={disabled}
+      placeholder="Transaction memo (optional)"
+      label="Transaction memo"
+      value={txMemo}
+      onChange={setTxMemo}
+    />
   )
 }
 
