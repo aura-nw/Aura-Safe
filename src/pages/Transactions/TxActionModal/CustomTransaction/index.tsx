@@ -110,7 +110,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
           </div>
           <Divider />
           <div className="msgs">
-            {JSON.parse(data.txDetails?.rawMessage).map((message, index) => {
+            {JSON.parse(data.txDetails?.rawMessage ?? []).map((message, index) => {
               return <Message key={index} index={index} msgData={message} />
             })}
           </div>
@@ -147,7 +147,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={16} />
                 </>
               )}
-              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} disabled />
               <Gap height={16} />
               <Divider />
               <Amount

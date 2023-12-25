@@ -125,7 +125,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                   <Gap height={24} />
                 </>
               )}
-              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} />
+              <TxMemo txMemo={txMemo} setTxMemo={setTxMemo} disabled />
               <Gap height={24} />
               <Divider />
               <Amount label="Total Allocation Amount" amount={formatNativeToken(+data.txDetails?.fee || 0)} />

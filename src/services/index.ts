@@ -161,6 +161,10 @@ export async function getMSafeInfo(safeId: number): Promise<IMSafeInfo> {
   return axios.get(`${baseUrl}/multisigwallet/${safeId}`).then((res) => res.data.Data)
 }
 
+export async function getMSafeNextSeq(safeId: number): Promise<string> {
+  return axios.get(`${baseUrl}/transaction/next-seq?safeId=${safeId}`).then((res) => res.data.nextSequence)
+}
+
 export async function getAccountAsset(safeAddress: string): Promise<any> {
   const chainInfo = getChainInfo() as any
   return axios

@@ -31,6 +31,7 @@ import TermModal from './TermModal'
 
 import TermContext from 'src/logic/TermContext'
 import { fetchAllValidator } from 'src/logic/validator/store/actions'
+import ReceiveModal from './ReceiveModal'
 
 const notificationStyles = {
   success: {
@@ -76,7 +77,7 @@ const App: React.FC = ({ children }) => {
   const { name: safeName, totalFiatBalance: currentSafeBalance } = useSelector(currentSafeWithNames)
   const safeAddress = extractSafeAddress()
   const safeId = extractSafeId()
-  const { onShow, showSendFunds } = useSafeActions()
+  const { onShow, onHide, showSendFunds, safeActionsState } = useSafeActions()
   const { connectWalletState, onConnectWalletShow, onConnectWalletHide } = useConnectWallet()
   const currentCurrency = useSelector(currentCurrencySelector)
   const granted = useSelector(grantedSelector)
@@ -91,6 +92,7 @@ const App: React.FC = ({ children }) => {
     !!formattedTotalBalance && !!currentCurrency ? `${formattedTotalBalance} ${currentCurrency}` : undefined
 
   const onReceiveShow = () => onShow('Receive')
+  const onReceiveHide = () => onHide('Receive')
 
   const onTermHide = () => {
     termContext?.SetTerm(false)
@@ -138,6 +140,18 @@ const App: React.FC = ({ children }) => {
             isOpen={connectWalletState.showConnect}
             onClose={onConnectWalletHide}
           ></ConnectWalletModal>
+
+          {safeAddress && (
+            <Modal
+              description="Receive Tokens Form"
+              handleClose={onReceiveHide}
+              open={safeActionsState.showReceive}
+              paperClassName="receive-modal"
+              title="Receive Tokens"
+            >
+              <ReceiveModal onClose={onReceiveHide} safeAddress={safeAddress} safeName={safeName} />
+            </Modal>
+          )}
 
           <Modal description="Term Tokens Form" handleClose={onTermHide} open={TermState} title="Term Tokens">
             <TermModal onClose={onTermHide} valueTerm={termContext?.valueTerm} />

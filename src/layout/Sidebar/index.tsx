@@ -1,6 +1,3 @@
-import styled from 'styled-components'
-import { Divider } from '@aura/safe-react-components'
-
 import List, { ListItemType } from 'src/components/List'
 import SafeHeader from './SafeHeader'
 
