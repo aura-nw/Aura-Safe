@@ -110,9 +110,10 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
           </div>
           <Divider />
           <div className="msgs">
-            {JSON.parse(data.txDetails?.rawMessage ?? []).map((message, index) => {
-              return <Message key={index} index={index} msgData={message} />
-            })}
+            {data.txDetails?.rawMessage &&
+              JSON.parse(data.txDetails?.rawMessage).map((message, index) => {
+                return <Message key={index} index={index} msgData={message} />
+              })}
           </div>
           <Gap height={16} />
           {action == 'delete' ? (
