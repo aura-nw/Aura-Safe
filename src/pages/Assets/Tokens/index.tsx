@@ -121,7 +121,9 @@ function Tokens(props): ReactElement {
     )
     .map((token) => getDefaultTokenConfig(token))
 
-  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])].filter((token) => token.type === 'native' || coinConfig?.find((coin) => coin.address === token.address)?.enable)
+  const tokenConfig = [...safeTokens, ...(filteredTokens ?? [])].filter(
+    (token) => token.type === 'native' || coinConfig?.find((coin) => coin.address === token.address)?.enable,
+  )
 
   const [listToken, setListToken] = useState(
     isHideZeroBalance ? tokenConfig.filter((token) => token.balance.tokenBalance > 0) : tokenConfig,
@@ -216,7 +218,7 @@ function Tokens(props): ReactElement {
           )
         })}
       </DenseTable>
-      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => { }} onClose={() => setOpen(false)} />
+      <SendingPopup defaultToken={selectedToken} open={open} onOpen={() => {}} onClose={() => setOpen(false)} />
       {keepMountedManagePopup && (
         <ManageTokenPopup
           open={manageTokenPopupOpen}

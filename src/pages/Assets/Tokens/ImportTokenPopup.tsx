@@ -47,6 +47,7 @@ type IToken = {
   enable: boolean
   decimals: number
   logoUri: string
+  tokenType: string
 }
 const defaultToken = {
   address: '',
@@ -56,6 +57,7 @@ const defaultToken = {
   isAddedToken: true,
   decimals: 0,
   logoUri: ic_defIcon,
+  tokenType: '',
 }
 
 type IImportTokenPopup = {
@@ -86,7 +88,7 @@ const ImportTokenPopup = ({ open, onBack, onClose, addressContract, onImport }: 
       const { data } = await getDetailToken(token.address)
       if (data) {
         setIsVerifiedContract('true')
-        setToken({ ...token, name: data.name, symbol: data.symbol, decimals: data.decimals })
+        setToken({ ...token, name: data.name, symbol: data.symbol, decimals: data.decimals, tokenType: 'cw20' })
       }
     } catch (error) {
       setIsVerifiedContract('false')
