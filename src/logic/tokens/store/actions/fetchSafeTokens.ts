@@ -8,13 +8,15 @@ import { Errors, logError } from 'src/logic/exceptions/CodedException'
 import { TokenBalance, fetchTokenCurrenciesBalances } from 'src/logic/safe/api/fetchTokenCurrenciesBalances'
 import { AppReduxState } from 'src/logic/safe/store'
 import { updateSafe } from 'src/logic/safe/store/actions/updateSafe'
-import { currentSafe, safeByAddressSelector } from 'src/logic/safe/store/selectors'
+import { currentSafe } from 'src/logic/safe/store/selectors'
 import { addTokens } from 'src/logic/tokens/store/actions/addTokens'
 import { Token, makeToken } from 'src/logic/tokens/store/model/token'
 import { humanReadableValue } from 'src/logic/tokens/utils/humanReadableValue'
 import { ZERO_ADDRESS, sameAddress } from 'src/logic/wallets/ethAddresses'
 import { getTokenDetail } from 'src/services'
 import { IMSafeInfo } from 'src/types/safe'
+import { LS_TOKEN_CONFIG } from '../../../../utils/constants'
+import { loadFromLocalStorage } from '../../../../utils/storage/local'
 
 export type BalanceRecord = {
   tokenAddress?: string
@@ -93,7 +95,7 @@ export const fetchSafeTokens =
 
 export const fetchMSafeTokens =
   (safeInfo: IMSafeInfo) =>
-    async (dispatch: Dispatch, getState: () => AppReduxState): Promise<void> => {
+    async (dispatch: Dispatch): Promise<void> => {
       let listTokens: any[] = []
       const cw20Tokens = safeInfo.assets.CW20.asset.map((asset) => ({
         name: asset.asset_info.data.name,
@@ -103,15 +105,14 @@ export const fetchMSafeTokens =
         _id: asset['_id'],
       }))
       const listSafeTokens = [...(safeInfo?.balance || []), ...cw20Tokens]
-      const state = getState()
-      const safe = safeByAddressSelector(state, safeInfo.address)
       if (safeInfo?.balance) {
+        const coinConfigStorage = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
         const listChain = getChains()
         const tokenDetailsListData = await getTokenDetail()
         const tokenDetailsList = await tokenDetailsListData.json()
         listTokens = [...tokenDetailsList['ibc'], ...tokenDetailsList['cw20']]
         const importedConfig =
-          safe?.coinConfig?.filter((c) => {
+          coinConfigStorage.filter((c) => {
             if (c.isAddedToken) {
               return !listTokens.some((t) => t.address === c.address)
             }
@@ -141,17 +142,17 @@ export const fetchMSafeTokens =
             enable: true,
           }
           balances.push(nativeToken)
-          const { tokenBalance, ...modifiedNativeToken } = nativeToken;
+          const { tokenBalance, ...modifiedNativeToken } = nativeToken
           filteredListTokens.unshift(modifiedNativeToken)
         }
 
-        const coinConfig = safe?.coinConfig?.length
+        const coinConfig = coinConfigStorage.length
           ? filteredListTokens
             .filter(
               (item) =>
-                !safe?.coinConfig?.some((token) => token.denom === item.denom || token.address === item.address),
+                !coinConfigStorage.some((token) => token.denom === item.denom || token.address === item.address),
             )
-            .concat(safe?.coinConfig)
+            .concat(coinConfigStorage)
           : filteredListTokens
 
         safeInfo.balance
