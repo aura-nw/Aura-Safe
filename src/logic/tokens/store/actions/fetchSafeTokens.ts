@@ -73,7 +73,7 @@ export const fetchSafeTokens =
         return
       }
 
-      const { balances, nativeBalance, tokens } = tokenCurrenciesBalances.items.reduce<ExtractedData>(
+      const { balances, tokens } = tokenCurrenciesBalances.items.reduce<ExtractedData>(
         extractDataFromResult,
         {
           balances: [],
@@ -112,7 +112,7 @@ export const fetchMSafeTokens =
         const tokenDetailsList = await tokenDetailsListData.json()
         listTokens = [...tokenDetailsList['ibc'], ...tokenDetailsList['cw20']]
         const importedConfig =
-          coinConfigStorage.filter((c) => {
+          coinConfigStorage?.filter((c) => {
             if (c.isAddedToken) {
               return !listTokens.some((t) => t.address === c.address)
             }
@@ -146,11 +146,11 @@ export const fetchMSafeTokens =
           filteredListTokens.unshift(modifiedNativeToken)
         }
 
-        const coinConfig = coinConfigStorage.length
+        const coinConfig = coinConfigStorage?.length
           ? filteredListTokens
             .filter(
               (item) =>
-                !coinConfigStorage.some((token) => token.denom === item.denom || token.address === item.address),
+                !coinConfigStorage?.some((token) => token.denom === item.denom || token.address === item.address),
             )
             .concat(coinConfigStorage)
           : filteredListTokens
