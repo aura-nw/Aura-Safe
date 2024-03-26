@@ -6,31 +6,43 @@ import AddressInfo from 'src/components/AddressInfo'
 import { FilledButton, OutlinedNeutralButton } from 'src/components/Button'
 import Divider from 'src/components/Divider'
 import Gap from 'src/components/Gap'
+import TxMemo from 'src/components/Input/TxMemo'
 import { Popup } from 'src/components/Popup'
 import Footer from 'src/components/Popup/Footer'
 import Header from 'src/components/Popup/Header'
 import Amount from 'src/components/TxComponents/Amount'
-import { getCoinMinimalDenom } from 'src/config'
+import { getChainDefaultGasPrice, getCoinDecimal, getCoinMinimalDenom } from 'src/config'
 import { currentSafeWithNames } from 'src/logic/safe/store/selectors'
-import { formatNativeCurrency, formatNativeToken } from 'src/utils'
+import { convertAmount, formatNativeCurrency, formatNativeToken, formatWithComma } from 'src/utils'
 import { signAndChangeTransactionSequence, signAndConfirmTransaction } from 'src/utils/signer'
 import { getNotice, getTitle } from '..'
 import { TxSignModalContext } from '../../Queue'
 import { ReviewTxPopupWrapper } from '../../styled'
 import EditSequence from '../EditSequence'
-import TxMemo from 'src/components/Input/TxMemo'
 import { DeleteButton, TxContent } from '../styles'
+import calculateGasFee from '../../../../logic/providers/utils/fee'
 
 export default function Execute({ open, onClose, data, sendTx, rejectTx, disabled, setDisabled, deleteTx }) {
   const { action } = useContext(TxSignModalContext)
-  const { nativeBalance: balance, sequence: currentSequence } = useSelector(currentSafeWithNames)
+  const { nativeBalance: balance, sequence: currentSequence, coinConfig } = useSelector(currentSafeWithNames)
+  const chainDefaultGasPrice = getChainDefaultGasPrice()
+  const decimal = getCoinDecimal()
+  const gasFee = chainDefaultGasPrice ? calculateGasFee(400000, +chainDefaultGasPrice, decimal) : chainDefaultGasPrice
   const dispatch = useDispatch()
   const [sequence, setSequence] = useState(data?.txSequence)
   const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
 
-  const totalAllocationAmount = formatNativeToken(
-    new BigNumber(+data?.txDetails?.txMessage[0]?.amount || 0).plus(+data.txDetails?.fee || 0).toString(),
-  )
+  const isNativeToken = data?.txDetails?.txMessage[0]?.denom === coinConfig?.find((e) => e.type === 'native').denom
+  const otherToken = coinConfig?.find((e) => e.denom === data?.txDetails?.txMessage[0]?.denom)
+
+  const totalAllocationAmount = isNativeToken
+    ? formatNativeToken(
+        new BigNumber(+data?.txDetails?.txMessage[0]?.amount || 0).plus(+data.txDetails?.fee || 0).toString(),
+      )
+    : `${formatWithComma(data?.txDetails?.txMessage[0]?.amount)} ${otherToken?.coinDenom} + ${formatNativeCurrency(
+        new BigNumber(+gasFee).toString(),
+      )}`
+
   const txHandler = async (type) => {
     if (type == 'confirm') {
       dispatch(
@@ -80,6 +92,9 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
       )
     }
   }
+  console.log(data?.txDetails)
+  console.log(coinConfig)
+
   return (
     <>
       <Popup open={open} handleClose={onClose} title="">
@@ -115,7 +130,13 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             </TxContent>
           ) : (
             <>
-              <Amount amount={formatNativeToken(data?.txDetails?.txMessage[0]?.amount)} />
+              <Amount
+                amount={
+                  isNativeToken
+                    ? formatNativeToken(data?.txDetails?.txMessage[0]?.amount)
+                    : convertAmount(data?.txDetails?.txMessage[0]?.amount, false, otherToken?.coinDenom)
+                }
+              />
               {action == 'change-sequence' && (
                 <>
                   <Gap height={16} />

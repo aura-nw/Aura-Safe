@@ -21,7 +21,7 @@ export const loadChains = async () => {
         environment: 'serenity',
       }
     }
-    if (chain.chainId.includes('aura-testnet')) {
+    if (chain.chainId.includes('auradev_1235-3')) {
       return {
         ...chain,
         environment: 'auratestnet',
