@@ -35,13 +35,17 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
   const isNativeToken = data?.txDetails?.txMessage[0]?.denom === coinConfig?.find((e) => e?.type === 'native')?.denom
   const otherToken = coinConfig?.find((e) => e?.denom ?? e?.cosmosDenom === data?.txDetails?.txMessage[0]?.denom)
 
+  const amount = isNativeToken
+    ? formatNativeToken(data?.txDetails?.txMessage[0]?.amount)
+    : `${convertAmount(data?.txDetails?.txMessage[0]?.amount, false, otherToken?.decimals)} ${otherToken?.coinDenom}`
+
   const totalAllocationAmount = isNativeToken
     ? formatNativeToken(
         new BigNumber(+data?.txDetails?.txMessage[0]?.amount || 0).plus(+data.txDetails?.fee || 0).toString(),
       )
-    : `${formatWithComma(data?.txDetails?.txMessage[0]?.amount)} ${otherToken?.coinDenom} + ${formatNativeCurrency(
-        new BigNumber(+gasFee).toString(),
-      )}`
+    : `${convertAmount(data?.txDetails?.txMessage[0]?.amount, false, otherToken?.decimals)} ${
+        otherToken?.coinDenom
+      } + ${formatNativeCurrency(new BigNumber(+gasFee).toString())}`
 
   const txHandler = async (type) => {
     if (type == 'confirm') {
@@ -110,7 +114,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             <TxContent>
               <div>
                 <div className="label">Amount</div>
-                <div className="value">{formatNativeToken(data?.txDetails?.txMessage[0]?.amount)}</div>
+                <div className="value">{amount}</div>
               </div>
               <div>
                 <div className="label">Transaction fee</div>
@@ -128,13 +132,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
             </TxContent>
           ) : (
             <>
-              <Amount
-                amount={
-                  isNativeToken
-                    ? formatNativeToken(data?.txDetails?.txMessage[0]?.amount)
-                    : convertAmount(data?.txDetails?.txMessage[0]?.amount, false, otherToken?.decimals)
-                }
-              />
+              <Amount amount={amount} />
               {action == 'change-sequence' && (
                 <>
                   <Gap height={16} />
