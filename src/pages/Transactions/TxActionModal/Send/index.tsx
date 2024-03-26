@@ -92,8 +92,6 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
       )
     }
   }
-  console.log(data?.txDetails)
-  console.log(coinConfig)
 
   return (
     <>
