@@ -132,7 +132,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
                 amount={
                   isNativeToken
                     ? formatNativeToken(data?.txDetails?.txMessage[0]?.amount)
-                    : convertAmount(data?.txDetails?.txMessage[0]?.amount, false, otherToken?.coinDenom)
+                    : convertAmount(data?.txDetails?.txMessage[0]?.amount, false, otherToken?.decimals)
                 }
               />
               {action == 'change-sequence' && (
