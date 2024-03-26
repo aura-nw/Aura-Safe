@@ -32,7 +32,7 @@ export default function Execute({ open, onClose, data, sendTx, rejectTx, disable
   const [sequence, setSequence] = useState(data?.txSequence)
   const [txMemo, setTxMemo] = useState(data?.txDetails?.txMemo)
 
-  const isNativeToken = data?.txDetails?.txMessage[0]?.denom === coinConfig?.find((e) => e.type === 'native').denom
+  const isNativeToken = data?.txDetails?.txMessage[0]?.denom === coinConfig?.find((e) => e?.type === 'native')?.denom
   const otherToken = coinConfig?.find((e) => e.denom === data?.txDetails?.txMessage[0]?.denom)
 
   const totalAllocationAmount = isNativeToken
