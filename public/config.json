@@ -1,12 +1,12 @@
 {
   "api-gateway": "https://safe-api.dev.aura.network",
-  "chain_id": "aura-testnet-2",
+  "chain_id": "auradev_1235-3",
   "chain_info": [
     {
       "features": [
         "ibc-transfer"
       ],
-      "chainId": "aura-testnet-2",
+      "chainId": "auradev_1235-3",
       "chainName": "aura testnet",
       "rpc": "https://rpc.dev.aura.network",
       "rest": "https://lcd.dev.aura.network",

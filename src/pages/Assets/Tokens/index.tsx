@@ -92,7 +92,8 @@ function Tokens(props): ReactElement {
   const safeTokens: any = useSelector(extendedSafeTokensSelector)
   const { name: safeName, address, isHideZeroBalance, coinConfig: coinConfigState } = useSelector(currentSafeWithNames)
   const [hideZeroBalance, setHideZeroBalance] = useState(isHideZeroBalance)
-  const coinConfig = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
+  const coinConfigStorage = loadFromLocalStorage(LS_TOKEN_CONFIG) as any[]
+  const coinConfig = coinConfigStorage ?? coinConfigState
   const { onShow, onHide, safeActionsState } = useSafeActions()
   const safeAddress = extractSafeAddress()
 

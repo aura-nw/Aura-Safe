@@ -16,8 +16,7 @@ export const safesAsMap = (state: AppReduxState): SafesMap => safesState(state).
 
 export const safesAsList = createSelector(safesAsMap, (safes): List<SafeRecord> => safes.toList())
 
-export const currentSafe = createSelector([safesAsMap], (safes: SafesMap) => {
-  const address = extractSafeAddress()
+export const currentSafe = createSelector([safesAsMap, extractSafeAddress], (safes: SafesMap, address: string) => {
   return safes.get(address, baseSafe(address))
 })
 export const safeByAddressSelector = createSelector(
