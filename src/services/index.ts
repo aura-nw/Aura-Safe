@@ -36,6 +36,7 @@ type _ChainInfo = {
   explorer: string
   defaultGasPrice: string
   defaultGas: GasPriceDefault[]
+  indexerDb: string
 }
 
 type GasPriceDefault = {
