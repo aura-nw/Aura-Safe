@@ -1,5 +1,5 @@
 import { ChainInfo, RPC_AUTHENTICATION } from '@gnosis.pm/safe-react-gateway-sdk'
-import { getMChainsConfig } from '../../services'
+import { MChainInfo, getMChainsConfig } from '../../services'
 
 // Cache is required as loading Redux store directly is an anit-pattern
 let chains: ChainInfo[] = []
@@ -7,33 +7,12 @@ let chains: ChainInfo[] = []
 export const getChains = (): ChainInfo[] => chains
 
 export const loadChains = async () => {
-  const networkList: ChainInfo[] = await getMChainsConfig()
+  const networkList: MChainInfo[] = await getMChainsConfig()
   chains = networkList.map((chain) => {
-    if (chain.chainId.includes('euphoria')) {
-      return {
-        ...chain,
-        environment: 'euphoria',
-      }
+    return {
+      ...chain,
+      environment: chain.indexerDb,
     }
-    if (chain.chainId.includes('serenity')) {
-      return {
-        ...chain,
-        environment: 'serenity',
-      }
-    }
-    if (chain.chainId.includes('aura')) {
-      return {
-        ...chain,
-        environment: 'auratestnet',
-      }
-    }
-    if (chain.chainId.includes('xstaxy')) {
-      return {
-        ...chain,
-        environment: 'xstaxy',
-      }
-    }
-    return chain
   })
   // const { results = [] } = await getChainsConfig(GATEWAY_URL, { limit: 100 })
   // chains = results

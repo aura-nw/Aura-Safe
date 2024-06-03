@@ -36,6 +36,7 @@ type _ChainInfo = {
   explorer: string
   defaultGasPrice: string
   defaultGas: GasPriceDefault[]
+  indexerDb: string
 }
 
 type GasPriceDefault = {
@@ -75,6 +76,7 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
         tokenImg: string
         rest: string
         coinConfig?: any[]
+        indexerDb: string
       }) => {
         return {
           transactionService: null,
@@ -128,6 +130,7 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
             // 'SPENDING_LIMIT',
           ],
           coinConfig: e?.coinConfig || [],
+          indexerDb: e?.indexerDb
         }
       },
     )
@@ -354,8 +357,7 @@ export async function getNumberOfDelegator(validatorId: any): Promise<IResponse<
   const { chainInfo } = await getGatewayUrl()
   return axios
     .get(
-      `${
-        chainInfo.find((chain) => chain.chainId == currentChainInfo.chainId)?.rest
+      `${chainInfo.find((chain) => chain.chainId == currentChainInfo.chainId)?.rest
       }/cosmos/staking/v1beta1/validators/${validatorId}/delegations?pagination.count_total=true`,
     )
     .then((res) => res.data)
