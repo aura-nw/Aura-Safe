@@ -129,7 +129,7 @@ export function getMChainsConfig(): Promise<MChainInfo[]> {
             // 'SPENDING_LIMIT',
           ],
           coinConfig: e?.coinConfig || [],
-          indexerDb: e.indexerDb
+          indexerDb: e?.indexerDb
         }
       },
     )
