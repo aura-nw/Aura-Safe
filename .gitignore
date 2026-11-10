@@ -19,3 +19,6 @@ jest.results.json
 *.#*
 # yarn.lock
 /public/config.json
+
+# Local scratch (not committed)
+/tmp/
