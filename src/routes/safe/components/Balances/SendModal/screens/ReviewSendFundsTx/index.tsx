@@ -193,8 +193,6 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
 
         const signResult = await client.sign(accounts[0]?.address, [msg], sendFee, '', signerData)
 
-        console.log(signResult)
-
         const signatures = toBase64(signResult.signatures[0])
         const bodyBytes = toBase64(signResult.bodyBytes)
         const authInfoBytes = toBase64(signResult.authInfoBytes)
