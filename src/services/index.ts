@@ -50,6 +50,9 @@ export type MChainInfo = ChainInfo & _ChainInfo
 export function setBaseUrl(url: string): void {
   baseUrl = url
 }
+export function getBaseUrl(): string {
+  return baseUrl
+}
 export function setGithubPageTokenRegistryUrl(url: string): void {
   githubPageTokenRegistryUrl = url
 }
